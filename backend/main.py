@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly
+from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile
 
 app = FastAPI(title="SignalForge API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -21,6 +21,7 @@ for router in [
     tasks.router,
     people.router,
     weekly.router,
+    profile.router,
 ]:
     app.include_router(router)
 

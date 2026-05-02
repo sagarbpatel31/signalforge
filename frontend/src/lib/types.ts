@@ -72,3 +72,37 @@ export interface ConvictionBet {
   label: string;
   conviction: number;
 }
+
+export interface UserProfile {
+  name: string;
+  handle: string;
+  domains: string[];
+  experience: string;
+  goal: string;
+  current_projects: string;
+}
+
+export const DOMAINS = [
+  "Robotics",
+  "Edge AI",
+  "Physical AI",
+  "Embedded Systems",
+  "Generative AI",
+  "Startup Ecosystem",
+] as const;
+
+export const EXPERIENCE_LEVELS = [
+  "Student / Early Career",
+  "Mid-level Engineer",
+  "Senior Engineer",
+  "Staff / Principal",
+  "Founder / CTO",
+] as const;
+
+export const GOALS = [
+  "Land a top job",
+  "Build a startup",
+  "Stay ahead of the field",
+  "Find co-founders / team",
+  "Publish research",
+] as const;

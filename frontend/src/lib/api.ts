@@ -1,6 +1,6 @@
 import type {
   Signal, Stat, Opportunity, Startup, Role,
-  Paper, Post, Task, Person, ConvictionBet,
+  Paper, Post, Task, Person, ConvictionBet, UserProfile,
 } from "./types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -88,3 +88,24 @@ export const fetchWeekly = () =>
     conviction_bets: fallbackBets,
     next_week_focus: nextWeekFocus,
   });
+
+export async function fetchProfile(): Promise<UserProfile | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/profile`, { cache: "no-store" });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`${res.status}`);
+    return res.json() as Promise<UserProfile>;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
+  const res = await fetch(`${API_BASE}/api/profile`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(profile),
+  });
+  if (!res.ok) throw new Error("Failed to save profile");
+  return res.json() as Promise<UserProfile>;
+}

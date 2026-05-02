@@ -3,9 +3,19 @@ import { SfTag } from "@/components/ui/sf-tag";
 
 interface NavProps {
   date: string;
+  userName?: string;
 }
 
-export function Nav({ date }: NavProps) {
+function initials(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .map((w) => w[0].toUpperCase())
+    .slice(0, 2)
+    .join("");
+}
+
+export function Nav({ date, userName }: NavProps) {
   return (
     <nav
       style={{
@@ -72,7 +82,7 @@ export function Nav({ date }: NavProps) {
             color: "var(--sf-cyan)",
           }}
         >
-          SF
+          {userName ? initials(userName) : "SF"}
         </div>
       </div>
     </nav>

@@ -9,16 +9,23 @@ import { PostOnX } from "@/components/sections/PostOnX";
 import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
-import { fetchPosts, fetchTasks } from "@/lib/api";
+import { fetchPosts, fetchTasks, fetchProfile } from "@/lib/api";
+import { redirect } from "next/navigation";
 
 const GAP = 18;
 
 export default async function DashboardPage() {
-  const [posts, tasks] = await Promise.all([fetchPosts(), fetchTasks()]);
+  const [profile, posts, tasks] = await Promise.all([
+    fetchProfile(),
+    fetchPosts(),
+    fetchTasks(),
+  ]);
+
+  if (!profile) redirect("/onboarding");
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--sf-bg)" }}>
-      <Nav date="May 1, 2026" />
+      <Nav date="May 1, 2026" userName={profile.name} />
 
       {/* Subtle background grid texture */}
       <div
