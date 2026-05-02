@@ -1,0 +1,239 @@
+[
+  {
+    "title": "OmniRobotHome: A Multi-Camera Platform for Real-Time Multiadic Human-Robot Interaction",
+    "venue": "arXiv · Robotics",
+    "tags": [
+      "cs.RO",
+      "cs.CV"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28197v1"
+  },
+  {
+    "title": "LaST-R1: Reinforcing Action via Adaptive Physical Latent Reasoning for VLA Models",
+    "venue": "arXiv · Robotics",
+    "tags": [
+      "cs.RO",
+      "cs.CV"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28192v1"
+  },
+  {
+    "title": "RopeDreamer: A Kinematic Recurrent State Space Model for Dynamics of Flexible Deformable Linear Objects",
+    "venue": "arXiv · Robotics",
+    "tags": [
+      "cs.RO"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28161v1"
+  },
+  {
+    "title": "FlexiTac: A Low-Cost, Open-Source, Scalable Tactile Sensing Solution for Robotic Systems",
+    "venue": "arXiv · Robotics",
+    "tags": [
+      "cs.RO",
+      "cs.AI",
+      "cs.LG"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28156v1"
+  },
+  {
+    "title": "Design and Characteristics of a Thin-Film ThermoMesh for the Efficient Embedded Sensing of a Spatio-Temporally Sparse Heat Source",
+    "venue": "arXiv · Robotics",
+    "tags": [
+      "cs.RO",
+      "eess.IV",
+      "physics.ins-det"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28148v1"
+  },
+  {
+    "title": "FreeOcc: Training-Free Embodied Open-Vocabulary Occupancy Prediction",
+    "venue": "arXiv · Robotics",
+    "tags": [
+      "cs.RO",
+      "cs.CV"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28115v1"
+  },
+  {
+    "title": "Computing Equilibrium beyond Unilateral Deviation",
+    "venue": "arXiv · Artificial Intelligence",
+    "tags": [
+      "cs.GT",
+      "cs.AI",
+      "cs.CC"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28186v1"
+  },
+  {
+    "title": "Synthetic Computers at Scale for Long-Horizon Productivity Simulation",
+    "venue": "arXiv · Artificial Intelligence",
+    "tags": [
+      "cs.AI",
+      "cs.CL",
+      "cs.LG"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28181v1"
+  },
+  {
+    "title": "LLM as Clinical Graph Structure Refiner: Enhancing Representation Learning in EEG Seizure Diagnosis",
+    "venue": "arXiv · Artificial Intelligence",
+    "tags": [
+      "cs.AI"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28178v1"
+  },
+  {
+    "title": "PhyCo: Learning Controllable Physical Priors for Generative Motion",
+    "venue": "arXiv · Artificial Intelligence",
+    "tags": [
+      "cs.CV",
+      "cs.AI",
+      "cs.LG"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28169v1"
+  },
+  {
+    "title": "Intern-Atlas: A Methodological Evolution Graph as Research Infrastructure for AI Scientists",
+    "venue": "arXiv · Artificial Intelligence",
+    "tags": [
+      "cs.AI"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28158v1"
+  },
+  {
+    "title": "Exploration Hacking: Can LLMs Learn to Resist RL Training?",
+    "venue": "arXiv · Machine Learning",
+    "tags": [
+      "cs.LG",
+      "cs.CL"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28182v1"
+  },
+  {
+    "title": "An adaptive wavelet-based PINN for problems with localized high-magnitude source",
+    "venue": "arXiv · Machine Learning",
+    "tags": [
+      "cs.LG"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28180v1"
+  },
+  {
+    "title": "Defending Quantum Classifiers against Adversarial Perturbations through Quantum Autoencoders",
+    "venue": "arXiv · Machine Learning",
+    "tags": [
+      "quant-ph",
+      "cs.LG"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28176v1"
+  },
+  {
+    "title": "Strait: Perceiving Priority and Interference in ML Inference Serving",
+    "venue": "arXiv · Machine Learning",
+    "tags": [
+      "cs.LG"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28175v1"
+  },
+  {
+    "title": "Hierarchical Control for Continuous-time Systems via General Approximate Alternating Simulation Relations",
+    "venue": "arXiv · Systems & Control",
+    "tags": [
+      "eess.SY"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28108v1"
+  },
+  {
+    "title": "Intelligent Self-tuning Active EMI Filtering for Electrified Automotive Power Systems Using Reinforcement Learning",
+    "venue": "arXiv · Systems & Control",
+    "tags": [
+      "eess.SY"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28084v1"
+  },
+  {
+    "title": "A MEC-Based Optimization Framework for Dynamic Inductive Charging",
+    "venue": "arXiv · Systems & Control",
+    "tags": [
+      "eess.SY",
+      "cs.NI"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.28069v1"
+  },
+  {
+    "title": "Flying by Inference: Active Inference World Models for Adaptive UAV Swarms",
+    "venue": "arXiv · Systems & Control",
+    "tags": [
+      "cs.RO",
+      "eess.SP",
+      "eess.SY"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.27935v1"
+  },
+  {
+    "title": "Data-Driven Continuous-Time Linear Quadratic Regulator via Closed-Loop and Reinforcement Learning Parameterizations",
+    "venue": "arXiv · Systems & Control",
+    "tags": [
+      "math.OC",
+      "eess.SY"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.27922v1"
+  },
+  {
+    "title": "On the Nesterov's acceleration: A NAIM perspective",
+    "venue": "arXiv · Systems & Control",
+    "tags": [
+      "eess.SY"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.27798v1"
+  },
+  {
+    "title": "Physical Foundation Models: Fixed hardware implementations of large-scale neural networks",
+    "venue": "arXiv · Edge AI",
+    "tags": [
+      "cs.LG",
+      "cs.ET",
+      "cs.NE"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.27911v1"
+  },
+  {
+    "title": "EdgeFM: Efficient Edge Inference for Vision-Language Models",
+    "venue": "arXiv · Edge AI",
+    "tags": [
+      "cs.CV"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.27476v1"
+  },
+  {
+    "title": "MiniCPM-o 4.5: Towards Real-Time Full-Duplex Omni-Modal Interaction",
+    "venue": "arXiv · Edge AI",
+    "tags": [
+      "cs.CL"
+    ],
+    "read": false,
+    "url": "http://arxiv.org/abs/2604.27393v1"
+  }
+]

@@ -1,11 +1,29 @@
+import asyncio
+import logging
+from contextlib import asynccontextmanager
+
 from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate
+from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate, feeds
+from app.ingestion.scheduler import create_scheduler, run_ingestion
 
-app = FastAPI(title="SignalForge API", version="0.1.0")
+logging.basicConfig(level=logging.INFO)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler = create_scheduler()
+    scheduler.start()
+    # Kick off initial ingestion without blocking startup
+    asyncio.create_task(run_ingestion())
+    yield
+    scheduler.shutdown(wait=False)
+
+
+app = FastAPI(title="SignalForge API", version="0.2.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,6 +44,7 @@ for router in [
     weekly.router,
     profile.router,
     generate.router,
+    feeds.router,
 ]:
     app.include_router(router)
 
