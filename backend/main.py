@@ -1,6 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile
+from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate
 
 app = FastAPI(title="SignalForge API", version="0.1.0")
 
@@ -22,6 +25,7 @@ for router in [
     people.router,
     weekly.router,
     profile.router,
+    generate.router,
 ]:
     app.include_router(router)
 

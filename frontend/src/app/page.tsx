@@ -9,16 +9,17 @@ import { PostOnX } from "@/components/sections/PostOnX";
 import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
-import { fetchPosts, fetchTasks, fetchProfile } from "@/lib/api";
+import { fetchPosts, fetchTasks, fetchProfile, fetchBrief } from "@/lib/api";
 import { redirect } from "next/navigation";
 
 const GAP = 18;
 
 export default async function DashboardPage() {
-  const [profile, posts, tasks] = await Promise.all([
+  const [profile, posts, tasks, brief] = await Promise.all([
     fetchProfile(),
     fetchPosts(),
     fetchTasks(),
+    fetchBrief(),
   ]);
 
   if (!profile) redirect("/onboarding");
@@ -57,7 +58,7 @@ export default async function DashboardPage() {
 
         {/* Row 1: Today's Brief */}
         <div className="fade-up fade-up-2" style={{ marginBottom: GAP }}>
-          <TodaysBrief />
+          <TodaysBrief initialBrief={brief} />
         </div>
 
         {/* Row 2: Top Opportunities */}

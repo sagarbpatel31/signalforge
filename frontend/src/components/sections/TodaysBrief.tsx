@@ -1,10 +1,28 @@
-import { fetchBrief } from "@/lib/api";
+"use client";
+
+import { useState } from "react";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { generateBrief } from "@/lib/api";
+import type { BriefResponse } from "@/lib/api";
 
-export async function TodaysBrief() {
-  const { market_pulse, signals, timestamp } = await fetchBrief();
+export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
+  const [brief, setBrief] = useState(initialBrief);
+  const [loading, setLoading] = useState(false);
+
+  async function handleRegenerate() {
+    setLoading(true);
+    try {
+      const fresh = await generateBrief();
+      setBrief(fresh);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const { market_pulse, signals, timestamp } = brief;
+
   return (
     <SfCard glow>
       <div
@@ -16,15 +34,34 @@ export async function TodaysBrief() {
         }}
       >
         <SectionLabel>Today&apos;s Brief</SectionLabel>
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "var(--sf-text-3)",
-          }}
-        >
-          {timestamp}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              color: "var(--sf-text-3)",
+            }}
+          >
+            {timestamp}
+          </span>
+          <button
+            onClick={handleRegenerate}
+            disabled={loading}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              padding: "4px 10px",
+              background: loading ? "var(--sf-bg3)" : "var(--sf-cyan-dim)",
+              border: `1px solid ${loading ? "var(--sf-border)" : "var(--sf-cyan)"}`,
+              color: loading ? "var(--sf-text-3)" : "var(--sf-cyan)",
+              cursor: loading ? "wait" : "pointer",
+              letterSpacing: "0.06em",
+              transition: "all 0.15s",
+            }}
+          >
+            {loading ? "GENERATING..." : "⟳ AI BRIEF"}
+          </button>
+        </div>
       </div>
 
       {/* Market pulse highlight */}

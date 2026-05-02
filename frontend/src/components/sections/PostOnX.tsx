@@ -4,10 +4,24 @@ import { useState } from "react";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { generatePosts } from "@/lib/api";
 import type { Post } from "@/lib/types";
 
-export function PostOnX({ posts }: { posts: Post[] }) {
+export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
+  const [posts, setPosts] = useState(initialPosts);
   const [selected, setSelected] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  async function handleRegenerate() {
+    setLoading(true);
+    try {
+      const fresh = await generatePosts();
+      setPosts(fresh);
+      setSelected(0);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <SfCard>
@@ -73,21 +87,39 @@ export function PostOnX({ posts }: { posts: Post[] }) {
             </SfTag>
           ))}
         </div>
-        <button
-          onClick={() => navigator.clipboard.writeText(posts[selected].text)}
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            letterSpacing: "0.06em",
-            padding: "5px 12px",
-            background: "var(--sf-cyan-dim)",
-            border: "1px solid var(--sf-cyan)",
-            color: "var(--sf-cyan)",
-            cursor: "pointer",
-          }}
-        >
-          Copy Draft
-        </button>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button
+            onClick={handleRegenerate}
+            disabled={loading}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              letterSpacing: "0.06em",
+              padding: "5px 12px",
+              background: loading ? "var(--sf-bg3)" : "transparent",
+              border: `1px solid ${loading ? "var(--sf-border)" : "var(--sf-border)"}`,
+              color: loading ? "var(--sf-text-3)" : "var(--sf-text-2)",
+              cursor: loading ? "wait" : "pointer",
+            }}
+          >
+            {loading ? "..." : "⟳ AI"}
+          </button>
+          <button
+            onClick={() => navigator.clipboard.writeText(posts[selected].text)}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              letterSpacing: "0.06em",
+              padding: "5px 12px",
+              background: "var(--sf-cyan-dim)",
+              border: "1px solid var(--sf-cyan)",
+              color: "var(--sf-cyan)",
+              cursor: "pointer",
+            }}
+          >
+            Copy Draft
+          </button>
+        </div>
       </div>
     </SfCard>
   );

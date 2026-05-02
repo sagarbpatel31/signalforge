@@ -109,3 +109,15 @@ export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
   if (!res.ok) throw new Error("Failed to save profile");
   return res.json() as Promise<UserProfile>;
 }
+
+export async function generateBrief(): Promise<BriefResponse> {
+  const res = await fetch(`${API_BASE}/api/generate/brief`, { method: "POST" });
+  if (!res.ok) throw new Error(`generate/brief failed: ${res.status}`);
+  return res.json() as Promise<BriefResponse>;
+}
+
+export async function generatePosts(): Promise<Post[]> {
+  const res = await fetch(`${API_BASE}/api/generate/posts`, { method: "POST" });
+  if (!res.ok) throw new Error(`generate/posts failed: ${res.status}`);
+  return res.json() as Promise<Post[]>;
+}
