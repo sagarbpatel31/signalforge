@@ -1,0 +1,74 @@
+export type TagColor = "cyan" | "amber" | "green" | "red" | "muted";
+
+export interface Signal {
+  label: string;
+  delta: string;
+  color: TagColor;
+  text: string;
+}
+
+export interface Stat {
+  label: string;
+  value: string;
+  delta: string;
+  up: boolean | null;
+}
+
+export interface Opportunity {
+  rank: string;
+  title: string;
+  domain: string;
+  signal: "HIGH" | "MEDIUM" | "LOW";
+  fit: number;
+  why: string;
+}
+
+export interface Startup {
+  name: string;
+  stage: string;
+  domain: string;
+  signal: "Hot" | "Watch" | "Track";
+  note: string;
+}
+
+export interface Role {
+  company: string;
+  role: string;
+  type: string;
+  signal: string;
+  color: TagColor;
+}
+
+export interface Paper {
+  title: string;
+  venue: string;
+  tags: string[];
+  read: boolean;
+}
+
+export interface Post {
+  angle: string;
+  text: string;
+  tags: string[];
+}
+
+export interface Task {
+  id: number;
+  priority: "P0" | "P1" | "P2";
+  task: string;
+  domain: string;
+  time: string;
+}
+
+export interface Person {
+  name: string;
+  handle: string;
+  context: string;
+  urgency: "Overdue" | "This week" | "Waiting";
+  days: number;
+}
+
+export interface ConvictionBet {
+  label: string;
+  conviction: number;
+}
