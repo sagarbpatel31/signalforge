@@ -16,7 +16,8 @@ async def get_research() -> list[Paper]:
                 venue=p.get("venue", "arXiv"),
                 tags=p.get("tags", [])[:3],
                 read=p.get("read", False),
+                url=p.get("url", ""),
             )
-            for p in cached[:12]
+            for p in cached[:24]
         ]
     return PAPERS

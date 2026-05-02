@@ -52,6 +52,7 @@ class Paper(BaseModel):
     venue: str
     tags: list[str]
     read: bool
+    url: str = ""
 
 
 class Post(BaseModel):

@@ -44,6 +44,25 @@ export interface Paper {
   venue: string;
   tags: string[];
   read: boolean;
+  url?: string;
+}
+
+export interface JobListing {
+  title: string;
+  company: string;
+  location: string;
+  url: string;
+  job_type: string;
+  tags: string[];
+  source: string;
+}
+
+export interface NewsItem {
+  title: string;
+  url: string;
+  source: string;
+  published: string;
+  tags: string[];
 }
 
 export interface Post {

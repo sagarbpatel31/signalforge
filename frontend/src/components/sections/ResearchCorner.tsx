@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { fetchResearch } from "@/lib/api";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -16,16 +17,9 @@ export async function ResearchCorner() {
         }}
       >
         <SectionLabel>Research Corner</SectionLabel>
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "var(--sf-cyan)",
-            cursor: "pointer",
-          }}
-        >
+        <Link href="/research" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-cyan)", textDecoration: "none", letterSpacing: "0.04em" }}>
           Browse all →
-        </span>
+        </Link>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         {papers.map((p, i) => (

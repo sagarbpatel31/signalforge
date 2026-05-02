@@ -147,12 +147,218 @@
     ]
   },
   {
-    "title": "Flue is a TypeScript framework for building the next generation of agents",
-    "url": "https://flueframework.com/",
+    "title": "Salesforce launches Agentforce Operations to fix the workflows breaking enterprise AI",
+    "url": "https://venturebeat.com/orchestration/salesforce-launches-agentforce-operations-to-fix-the-workflows-breaking-enterprise-ai",
+    "source": "VentureBeat AI",
+    "published": "Fri, 01 May 2026 21:14:29 GMT",
+    "tags": [
+      "robotics",
+      "agentic"
+    ]
+  },
+  {
+    "title": "200,000 MCP servers expose a command execution flaw that Anthropic calls a feature",
+    "url": "https://venturebeat.com/security/mcp-stdio-flaw-200000-ai-agent-servers-exposed-ox-security-audit",
+    "source": "VentureBeat AI",
+    "published": "Fri, 01 May 2026 20:35:46 GMT",
+    "tags": [
+      "robotics",
+      "llm",
+      "agentic"
+    ]
+  },
+  {
+    "title": "The AI scaffolding layer is collapsing. LlamaIndex's CEO explains what survives.",
+    "url": "https://venturebeat.com/infrastructure/the-ai-scaffolding-layer-is-collapsing-llamaindexs-ceo-explains-what-survives",
+    "source": "VentureBeat AI",
+    "published": "Fri, 01 May 2026 18:01:52 GMT",
+    "tags": [
+      "llm",
+      "agentic"
+    ]
+  },
+  {
+    "title": "xAI launches Grok 4.3 at an aggressively low price and a new, fast, powerful voice cloning suite",
+    "url": "https://venturebeat.com/technology/xai-launches-grok-4-3-at-an-aggressively-low-price-and-a-new-fast-powerful-voice-cloning-suite",
+    "source": "VentureBeat AI",
+    "published": "Fri, 01 May 2026 17:49:00 GMT",
+    "tags": [
+      "robotics",
+      "llm",
+      "startup"
+    ]
+  },
+  {
+    "title": "Hidden IT problems are quietly creating risk, shadow IT, and lost productivity",
+    "url": "https://venturebeat.com/technology/hidden-it-problems-are-quietly-creating-risk-shadow-it-and-lost-productivity",
+    "source": "VentureBeat AI",
+    "published": "Fri, 01 May 2026 13:03:15 GMT",
+    "tags": [
+      "robotics"
+    ]
+  },
+  {
+    "title": "Alibaba's Metis agent cuts redundant AI tool calls from 98% to 2% — and gets more accurate doing it",
+    "url": "https://venturebeat.com/orchestration/alibabas-metis-agent-cuts-redundant-ai-tool-calls-from-98-to-2-and-gets-more-accurate-doing-it",
+    "source": "VentureBeat AI",
+    "published": "Thu, 30 Apr 2026 20:51:26 GMT",
+    "tags": [
+      "robotics",
+      "llm",
+      "agentic"
+    ]
+  },
+  {
+    "title": "One tool call to rule them all? New open source Python tool Runpod Flash eliminates containers for faster AI dev",
+    "url": "https://venturebeat.com/infrastructure/one-tool-call-to-rule-them-all-new-open-source-python-tool-runpod-flash-eliminates-containers-for-faster-ai-dev",
+    "source": "VentureBeat AI",
+    "published": "Thu, 30 Apr 2026 18:31:07 GMT",
+    "tags": [
+      "robotics",
+      "llm",
+      "startup"
+    ]
+  },
+  {
+    "title": "With $1 Cyberattacks on the Rise, Durable Defenses Pay Off",
+    "url": "https://spectrum.ieee.org/ai-cyberattacks-memory-safe-code",
+    "source": "IEEE Spectrum",
+    "published": "Thu, 30 Apr 2026 14:00:01 +0000",
+    "tags": [
+      "robotics",
+      "llm",
+      "agentic"
+    ]
+  },
+  {
+    "title": "DAIMON Robotics Wants to Give Robot Hands a Sense of Touch",
+    "url": "https://spectrum.ieee.org/daimon-robotics-physical-ai",
+    "source": "IEEE Spectrum",
+    "published": "Thu, 30 Apr 2026 13:22:51 +0000",
+    "tags": [
+      "robotics",
+      "llm",
+      "startup"
+    ]
+  },
+  {
+    "title": "Transmission Hardware Corona Performance and HVDC Submarine Cable EM Fields",
+    "url": "https://events.bizzabo.com/860041",
+    "source": "IEEE Spectrum",
+    "published": "Thu, 30 Apr 2026 10:00:01 +0000",
+    "tags": [
+      "tech"
+    ]
+  },
+  {
+    "title": "Better Hardware Could Turn Zeros into AI Heroes",
+    "url": "https://spectrum.ieee.org/sparse-ai",
+    "source": "IEEE Spectrum",
+    "published": "Tue, 28 Apr 2026 18:03:40 +0000",
+    "tags": [
+      "robotics",
+      "edge-ai",
+      "llm"
+    ]
+  },
+  {
+    "title": "The Chip That Made Hardware Rewriteable",
+    "url": "https://spectrum.ieee.org/fpga-chip-ieee-milestone",
+    "source": "IEEE Spectrum",
+    "published": "Tue, 28 Apr 2026 18:00:02 +0000",
+    "tags": [
+      "robotics",
+      "edge-ai",
+      "llm"
+    ]
+  },
+  {
+    "title": "Engineering Collisions: How NYU Is Remaking Health Research",
+    "url": "https://spectrum.ieee.org/nyu-health-research",
+    "source": "IEEE Spectrum",
+    "published": "Mon, 27 Apr 2026 12:45:01 +0000",
+    "tags": [
+      "robotics",
+      "startup"
+    ]
+  },
+  {
+    "title": "Modeling and Simulation Approaches for Modern Power System Studies",
+    "url": "https://content.knowledgehub.wiley.com/power-systems-studies-with-simulink-and-simscape-electrical/",
+    "source": "IEEE Spectrum",
+    "published": "Mon, 27 Apr 2026 10:00:01 +0000",
+    "tags": [
+      "robotics"
+    ]
+  },
+  {
+    "title": "Yong Wang Turns Information Into Insights",
+    "url": "https://spectrum.ieee.org/yong-wang-data-visualization",
+    "source": "IEEE Spectrum",
+    "published": "Fri, 24 Apr 2026 18:00:02 +0000",
+    "tags": [
+      "robotics",
+      "llm",
+      "startup"
+    ]
+  },
+  {
+    "title": "GPU Renters Are Playing a Silicon Lottery",
+    "url": "https://spectrum.ieee.org/gpu-performance-comparison",
+    "source": "IEEE Spectrum",
+    "published": "Thu, 23 Apr 2026 18:06:01 +0000",
+    "tags": [
+      "llm",
+      "startup",
+      "generative"
+    ]
+  },
+  {
+    "title": "What Anthropic’s Mythos Means for the Future of Cybersecurity",
+    "url": "https://spectrum.ieee.org/ai-cybersecurity-mythos",
+    "source": "IEEE Spectrum",
+    "published": "Thu, 23 Apr 2026 14:00:01 +0000",
+    "tags": [
+      "llm",
+      "agentic"
+    ]
+  },
+  {
+    "title": "This Roboticist-Turned-Teacher Built a Life-Size Replica of ENIAC",
+    "url": "https://spectrum.ieee.org/roboticist-turned-teacher-eniac-replica",
+    "source": "IEEE Spectrum",
+    "published": "Thu, 23 Apr 2026 13:00:01 +0000",
+    "tags": [
+      "robotics",
+      "agentic"
+    ]
+  },
+  {
+    "title": "Reviving Teletext for Ham Radio",
+    "url": "https://spectrum.ieee.org/reviving-teletext-for-ham-radio",
+    "source": "IEEE Spectrum",
+    "published": "Wed, 22 Apr 2026 16:19:08 +0000",
+    "tags": [
+      "robotics",
+      "llm"
+    ]
+  },
+  {
+    "title": "The agent harness belongs outside the sandbox",
+    "url": "https://www.mendral.com/blog/agent-harness-belongs-outside-sandbox",
     "source": "Hacker News",
-    "published": "Sat, 02 May 2026 17:32:07 +0000",
+    "published": "Sat, 02 May 2026 21:21:27 +0000",
     "tags": [
       "agentic"
+    ]
+  },
+  {
+    "title": "Clojurists Together – Q2 2026 Open Source Funding Announcement",
+    "url": "https://www.clojuriststogether.org/news/q2-2026-funding-announcement/",
+    "source": "Hacker News",
+    "published": "Sat, 02 May 2026 21:34:49 +0000",
+    "tags": [
+      "startup"
     ]
   },
   {
@@ -272,80 +478,6 @@
     "published": "Wed, 29 Apr 2026 00:00:00 GMT",
     "tags": [
       "tech"
-    ]
-  },
-  {
-    "title": "Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents",
-    "url": "https://huggingface.co/blog/nvidia/nemotron-3-nano-omni-multimodal-intelligence",
-    "source": "Hugging Face",
-    "published": "Tue, 28 Apr 2026 15:58:57 GMT",
-    "tags": [
-      "agentic",
-      "generative"
-    ]
-  },
-  {
-    "title": "How to build scalable web apps with OpenAI's Privacy Filter",
-    "url": "https://huggingface.co/blog/openai-privacy-filter-web-apps",
-    "source": "Hugging Face",
-    "published": "Mon, 27 Apr 2026 00:00:00 GMT",
-    "tags": [
-      "tech"
-    ]
-  },
-  {
-    "title": "DeepSeek-V4: a million-token context that agents can actually use",
-    "url": "https://huggingface.co/blog/deepseekv4",
-    "source": "Hugging Face",
-    "published": "Fri, 24 Apr 2026 00:00:00 GMT",
-    "tags": [
-      "agentic"
-    ]
-  },
-  {
-    "title": "How to Use Transformers.js in a Chrome Extension",
-    "url": "https://huggingface.co/blog/transformersjs-chrome-extension",
-    "source": "Hugging Face",
-    "published": "Thu, 23 Apr 2026 00:00:00 GMT",
-    "tags": [
-      "llm"
-    ]
-  },
-  {
-    "title": "QIMMA قِمّة ⛰: A Quality-First Arabic LLM Leaderboard",
-    "url": "https://huggingface.co/blog/tiiuae/qimma-arabic-leaderboard",
-    "source": "Hugging Face",
-    "published": "Tue, 21 Apr 2026 10:09:58 GMT",
-    "tags": [
-      "llm"
-    ]
-  },
-  {
-    "title": "Ecom-RLVE: Adaptive Verifiable Environments for E-Commerce Conversational Agents",
-    "url": "https://huggingface.co/blog/ecom-rlve",
-    "source": "Hugging Face",
-    "published": "Thu, 16 Apr 2026 00:00:00 GMT",
-    "tags": [
-      "agentic"
-    ]
-  },
-  {
-    "title": "Training and Finetuning Multimodal Embedding & Reranker Models with Sentence Transformers",
-    "url": "https://huggingface.co/blog/train-multimodal-sentence-transformers",
-    "source": "Hugging Face",
-    "published": "Thu, 16 Apr 2026 00:00:00 GMT",
-    "tags": [
-      "llm",
-      "generative"
-    ]
-  },
-  {
-    "title": "Inside VAKRA: Reasoning, Tool Use, and Failure Modes of Agents",
-    "url": "https://huggingface.co/blog/ibm-research/vakra-benchmark-analysis",
-    "source": "Hugging Face",
-    "published": "Wed, 15 Apr 2026 12:07:25 GMT",
-    "tags": [
-      "agentic"
     ]
   }
 ]

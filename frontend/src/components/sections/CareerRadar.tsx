@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { fetchCareer } from "@/lib/api";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -7,7 +8,12 @@ export async function CareerRadar() {
   const roles = await fetchCareer();
   return (
     <SfCard>
-      <SectionLabel>Career Radar</SectionLabel>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+        <SectionLabel>Career Radar</SectionLabel>
+        <Link href="/career" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-cyan)", textDecoration: "none", letterSpacing: "0.04em" }}>
+          View all →
+        </Link>
+      </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         {roles.map((r, i) => (
           <div

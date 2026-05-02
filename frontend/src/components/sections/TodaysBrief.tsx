@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
@@ -35,6 +36,9 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
       >
         <SectionLabel>Today&apos;s Brief</SectionLabel>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Link href="/news" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-text-3)", textDecoration: "none", letterSpacing: "0.04em" }}>
+            View Feed →
+          </Link>
           <span
             style={{
               fontFamily: "var(--font-mono)",
