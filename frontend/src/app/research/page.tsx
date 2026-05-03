@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { fetchResearch } from "@/lib/api";
+import { fetchAllResearch } from "@/lib/api";
 import { SfTag } from "@/components/ui/sf-tag";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "SignalForge — Research Corner" };
 
 export default async function ResearchPage() {
-  const papers = await fetchResearch();
+  const papers = await fetchAllResearch();
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--sf-bg)", padding: "32px 24px 60px" }}>

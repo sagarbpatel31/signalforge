@@ -117,7 +117,7 @@ export function PeopleFollowUp({ people }: { people: Person[] }) {
                       color: "var(--sf-text-3)",
                     }}
                   >
-                    {p.days}d ago
+                    {p.days === 0 ? "Today" : `${p.days}d ago`}
                   </span>
                   {!isDone && (
                     <SfTag color={urgencyColor(p.urgency)}>{p.urgency}</SfTag>

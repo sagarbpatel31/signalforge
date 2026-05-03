@@ -67,6 +67,8 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
           lineHeight: 1.7,
           color: "var(--sf-text-2)",
           whiteSpace: "pre-wrap",
+          wordBreak: "break-word",
+          overflow: "hidden",
         }}
       >
         {posts[selected].text}

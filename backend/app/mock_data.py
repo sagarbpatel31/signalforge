@@ -120,41 +120,43 @@ POSTS: list[Post] = [
 ]
 
 TASKS: list[Task] = [
-    Task(id=1, priority="P0", task="Publish INT4 benchmark results thread on X", domain="Edge AI", time="1h"),
-    Task(id=2, priority="P0", task="Draft ROS2↔LLM bridge 1-pager for Priya", domain="Robotics", time="2h"),
-    Task(id=3, priority="P1", task="Test Hailo-8L SDK on camera inference pipeline", domain="Edge AI", time="3h"),
-    Task(id=4, priority="P1", task="Spec Zephyr medical OTA module requirements", domain="Embedded", time="2h"),
+    Task(id=1, priority="P0", task="Apply to Hailo + Inferix — send tailored resume today", domain="Edge AI", time="1h"),
+    Task(id=2, priority="P0", task="Complete ROS2 Nav2 tutorial in Gazebo sim", domain="Robotics", time="2h"),
+    Task(id=3, priority="P1", task="Run first Isaac Lab policy rollout on Jetson Orin", domain="Physical AI", time="3h"),
+    Task(id=4, priority="P1", task="Deploy + benchmark Google Gemma 4 on-device (GGUF)", domain="Edge AI", time="2h"),
+    Task(id=5, priority="P1", task="Submit Zephyr RTOS driver PR for medical OTA module", domain="Embedded", time="2h"),
+    Task(id=6, priority="P2", task="Publish INT4 benchmark thread on X with data", domain="Edge AI", time="1h"),
 ]
 
 PEOPLE: list[Person] = [
     Person(name="Priya Nair", handle="@priyanair_robotics", url="https://x.com/priyanair_robotics",
-           context="Owes demo repo for ROS2 bridge collab. Send 1-pager first.", urgency="Overdue", days=2),
+           context="Owes demo repo for ROS2 bridge collab. Send 1-pager first.", urgency="Overdue", days=0),
     Person(name="Marcus Chen", handle="@mchen_edgeai", url="https://x.com/mchen_edgeai",
-           context="Hailo BD intro still pending — promised last week.", urgency="This week", days=1),
+           context="Hailo BD intro still pending — promised last week.", urgency="This week", days=0),
     Person(name="Lena Schwarz", handle="@lena_embedded", url="https://x.com/lena_embedded",
-           context="Zephyr medical stack — confirm advisory interest before she commits elsewhere.", urgency="This week", days=3),
+           context="Zephyr medical stack — confirm advisory interest before she commits elsewhere.", urgency="This week", days=0),
     Person(name="Andres Vega", handle="@andres_physai", url="https://x.com/andres_physai",
-           context="ML infra role at Figure. Resume sent 4d ago — follow up now.", urgency="Overdue", days=4),
+           context="ML infra role at Figure. Resume sent — follow up now.", urgency="Overdue", days=0),
 ]
 
 WEEKLY_WINS = [
-    "Published INT4 benchmarks — 240 impressions, 3 founder DMs.",
-    "Hailo BD intro via Marcus — call booked for next week.",
-    "Edge inference prototype: 6ms on H7, beats baseline by 40%.",
+    "Completed ROS2 Nav2 stack tutorial — nav through sim obstacle course.",
+    "Applied to Hailo Compiler Eng role — referral from Marcus confirmed.",
+    "Benchmarked Gemma 4B GGUF on Jetson Orin: 18 tok/s — beats prior baseline.",
 ]
 
 WEEKLY_GAPS = [
-    "Dexterity API spec not started — self-blocked.",
-    "Missed ICRA workshop abstract deadline.",
+    "Isaac Lab policy rollout blocked — CUDA driver mismatch on Orin, unresolved.",
+    "No cold outreach done — need to message 2 Edge AI founders this week.",
 ]
 
 CONVICTION_BETS: list[ConvictionBet] = [
     ConvictionBet(label="Edge compiler toolchain", conviction=90),
-    ConvictionBet(label="Physical AI middleware", conviction=75),
-    ConvictionBet(label="Embedded OS for medical", conviction=62),
+    ConvictionBet(label="Isaac Lab sim-to-real pipeline", conviction=78),
+    ConvictionBet(label="Embedded OS for medical devices", conviction=63),
 ]
 
 NEXT_WEEK_FOCUS = (
-    "Ship ROS2↔LLM bridge v0.1. Post INT4 benchmark thread. "
-    "2 founder coffees in Edge AI space."
+    "Fix Isaac Lab CUDA issue + run first policy rollout. "
+    "Message 2 Edge AI founders cold. Ship Zephyr OTA PR draft."
 )

@@ -11,7 +11,7 @@ export async function ResearchCorner() {
   if (!papers.length) {
     const cached = readCacheFile<Record<string, unknown>[]>("papers");
     if (cached?.length) {
-      papers = cached.slice(0, 6).map((p) => ({
+      papers = cached.slice(0, 4).map((p) => ({
         title: ((p.title as string) ?? "").slice(0, 120),
         venue: (p.venue as string) ?? "arXiv",
         tags: ((p.tags as string[]) ?? []).slice(0, 3),

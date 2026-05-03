@@ -344,21 +344,12 @@
     ]
   },
   {
-    "title": "The agent harness belongs outside the sandbox",
-    "url": "https://www.mendral.com/blog/agent-harness-belongs-outside-sandbox",
+    "title": "Embedded Rust or C Firmware? Lessons from an Industrial Microcontroller Use Case",
+    "url": "https://arxiv.org/abs/2604.25679",
     "source": "Hacker News",
-    "published": "Sat, 02 May 2026 21:21:27 +0000",
+    "published": "Fri, 01 May 2026 13:02:30 +0000",
     "tags": [
-      "agentic"
-    ]
-  },
-  {
-    "title": "Clojurists Together – Q2 2026 Open Source Funding Announcement",
-    "url": "https://www.clojuriststogether.org/news/q2-2026-funding-announcement/",
-    "source": "Hacker News",
-    "published": "Sat, 02 May 2026 21:34:49 +0000",
-    "tags": [
-      "startup"
+      "embedded"
     ]
   },
   {
@@ -478,6 +469,16 @@
     "published": "Wed, 29 Apr 2026 00:00:00 GMT",
     "tags": [
       "tech"
+    ]
+  },
+  {
+    "title": "Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents",
+    "url": "https://huggingface.co/blog/nvidia/nemotron-3-nano-omni-multimodal-intelligence",
+    "source": "Hugging Face",
+    "published": "Tue, 28 Apr 2026 15:58:57 GMT",
+    "tags": [
+      "agentic",
+      "generative"
     ]
   }
 ]

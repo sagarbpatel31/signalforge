@@ -70,8 +70,14 @@ export const fetchStartups = () =>
 export const fetchCareer = () =>
   apiFetch<Role[]>("/api/career", fallbackRoles);
 
+export const fetchAllCareer = () =>
+  apiFetch<Role[]>("/api/career/all", fallbackRoles);
+
 export const fetchResearch = () =>
   apiFetch<Paper[]>("/api/research", fallbackPapers);
+
+export const fetchAllResearch = () =>
+  apiFetch<Paper[]>("/api/research/all", fallbackPapers);
 
 export const fetchPosts = () =>
   apiFetch<Post[]>("/api/posts", fallbackPosts);

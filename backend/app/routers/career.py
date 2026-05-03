@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 from fastapi import APIRouter
 from ..schemas import Role
 from ..mock_data import ROLES
@@ -105,11 +106,10 @@ def _job_to_role(job: dict) -> Role:
     )
 
 
-@router.get("/career", response_model=list[Role])
-async def get_career() -> list[Role]:
+def _get_filtered_roles(limit: Optional[int] = None) -> list[Role]:
     cached = read_cache("jobs")
     if not cached:
-        return ROLES
+        return ROLES[:limit] if limit else ROLES
 
     profile = _load_profile()
     domains = profile.domains if profile else []
@@ -123,4 +123,26 @@ async def get_career() -> list[Role]:
     if not filtered:
         filtered = [j for j in cached if _is_tech_role(j.get("title", ""))] or cached
 
-    return [_job_to_role(j) for j in filtered[:12]]
+    roles = [_job_to_role(j) for j in filtered]
+    if limit:
+        # dedupe by company, keep first seen
+        seen: set = set()
+        deduped = []
+        for r in roles:
+            if r.company not in seen:
+                seen.add(r.company)
+                deduped.append(r)
+                if len(deduped) >= limit:
+                    break
+        return deduped
+    return roles
+
+
+@router.get("/career", response_model=list[Role])
+async def get_career() -> list[Role]:
+    return _get_filtered_roles(limit=4)
+
+
+@router.get("/career/all", response_model=list[Role])
+async def get_career_all() -> list[Role]:
+    return _get_filtered_roles(limit=None)
