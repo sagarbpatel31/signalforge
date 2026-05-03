@@ -69,6 +69,7 @@ export interface Post {
   angle: string;
   text: string;
   tags: string[];
+  source_ref?: string;
 }
 
 export interface Task {
@@ -82,6 +83,7 @@ export interface Task {
 export interface Person {
   name: string;
   handle: string;
+  url?: string;
   context: string;
   urgency: "Overdue" | "This week" | "Waiting";
   days: number;

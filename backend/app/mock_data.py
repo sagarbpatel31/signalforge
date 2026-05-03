@@ -4,8 +4,7 @@ from .schemas import (
 )
 
 MARKET_PULSE = (
-    "Market pulse: Edge AI inference spend up 38% QoQ. "
-    "Physical AI talent war intensifying. "
+    "Edge AI inference spend up 38% QoQ. Physical AI talent war intensifying. "
     "Embedded startup exits averaging 4.2× — best in 5 years."
 )
 
@@ -13,7 +12,7 @@ SIGNALS: list[Signal] = [
     Signal(label="Robotics M&A", delta="+3", color="cyan",
            text="Boston Dynamics licensing talks with Toyota signal $2B+ ecosystem play. Watch actuator IP."),
     Signal(label="Edge AI Funding", delta="+7", color="green",
-           text="Hailo & Axelera both closing rounds this week. Edge inference silicon heating up post-NPU wars."),
+           text="Hailo raised $136M Series C. Axelera closing round. NPU war moving down-stack to MCUs."),
     Signal(label="Physical AI", delta="+5", color="amber",
            text="Figure & Apptronik deployment contracts signal commercial humanoid inflection — 2026 is real."),
     Signal(label="Embedded OS", delta="+2", color="muted",
@@ -29,16 +28,21 @@ STATS: list[Stat] = [
 ]
 
 OPPORTUNITIES: list[Opportunity] = [
-    Opportunity(rank="01", title="Edge Inference SDK for Industrial Cameras", domain="Edge AI",
-                signal="HIGH", fit=94, why="No dominant OSS player. $180M TAM in machine vision alone."),
-    Opportunity(rank="02", title="Zephyr RTOS → Medical Device Stack", domain="Embedded",
-                signal="HIGH", fit=88, why="FDA pathway clarified. 3 BD conversations this month."),
-    Opportunity(rank="03", title="Humanoid Dexterity Fine-tuning API", domain="Physical AI",
-                signal="MEDIUM", fit=81, why="Figure, Apptronik, Agility all need this. No API exists yet."),
-    Opportunity(rank="04", title="ROS2 ↔ LLM Middleware Bridge", domain="Robotics",
-                signal="MEDIUM", fit=76, why="Massive community demand. Seen in 47 Discord threads this week."),
-    Opportunity(rank="05", title="Startup Radar: Sub-$5M Embedded AI Seed", domain="Startup",
-                signal="LOW", fit=68, why="Pattern: 3 exits this qtr avg 4.1× in <18mo from seed."),
+    Opportunity(rank="01", title="Edge Inference SDK for Industrial Cameras",
+                domain="Edge AI", signal="HIGH", fit=94,
+                why="$180M TAM in machine vision. No dominant OSS player. 3 pilots asking now."),
+    Opportunity(rank="02", title="Zephyr RTOS → Medical Device Stack",
+                domain="Embedded", signal="HIGH", fit=88,
+                why="FDA 510(k) pathway clarified Q1 2026. 3 active BD conversations this month."),
+    Opportunity(rank="03", title="Humanoid Dexterity Fine-tuning API",
+                domain="Physical AI", signal="MEDIUM", fit=81,
+                why="Figure, Apptronik, Agility all need this — no API exists. $50M+ capex waiting."),
+    Opportunity(rank="04", title="ROS2 ↔ LLM Middleware Bridge",
+                domain="Robotics", signal="MEDIUM", fit=76,
+                why="47 Discord threads this week. 12 GitHub issues open. Clear OSS gap."),
+    Opportunity(rank="05", title="Sub-$5M Embedded AI Seed",
+                domain="Startup", signal="LOW", fit=68,
+                why="3 exits this quarter avg 4.1× in <18mo from seed. Pattern repeating."),
 ]
 
 STARTUPS: list[Startup] = [
@@ -48,8 +52,6 @@ STARTUPS: list[Startup] = [
             note="Dexterous gripper + force-feedback loop. YC W25."),
     Startup(name="FirmWave", stage="Series A", domain="Embedded", signal="Track",
             note="$8M raised. OTA update infra for medical devices."),
-    Startup(name="Morphic Systems", stage="Stealth", domain="Robotics", signal="Watch",
-            note="Ex-Boston Dynamics. Legged robot perception stack."),
     Startup(name="Inferix", stage="Pre-Seed", domain="Edge AI", signal="Hot",
             note="Vision LLM on RISC-V with <5ms latency. Open beta."),
 ]
@@ -64,74 +66,86 @@ ROLES: list[Role] = [
 
 PAPERS: list[Paper] = [
     Paper(title="Diffusion Policies for Dexterous Manipulation at Scale",
-          venue="arXiv 2025", tags=["Physical AI", "Policy"], read=False),
+          venue="arXiv 2025", tags=["Physical AI", "Policy"], read=False,
+          url="https://arxiv.org/search/?searchtype=all&query=diffusion+dexterous+manipulation"),
     Paper(title="INT4 Quantization for Transformer Inference on MCUs",
-          venue="MLSys 2025", tags=["Edge AI"], read=False),
+          venue="MLSys 2025", tags=["Edge AI"], read=False,
+          url="https://arxiv.org/search/?searchtype=all&query=INT4+quantization+MCU+inference"),
     Paper(title="ROS2 Real-Time Guarantees: A Systematic Review",
-          venue="ICRA 2025", tags=["Robotics"], read=True),
+          venue="ICRA 2025", tags=["Robotics"], read=True,
+          url="https://arxiv.org/search/?searchtype=all&query=ROS2+real+time+guarantees"),
     Paper(title="Formal Verification of RTOS Scheduling Under Load",
-          venue="EMSOFT 2024", tags=["Embedded"], read=True),
+          venue="EMSOFT 2024", tags=["Embedded"], read=True,
+          url="https://arxiv.org/search/?searchtype=all&query=RTOS+scheduling+formal+verification"),
 ]
 
 POSTS: list[Post] = [
     Post(
         angle="Take",
         text=(
-            "Edge AI inference is hitting an inflection. Hailo, Axelera, Qualcomm AI Hub — "
-            "the NPU war is moving down-stack to MCUs. Next 18 months: whoever owns the "
-            "compiler layer owns the market. Watch INT4 quantization tooling."
+            "Edge AI inference is hitting an inflection. Hailo raised $136M Series C. "
+            "Axelera closing. Qualcomm AI Hub crossed 1M downloads.\n\n"
+            "The NPU war is moving down-stack to MCUs. Next 18 months: whoever owns the "
+            "compiler layer owns the market.\n\n"
+            "INT4 quantization on STM32H7 hit 6ms — real-time on a $4 chip. "
+            "This is not a research story anymore."
         ),
-        tags=["EdgeAI", "Embedded", "Semiconductors"],
+        tags=["EdgeAI", "Semiconductors", "EmbeddedAI"],
+        source_ref="Hailo Series C Feb 2026 · Axelera round Mar 2026 · QC AI Hub 1M DL Apr 2026",
     ),
     Post(
         angle="Thread",
         text=(
-            "Humanoid robots are real this year — not hype. Here's what the market actually looks like:\n\n"
-            "1/ Figure raised $675M. First commercial deployment this quarter.\n"
-            "2/ Apptronik: NASA heritage + Apollo humanoid in warehouses.\n"
-            "3/ Skild AI: Foundation model for robot policy. The \"GPT moment\" for manipulation."
+            "Humanoid robots are commercially real in 2026. Here's what the market actually looks like:\n\n"
+            "1/ Figure raised $675M. First commercial deployment with BMW this quarter.\n"
+            "2/ Apptronik: NASA-heritage Apollo humanoid in warehouse pilots at GXO.\n"
+            "3/ Agility Robotics: Digit at Amazon — 500 units ordered.\n"
+            "4/ Skild AI: Foundation model for robot policy. The 'GPT moment' for manipulation.\n\n"
+            "The dexterity API layer is still wide open. That's the gap."
         ),
-        tags=["Robotics", "PhysicalAI", "Founder"],
+        tags=["Robotics", "PhysicalAI", "Startups"],
+        source_ref="Figure/BMW Jan 2026 · Agility/Amazon Oct 2025 · Skild raise Dec 2025",
     ),
     Post(
         angle="Contrarian",
         text=(
-            "Hot take: ROS2 will not be the OS for commercial robotics at scale. It's a research tool. "
-            "The real winners will be whoever solves deterministic real-time + OTA updates + fleet "
-            "management in one stack. Nobody has it yet. That's a company."
+            "Hot take: ROS2 will not be the OS for commercial robotics at scale.\n\n"
+            "It's a research tool — jitter at 10kHz, no deterministic OTA, fleet mgmt bolted on.\n\n"
+            "The winner ships: deterministic real-time + secure OTA + fleet telemetry in one stack. "
+            "Nobody has it yet. That's a company worth building right now."
         ),
-        tags=["Robotics", "ROS2", "Startups"],
+        tags=["Robotics", "ROS2", "Founder"],
+        source_ref="ROS2 latency benchmarks ICRA 2025 · Apex.OS vs ROS2 comparison 2025",
     ),
 ]
 
 TASKS: list[Task] = [
-    Task(id=1, priority="P0", task="Ship edge inference benchmarking harness", domain="Edge AI", time="4h"),
-    Task(id=2, priority="P0", task="Draft ROS2–LLM bridge architecture doc", domain="Robotics", time="2h"),
-    Task(id=3, priority="P1", task="Profile INT4 quantization on STM32H7", domain="Embedded", time="3h"),
-    Task(id=4, priority="P1", task="Read: Diffusion Policies for Dexterous Manip.", domain="Research", time="1h"),
-    Task(id=5, priority="P2", task="Explore Hailo-8 SDK & write impressions", domain="Edge AI", time="2h"),
+    Task(id=1, priority="P0", task="Publish INT4 benchmark results thread on X", domain="Edge AI", time="1h"),
+    Task(id=2, priority="P0", task="Draft ROS2↔LLM bridge 1-pager for Priya", domain="Robotics", time="2h"),
+    Task(id=3, priority="P1", task="Test Hailo-8L SDK on camera inference pipeline", domain="Edge AI", time="3h"),
+    Task(id=4, priority="P1", task="Spec Zephyr medical OTA module requirements", domain="Embedded", time="2h"),
 ]
 
 PEOPLE: list[Person] = [
-    Person(name="Priya Nair", handle="@priyanair_robotics",
-           context="Discussed ROS2 bridge collab. Owes me a demo repo.", urgency="Overdue", days=8),
-    Person(name="Marcus Chen", handle="@mchen_edgeai",
-           context="Intro to Hailo BD team pending. Check in.", urgency="This week", days=3),
-    Person(name="Lena Schwarz", handle="@lena_embedded",
-           context="Zephyr RTOS medical stack — potential advisory.", urgency="This week", days=5),
-    Person(name="Andres Vega", handle="@andres_physai",
-           context="He's hiring ML infra at Figure. Resume sent.", urgency="Waiting", days=11),
+    Person(name="Priya Nair", handle="@priyanair_robotics", url="https://x.com/priyanair_robotics",
+           context="Owes demo repo for ROS2 bridge collab. Send 1-pager first.", urgency="Overdue", days=2),
+    Person(name="Marcus Chen", handle="@mchen_edgeai", url="https://x.com/mchen_edgeai",
+           context="Hailo BD intro still pending — promised last week.", urgency="This week", days=1),
+    Person(name="Lena Schwarz", handle="@lena_embedded", url="https://x.com/lena_embedded",
+           context="Zephyr medical stack — confirm advisory interest before she commits elsewhere.", urgency="This week", days=3),
+    Person(name="Andres Vega", handle="@andres_physai", url="https://x.com/andres_physai",
+           context="ML infra role at Figure. Resume sent 4d ago — follow up now.", urgency="Overdue", days=4),
 ]
 
 WEEKLY_WINS = [
-    "Published edge inference benchmarks — 240 impressions, 3 DMs from founders.",
-    "Connected with Hailo BD lead via Marcus intro.",
-    "Completed INT4 quantization prototype — 6ms on H7.",
+    "Published INT4 benchmarks — 240 impressions, 3 founder DMs.",
+    "Hailo BD intro via Marcus — call booked for next week.",
+    "Edge inference prototype: 6ms on H7, beats baseline by 40%.",
 ]
 
 WEEKLY_GAPS = [
-    "No progress on humanoid dexterity API spec.",
-    "Missed ICRA deadline for workshop abstract.",
+    "Dexterity API spec not started — self-blocked.",
+    "Missed ICRA workshop abstract deadline.",
 ]
 
 CONVICTION_BETS: list[ConvictionBet] = [
@@ -141,6 +155,6 @@ CONVICTION_BETS: list[ConvictionBet] = [
 ]
 
 NEXT_WEEK_FOCUS = (
-    "Ship the ROS2↔LLM bridge prototype. Publish benchmark thread on X. "
-    "Book 2 founder coffee chats in Edge AI. Read Diffusion Policies paper end-to-end."
+    "Ship ROS2↔LLM bridge v0.1. Post INT4 benchmark thread. "
+    "2 founder coffees in Edge AI space."
 )

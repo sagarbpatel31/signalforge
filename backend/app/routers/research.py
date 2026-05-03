@@ -18,6 +18,6 @@ async def get_research() -> list[Paper]:
                 read=p.get("read", False),
                 url=p.get("url", ""),
             )
-            for p in cached[:24]
+            for p in cached[:6]
         ]
     return PAPERS

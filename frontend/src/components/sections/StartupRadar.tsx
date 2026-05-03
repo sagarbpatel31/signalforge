@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { fetchStartups } from "@/lib/api";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -12,17 +13,39 @@ function signalColor(s: string): TagColor {
 
 export async function StartupRadar() {
   const startups = await fetchStartups();
+  const visible = startups.slice(0, 4);
   return (
     <SfCard>
-      <SectionLabel>Startup Radar</SectionLabel>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 4,
+        }}
+      >
+        <SectionLabel>Startup Radar</SectionLabel>
+        <Link
+          href="/startups"
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "var(--sf-text-3)",
+            textDecoration: "none",
+            letterSpacing: "0.04em",
+          }}
+        >
+          View all →
+        </Link>
+      </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {startups.map((s, i) => (
+        {visible.map((s, i) => (
           <div
             key={i}
             style={{
               padding: "11px 0",
               borderBottom:
-                i < startups.length - 1 ? "1px solid var(--sf-border-subtle)" : "none",
+                i < visible.length - 1 ? "1px solid var(--sf-border-subtle)" : "none",
             }}
           >
             <div

@@ -59,6 +59,7 @@ class Post(BaseModel):
     angle: str
     text: str
     tags: list[str]
+    source_ref: str = ""
 
 
 class Task(BaseModel):
@@ -72,6 +73,7 @@ class Task(BaseModel):
 class Person(BaseModel):
     name: str
     handle: str
+    url: str = ""
     context: str
     urgency: Literal["Overdue", "This week", "Waiting"]
     days: int

@@ -72,6 +72,20 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
         {posts[selected].text}
       </div>
 
+      {posts[selected].source_ref && (
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "var(--sf-text-3)",
+            marginTop: 6,
+            lineHeight: 1.5,
+          }}
+        >
+          ↗ Source: {posts[selected].source_ref}
+        </div>
+      )}
+
       <div
         style={{
           display: "flex",

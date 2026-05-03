@@ -9,7 +9,7 @@ import { PostOnX } from "@/components/sections/PostOnX";
 import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
-import { fetchPosts, fetchTasks, fetchProfile, fetchBrief } from "@/lib/api";
+import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchPeople } from "@/lib/api";
 import { readProfileFile } from "@/lib/server-cache";
 import { redirect } from "next/navigation";
 import type { UserProfile } from "@/lib/types";
@@ -17,11 +17,12 @@ import type { UserProfile } from "@/lib/types";
 const GAP = 18;
 
 export default async function DashboardPage() {
-  const [profile, posts, tasks, brief] = await Promise.all([
+  const [profile, posts, tasks, brief, people] = await Promise.all([
     fetchProfile(),
     fetchPosts(),
     fetchTasks(),
     fetchBrief(),
+    fetchPeople(),
   ]);
 
   // Fallback: read profile from disk (works when backend HTTP is unreachable in preview sandbox)
@@ -97,7 +98,7 @@ export default async function DashboardPage() {
         >
           <PostOnX posts={posts} />
           <BuildThisWeek tasks={tasks} />
-          <PeopleFollowUp />
+          <PeopleFollowUp people={people} />
         </div>
 
         {/* Row 5: Weekly Strategic Review */}
