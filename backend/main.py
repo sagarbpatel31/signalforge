@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent / ".env")
 
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate, feeds
 from app.ingestion.scheduler import create_scheduler, run_ingestion
@@ -17,12 +17,14 @@ logging.basicConfig(level=logging.INFO)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    scheduler = create_scheduler()
-    scheduler.start()
-    # Kick off initial ingestion without blocking startup
-    asyncio.create_task(run_ingestion())
-    yield
-    scheduler.shutdown(wait=False)
+    if not os.environ.get("VERCEL"):
+        scheduler = create_scheduler()
+        scheduler.start()
+        asyncio.create_task(run_ingestion())
+        yield
+        scheduler.shutdown(wait=False)
+    else:
+        yield
 
 
 app = FastAPI(title="SignalForge API", version="0.2.0", lifespan=lifespan)
@@ -58,3 +60,12 @@ for router in [
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok", "service": "signalforge-api"}
+
+
+@app.get("/api/ingest")
+async def trigger_ingest(authorization: str = Header(default="")) -> dict:
+    secret = os.environ.get("CRON_SECRET", "")
+    if secret and authorization != f"Bearer {secret}":
+        raise HTTPException(status_code=403, detail="Forbidden")
+    from app.ingestion.scheduler import run_ingestion
+    return await run_ingestion()

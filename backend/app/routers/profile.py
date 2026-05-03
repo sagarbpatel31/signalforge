@@ -1,13 +1,11 @@
-import json
-from pathlib import Path
 from typing import Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from ..kv import kv_get, kv_set
 
 router = APIRouter(prefix="/api", tags=["profile"])
 
-_PROFILE_FILE = Path(__file__).parent.parent.parent / "data" / "profile.json"
-_PROFILE_FILE.parent.mkdir(exist_ok=True)
+_KV_KEY = "profile"
 
 
 class UserProfile(BaseModel):
@@ -20,13 +18,12 @@ class UserProfile(BaseModel):
 
 
 def _load() -> Optional[UserProfile]:
-    if _PROFILE_FILE.exists():
-        return UserProfile(**json.loads(_PROFILE_FILE.read_text()))
-    return None
+    data = kv_get(_KV_KEY)
+    return UserProfile(**data) if data else None
 
 
 def _save(profile: UserProfile) -> None:
-    _PROFILE_FILE.write_text(profile.model_dump_json())
+    kv_set(_KV_KEY, profile.model_dump(), ttl=365 * 86_400)
 
 
 @router.get("/profile", response_model=UserProfile)

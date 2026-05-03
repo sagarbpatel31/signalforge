@@ -1,13 +1,10 @@
 import asyncio
 import json
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Union
 
 import feedparser
 import httpx
-
-CACHE_DIR = Path(__file__).parent.parent.parent / "data" / "cache"
 
 KEYWORDS = [
     "robot", "robotics", "edge ai", "embedded", "physical ai", "agentic",
@@ -253,15 +250,10 @@ async def fetch_jobs(limit: int = 50) -> list:
 
 
 def read_cache(name: str) -> Optional[Union[list, dict]]:
-    path = CACHE_DIR / f"{name}.json"
-    if path.exists():
-        try:
-            return json.loads(path.read_text())
-        except Exception:
-            return None
-    return None
+    from ..kv import kv_get
+    return kv_get(f"cache:{name}")
 
 
 def write_cache(name: str, data: Union[list, dict]) -> None:
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    (CACHE_DIR / f"{name}.json").write_text(json.dumps(data, ensure_ascii=False, indent=2))
+    from ..kv import kv_set
+    kv_set(f"cache:{name}", data)

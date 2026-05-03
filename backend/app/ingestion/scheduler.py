@@ -13,50 +13,41 @@ logger = logging.getLogger(__name__)
 
 async def run_ingestion() -> dict:
     logger.info("Ingestion started")
-    counts = {}
 
-    try:
-        news = await fetch_news()
+    # Fetch all sources in parallel to stay within Vercel's 10s function limit
+    results = await asyncio.gather(
+        fetch_news(),
+        fetch_papers(),
+        fetch_jobs(),
+        return_exceptions=True,
+    )
+
+    news = results[0] if isinstance(results[0], list) else []
+    papers = results[1] if isinstance(results[1], list) else []
+    jobs = results[2] if isinstance(results[2], list) else []
+
+    if news:
         write_cache("news", news)
-        counts["news"] = len(news)
-        logger.info(f"  news: {len(news)} items")
-    except Exception as e:
-        logger.error(f"  news failed: {e}")
-        counts["news"] = 0
-
-    try:
-        papers = await fetch_papers()
+    if papers:
         write_cache("papers", papers)
-        counts["papers"] = len(papers)
-        logger.info(f"  papers: {len(papers)} items")
-    except Exception as e:
-        logger.error(f"  papers failed: {e}")
-        counts["papers"] = 0
-
-    try:
-        jobs = await fetch_jobs()
+    if jobs:
         write_cache("jobs", jobs)
-        counts["jobs"] = len(jobs)
-        logger.info(f"  jobs: {len(jobs)} items")
-    except Exception as e:
-        logger.error(f"  jobs failed: {e}")
-        counts["jobs"] = 0
 
-    meta = {"last_refresh": datetime.now(timezone.utc).isoformat(), "counts": counts}
-    write_cache("meta", meta)
+    counts = {"news": len(news), "papers": len(papers), "jobs": len(jobs)}
+    write_cache("meta", {"last_refresh": datetime.now(timezone.utc).isoformat(), "counts": counts})
 
-    # Auto-generate digest if OpenAI key is configured
-    key = os.environ.get("OPENAI_API_KEY", "")
-    if key and key != "your_key_here":
+    logger.info("Ingestion complete: %s", counts)
+
+    # Auto-generate digest if OpenAI key present (skipped on Vercel cron — too slow)
+    if not os.environ.get("VERCEL") and os.environ.get("OPENAI_API_KEY", "") not in ("", "your_key_here"):
         try:
             from ..routers.generate import _generate_digest_content
             digest = await _generate_digest_content()
             write_cache("digest", digest)
             logger.info("  digest: generated")
-        except Exception as e:
-            logger.error(f"  digest failed: {e}")
+        except Exception as exc:
+            logger.error("  digest failed: %s", exc)
 
-    logger.info(f"Ingestion complete: {counts}")
     return counts
 
 
