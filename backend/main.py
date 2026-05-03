@@ -59,7 +59,15 @@ for router in [
 
 @app.get("/health")
 async def health() -> dict:
-    return {"status": "ok", "service": "signalforge-api"}
+    from app.kv import kv_get, kv_set
+    kv_set("health_check", {"ok": True}, ttl=60)
+    result = kv_get("health_check")
+    redis_url = os.environ.get("UPSTASH_REDIS_REST_URL", "")[:40]
+    return {
+        "status": "ok",
+        "redis_write_read": result is not None,
+        "redis_url_prefix": redis_url or "NOT SET",
+    }
 
 
 @app.get("/api/ingest")
