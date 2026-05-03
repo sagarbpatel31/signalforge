@@ -8,6 +8,6 @@
     { "src": "/(.*)", "dest": "/api/index" }
   ],
   "crons": [
-    { "path": "/api/ingest", "schedule": "0 */12 * * *" }
+    { "path": "/api/ingest", "schedule": "0 8 * * *" }
   ]
 }
