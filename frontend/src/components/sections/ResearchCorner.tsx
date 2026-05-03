@@ -1,11 +1,25 @@
 import Link from "next/link";
 import { fetchResearch } from "@/lib/api";
+import { readCacheFile } from "@/lib/server-cache";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import type { Paper } from "@/lib/types";
 
 export async function ResearchCorner() {
-  const papers = await fetchResearch();
+  let papers = await fetchResearch();
+  if (!papers.length) {
+    const cached = readCacheFile<Record<string, unknown>[]>("papers");
+    if (cached?.length) {
+      papers = cached.slice(0, 6).map((p) => ({
+        title: ((p.title as string) ?? "").slice(0, 120),
+        venue: (p.venue as string) ?? "arXiv",
+        tags: ((p.tags as string[]) ?? []).slice(0, 3),
+        read: false,
+        url: (p.url as string) ?? "",
+      })) as Paper[];
+    }
+  }
   return (
     <SfCard>
       <div

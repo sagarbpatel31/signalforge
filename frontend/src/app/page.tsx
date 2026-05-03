@@ -10,7 +10,9 @@ import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
 import { fetchPosts, fetchTasks, fetchProfile, fetchBrief } from "@/lib/api";
+import { readProfileFile } from "@/lib/server-cache";
 import { redirect } from "next/navigation";
+import type { UserProfile } from "@/lib/types";
 
 const GAP = 18;
 
@@ -22,11 +24,13 @@ export default async function DashboardPage() {
     fetchBrief(),
   ]);
 
-  if (!profile) redirect("/onboarding");
+  // Fallback: read profile from disk (works when backend HTTP is unreachable in preview sandbox)
+  const resolvedProfile: UserProfile | null = profile ?? readProfileFile<UserProfile>();
+  if (!resolvedProfile) redirect("/onboarding");
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--sf-bg)" }}>
-      <Nav date="May 1, 2026" userName={profile.name} />
+      <Nav date="May 1, 2026" userName={resolvedProfile!.name} />
 
       {/* Subtle background grid texture */}
       <div
