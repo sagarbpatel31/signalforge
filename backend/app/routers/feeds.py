@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from ..ingestion.sources import read_cache
+from ..ingestion.sources import read_cache, fetch_sheet_companies
 
 router = APIRouter(prefix="/api/feeds", tags=["feeds"])
 
@@ -22,3 +22,9 @@ async def get_digest():
 @router.get("/meta")
 async def get_meta():
     return read_cache("meta") or {"last_refresh": None, "counts": {}}
+
+
+@router.get("/sheet-companies")
+async def get_sheet_companies():
+    """Returns all company names from the Google Sheet watchlist."""
+    return await fetch_sheet_companies()

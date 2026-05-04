@@ -39,21 +39,37 @@ _DOMAIN_MAP: dict = {
 
 _TECH_RE = re.compile(
     r"\b("
+    r"software engineer|embedded software|embedded systems|firmware engineer|"
+    r"embedded linux|robotics software|robotics ai|ai embedded|edge ai|"
+    r"systems engineer|applications engineer|forward deployed|robotics engineer|"
+    r"ai engineer|machine learning engineer|ml engineer|perception engineer|"
+    r"automation systems|ai automation|ai deployed|full stack ai|founding engineer|"
+    r"research engineer|autonomous systems|reinforcement learning|ai infrastructure|"
+    r"nvidia research|gen ai engineer|"
     r"engineer(?:ing)?|scientist|researcher|developer|architect|"
     r"software|hardware|firmware|robotics|autonomy|perception|"
     r"simulation|embedded|fpga|inference|"
     r"machine learning|deep learning|computer vision|"
     r"motion planning|path planning|control systems|"
-    r"data scientist|data engineer|ml engineer|ai engineer|"
-    r"platform engineer|infrastructure|infra swe|"
-    r"phd intern|phd student|research intern|swe|"
-    r"technical program|tech lead|staff eng|principal eng"
+    r"platform engineer|infrastructure|"
+    r"tech lead|staff eng|principal eng"
     r")\b",
+    re.IGNORECASE,
+)
+
+# Exclude clearly non-technical roles
+_EXCLUDE_RE = re.compile(
+    r"\b(account executive|account manager|sales|recruiter|marketing|"
+    r"hr |human resources|legal|finance|accounting|business development|"
+    r"growth|content|designer|ux|ui designer|graphic|brand|"
+    r"customer success|customer support|operations manager)\b",
     re.IGNORECASE,
 )
 
 
 def _is_tech_role(title: str) -> bool:
+    if _EXCLUDE_RE.search(title):
+        return False
     return bool(_TECH_RE.search(title))
 
 

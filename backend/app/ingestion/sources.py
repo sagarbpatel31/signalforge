@@ -37,12 +37,39 @@ ARXIV_QUERIES = [
     ("all:humanoid+robot+learning", "Physical AI"),
 ]
 
-# Verified working Lever slugs (2026-05-02)
-LEVER_COMPANIES = [
-    "mistral",
+# Google Sheet — company watchlist (public CSV export)
+GSHEET_CSV_URL = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1QezZa9Y8OK-XImA_wqZg2vNoon5L8e_qv9xKsQ1aKiA/export?format=csv"
+)
+
+# Role keywords to match (user-specified)
+ROLE_KEYWORDS = [
+    "software engineer", "embedded software", "embedded systems", "firmware engineer",
+    "embedded linux", "robotics software", "robotics ai", "ai embedded", "edge ai engineer",
+    "systems engineer", "applications engineer", "forward deployed", "robotics engineer",
+    "ai engineer", "machine learning engineer", "ml engineer", "perception engineer",
+    "automation systems", "ai automation", "ai deployed", "full stack ai", "founding engineer",
+    "research engineer", "autonomous systems", "reinforcement learning", "ai infrastructure",
+    "nvidia research", "gen ai engineer",
 ]
 
-# Verified working Greenhouse slugs (2026-05-02)
+# Lever slugs (verified or high-confidence from sheet companies)
+LEVER_COMPANIES = [
+    "mistral",
+    "collaborative-robotics",
+    "field-ai",
+    "built-robotics",
+    "carbon-robotics",
+    "gecko-robotics",
+    "covariant",
+    "skydio",
+    "shield-ai",
+    "physical-intelligence",
+    "skild-ai",
+]
+
+# Greenhouse slugs (verified or high-confidence from sheet companies)
 GREENHOUSE_COMPANIES = [
     "anthropic",
     "waymo",
@@ -51,9 +78,47 @@ GREENHOUSE_COMPANIES = [
     "nuro",
     "motional",
     "helsing",
+    "aurora",
+    "applied-intuition",
+    "agility-robotics",
+    "boston-dynamics",
+    "zoox",
+    "kodiak-robotics",
+    "gatik",
+    "stack-av",
+    "wayve",
+    "robust-robotics",
+    "polymath-robotics",
+    "fort-robotics",
+    "graymatter-robotics",
+    "hebi-robotics",
+    "path-robotics",
+    "reliable-robotics",
+    "righthand-robotics",
+    "scythe-robotics",
+    "shift-robotics",
+    "torc-robotics",
+    "verdant-robotics",
+    "dusty-robotics",
+    "fox-robotics",
+    "gather-ai",
+    "seegrid",
+    "locus-robotics",
+    "formant",
+    "vimaan",
+    "dexterity",
+    "ambi-robotics",
+    "1x-technologies",
+    "etched",
+    "tenstorrent",
+    "sifive",
+    "memfault",
 ]
 
-REMOTIVE_SEARCHES = ["robotics", "embedded systems", "edge ai", "machine learning engineer"]
+REMOTIVE_SEARCHES = [
+    "robotics", "embedded systems", "edge ai", "machine learning engineer",
+    "firmware engineer", "perception engineer", "autonomous systems",
+]
 
 _HEADERS = {"User-Agent": "SignalForge/1.0 (intelligence terminal)"}
 
@@ -247,6 +312,32 @@ async def fetch_jobs(limit: int = 50) -> list:
             seen.add(key)
             unique.append(job)
     return unique[:limit]
+
+
+async def fetch_sheet_companies() -> list:
+    """Parse company names from the Google Sheet watchlist CSV."""
+    try:
+        async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
+            resp = await client.get(GSHEET_CSV_URL, headers=_HEADERS)
+            if resp.status_code != 200:
+                return []
+        companies = []
+        for row in resp.text.splitlines():
+            for cell in row.split(","):
+                name = cell.strip().strip('"').strip()
+                # Strip embedded URLs ("Company - https://...")
+                if " - http" in name:
+                    name = name.split(" - http")[0].strip()
+                if name and len(name) > 1 and not name.startswith("http"):
+                    companies.append(name)
+        return sorted(set(companies))
+    except Exception:
+        return []
+
+
+def _role_matches_keywords(title: str) -> bool:
+    t = title.lower()
+    return any(kw in t for kw in ROLE_KEYWORDS)
 
 
 def read_cache(name: str) -> Optional[Union[list, dict]]:
