@@ -37,6 +37,7 @@ class Startup(BaseModel):
     domain: str
     signal: Literal["Hot", "Watch", "Track"]
     note: str
+    website: str = ""
 
 
 class Role(BaseModel):
@@ -45,6 +46,7 @@ class Role(BaseModel):
     type: str
     signal: str
     color: Literal["cyan", "amber", "green", "red", "muted"]
+    url: str = ""
 
 
 class Paper(BaseModel):

@@ -103,6 +103,7 @@ def _job_to_role(job: dict) -> Role:
         type=f"{job.get('job_type', 'Full-time')} · {location}",
         signal=f"LIVE · {job.get('source', '')}",
         color=color,
+        url=job.get("url", ""),
     )
 
 

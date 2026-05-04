@@ -29,6 +29,7 @@ export interface Startup {
   domain: string;
   signal: "Hot" | "Watch" | "Track";
   note: string;
+  website?: string;
 }
 
 export interface Role {
@@ -37,6 +38,7 @@ export interface Role {
   type: string;
   signal: string;
   color: TagColor;
+  url?: string;
 }
 
 export interface Paper {

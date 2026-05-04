@@ -49,7 +49,14 @@ export default async function StartupsPage() {
             >
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                  <span style={{ fontWeight: 600, fontSize: 14 }}>{s.name}</span>
+                  {s.website ? (
+                    <a href={s.website} target="_blank" rel="noopener noreferrer"
+                      style={{ fontWeight: 600, fontSize: 14, color: "var(--sf-cyan)", textDecoration: "none" }}>
+                      {s.name} ↗
+                    </a>
+                  ) : (
+                    <span style={{ fontWeight: 600, fontSize: 14 }}>{s.name}</span>
+                  )}
                   <SfTag color="muted">{s.stage}</SfTag>
                   <SfTag color="muted">{s.domain}</SfTag>
                 </div>

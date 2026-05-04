@@ -44,7 +44,7 @@ export default async function CareerPage() {
                 gap: 16,
               }}
             >
-              <div>
+              <div style={{ minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
                   <span style={{ fontWeight: 600, fontSize: 13 }}>{role.company}</span>
                   <span style={{ color: "var(--sf-text-3)", fontSize: 12 }}>·</span>
@@ -57,6 +57,27 @@ export default async function CareerPage() {
                   <SfTag color={role.color}>{role.signal}</SfTag>
                 </div>
               </div>
+              {role.url ? (
+                <a
+                  href={role.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 10,
+                    padding: "6px 14px",
+                    background: "var(--sf-cyan-dim)",
+                    border: "1px solid var(--sf-cyan)",
+                    color: "var(--sf-cyan)",
+                    textDecoration: "none",
+                    letterSpacing: "0.06em",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                  }}
+                >
+                  Apply →
+                </a>
+              ) : null}
             </div>
           ))}
 

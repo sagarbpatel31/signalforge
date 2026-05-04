@@ -55,7 +55,12 @@ export async function CareerRadar() {
           >
             <div>
               <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 2 }}>
-                {r.company}{" "}
+                {r.url ? (
+                  <a href={r.url} target="_blank" rel="noopener noreferrer"
+                    style={{ color: "var(--sf-cyan)", textDecoration: "none", fontWeight: 600 }}>
+                    {r.company}
+                  </a>
+                ) : r.company}{" "}
                 <span style={{ color: "var(--sf-text-2)", fontWeight: 400 }}>
                   · {r.role}
                 </span>

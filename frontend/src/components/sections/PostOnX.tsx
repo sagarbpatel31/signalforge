@@ -33,7 +33,7 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
           marginBottom: 14,
         }}
       >
-        <SectionLabel>What to Post on X Today</SectionLabel>
+        <SectionLabel>What to Post</SectionLabel>
         <div style={{ display: "flex", gap: 4 }}>
           {posts.map((p, i) => (
             <button

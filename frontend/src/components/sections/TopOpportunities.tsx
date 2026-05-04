@@ -20,7 +20,7 @@ export async function TopOpportunities() {
   const opportunities = await fetchOpportunities();
   return (
     <SfCard>
-      <SectionLabel>Top Opportunities</SectionLabel>
+      <SectionLabel>Skills × Targets</SectionLabel>
       <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
         {opportunities.map((op, i) => (
           <div
@@ -44,15 +44,34 @@ export async function TopOpportunities() {
             >
               {op.rank}
             </span>
-            <div>
-              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 3 }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
                 {op.title}
               </div>
-              <div
-                style={{ fontSize: 12, color: "var(--sf-text-2)", lineHeight: 1.4 }}
-              >
-                {op.why}
-              </div>
+              {op.why.startsWith("Target:") ? (
+                <div style={{ fontSize: 11, lineHeight: 1.5 }}>
+                  <span style={{ color: "var(--sf-text-3)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
+                    Target:{" "}
+                  </span>
+                  <span style={{ color: "var(--sf-cyan)" }}>
+                    {op.why.replace("Target: ", "").split(" → ")[0]}
+                  </span>
+                  {op.why.includes(" → ") && (
+                    <>
+                      <span style={{ color: "var(--sf-text-3)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
+                        {" → "}
+                      </span>
+                      <span style={{ color: "var(--sf-amber)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
+                        {op.why.split(" → ")[1]}
+                      </span>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div style={{ fontSize: 12, color: "var(--sf-text-2)", lineHeight: 1.4 }}>
+                  {op.why}
+                </div>
+              )}
             </div>
             <div
               style={{

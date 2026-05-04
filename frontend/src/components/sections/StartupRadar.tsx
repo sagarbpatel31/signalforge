@@ -57,7 +57,14 @@ export async function StartupRadar() {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontWeight: 600, fontSize: 13 }}>{s.name}</span>
+                {s.website ? (
+                  <a href={s.website} target="_blank" rel="noopener noreferrer"
+                    style={{ fontWeight: 600, fontSize: 13, color: "var(--sf-cyan)", textDecoration: "none" }}>
+                    {s.name}
+                  </a>
+                ) : (
+                  <span style={{ fontWeight: 600, fontSize: 13 }}>{s.name}</span>
+                )}
                 <SfTag color="muted">{s.stage}</SfTag>
               </div>
               <SfTag color={signalColor(s.signal)} dot={s.signal === "Hot"}>
