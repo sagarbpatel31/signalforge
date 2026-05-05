@@ -6,14 +6,12 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
 import type { Person, TagColor } from "@/lib/types";
 
-// Pool of real Edge AI / Robotics / Physical AI researchers to follow on X.
-// When you tick one as followed, the next from this pool is added to the list.
 const FOLLOW_POOL: Person[] = [
   {
     name: "Lerrel Pinto",
     handle: "@lerrelpinto",
     url: "https://x.com/lerrelpinto",
-    context: "NYU professor. Dexterous manipulation + robot learning. Follow for hands-on robotics research.",
+    context: "NYU professor. Dexterous manipulation + robot learning.",
     urgency: "This week",
     days: 0,
   },
@@ -21,7 +19,7 @@ const FOLLOW_POOL: Person[] = [
     name: "Pieter Abbeel",
     handle: "@pabbeel",
     url: "https://x.com/pabbeel",
-    context: "Berkeley AI Research + Covariant founder. Robot learning pioneer. Must-follow for Physical AI.",
+    context: "Berkeley AI Research + Covariant founder. Robot learning pioneer.",
     urgency: "This week",
     days: 0,
   },
@@ -29,7 +27,7 @@ const FOLLOW_POOL: Person[] = [
     name: "Russ Tedrake",
     handle: "@RussTedrake",
     url: "https://x.com/RussTedrake",
-    context: "MIT robotics + Drake framework creator. Deep expertise in planning + manipulation.",
+    context: "MIT robotics + Drake framework. Planning + manipulation expert.",
     urgency: "This week",
     days: 0,
   },
@@ -37,7 +35,7 @@ const FOLLOW_POOL: Person[] = [
     name: "Georgi Gerganov",
     handle: "@ggerganov",
     url: "https://x.com/ggerganov",
-    context: "Creator of llama.cpp. Critical follow for edge inference + quantization work.",
+    context: "Creator of llama.cpp. Core follow for edge inference + quant.",
     urgency: "This week",
     days: 0,
   },
@@ -45,7 +43,7 @@ const FOLLOW_POOL: Person[] = [
     name: "Tim Dettmers",
     handle: "@Tim_Dettmers",
     url: "https://x.com/Tim_Dettmers",
-    context: "Quantization researcher (bitsandbytes, GPTQ). Core to INT4/INT8 edge inference work.",
+    context: "Quantization researcher (bitsandbytes, GPTQ). INT4/INT8 authority.",
     urgency: "This week",
     days: 0,
   },
@@ -53,16 +51,28 @@ const FOLLOW_POOL: Person[] = [
     name: "Jeremy Howard",
     handle: "@jeremyphoward",
     url: "https://x.com/jeremyphoward",
-    context: "fast.ai founder. Practical deep learning + on-device model deployment.",
+    context: "fast.ai founder. Practical deep learning + on-device deployment.",
     urgency: "This week",
     days: 0,
   },
+];
+
+// Gradient presets for avatars
+const GRADS = [
+  "linear-gradient(135deg, var(--blue-soft), var(--purple-soft))",
+  "linear-gradient(135deg, var(--green-soft), var(--blue-soft))",
+  "linear-gradient(135deg, var(--orange-soft), var(--pink-soft))",
+  "linear-gradient(135deg, var(--purple-soft), var(--pink-soft))",
 ];
 
 function urgencyColor(u: string): TagColor {
   if (u === "Overdue") return "red";
   if (u === "This week") return "amber";
   return "muted";
+}
+
+function avatarInitials(name: string) {
+  return name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 }
 
 export function PeopleFollowUp({ people: initialPeople }: { people: Person[] }) {
@@ -74,7 +84,6 @@ export function PeopleFollowUp({ people: initialPeople }: { people: Person[] }) 
   function markFollowed(idx: number) {
     if (followed.has(idx)) return;
     setFollowed((prev) => new Set(prev).add(idx));
-    // Add next from pool if available
     if (poolIdx < FOLLOW_POOL.length) {
       setPeople((prev) => [...prev, FOLLOW_POOL[poolIdx]]);
       setPoolIdx((p) => p + 1);
@@ -95,14 +104,14 @@ export function PeopleFollowUp({ people: initialPeople }: { people: Person[] }) 
           marginBottom: 4,
         }}
       >
-        <SectionLabel>People to Follow on X</SectionLabel>
+        <SectionLabel icon="👥">People to Follow</SectionLabel>
         {done.length > 0 && (
           <button
             onClick={() => setShowFollowed((v) => !v)}
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: 10,
-              color: "var(--sf-text-3)",
+              color: "var(--text-3)",
               background: "transparent",
               border: "none",
               cursor: "pointer",
@@ -123,7 +132,7 @@ export function PeopleFollowUp({ people: initialPeople }: { people: Person[] }) 
               key={origIdx}
               style={{
                 padding: "11px 0",
-                borderBottom: "1px solid var(--sf-border-subtle)",
+                borderBottom: "1px solid var(--hairline)",
                 opacity: isFollowed ? 0.4 : 1,
                 transition: "opacity 0.2s",
               }}
@@ -136,33 +145,56 @@ export function PeopleFollowUp({ people: initialPeople }: { people: Person[] }) 
                   marginBottom: 3,
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  {p.url ? (
-                    <a
-                      href={p.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        fontWeight: 600,
-                        fontSize: 13,
-                        color: "var(--sf-cyan)",
-                        textDecoration: isFollowed ? "line-through" : "none",
-                      }}
-                    >
-                      {p.name}
-                    </a>
-                  ) : (
-                    <span style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</span>
-                  )}
-                  <span
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  {/* Gradient avatar */}
+                  <div
                     style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: "50%",
+                      background: GRADS[origIdx % GRADS.length],
+                      border: "1px solid var(--hairline-strong)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       fontFamily: "var(--font-mono)",
                       fontSize: 10,
-                      color: "var(--sf-text-3)",
+                      fontWeight: 700,
+                      color: "var(--blue)",
+                      flexShrink: 0,
                     }}
                   >
-                    {p.handle}
-                  </span>
+                    {avatarInitials(p.name)}
+                  </div>
+                  <div>
+                    {p.url ? (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontWeight: 600,
+                          fontSize: 13,
+                          color: "var(--text)",
+                          textDecoration: isFollowed ? "line-through" : "none",
+                          display: "block",
+                        }}
+                      >
+                        {p.name}
+                      </a>
+                    ) : (
+                      <span style={{ fontWeight: 600, fontSize: 13, color: "var(--text)" }}>{p.name}</span>
+                    )}
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 10,
+                        color: "var(--blue)",
+                      }}
+                    >
+                      {p.handle}
+                    </span>
+                  </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   {!isFollowed && (
@@ -171,22 +203,22 @@ export function PeopleFollowUp({ people: initialPeople }: { people: Person[] }) 
                   <button
                     onClick={() => markFollowed(origIdx)}
                     disabled={isFollowed}
+                    className="btn btn-blue"
                     style={{
-                      fontFamily: "var(--font-mono)",
+                      padding: "3px 10px",
                       fontSize: 10,
-                      padding: "2px 8px",
-                      background: isFollowed ? "var(--sf-green-dim)" : "transparent",
-                      border: `1px solid ${isFollowed ? "var(--sf-green)" : "var(--sf-green)"}`,
-                      color: isFollowed ? "var(--sf-green)" : "var(--sf-green)",
+                      borderRadius: 999,
+                      background: isFollowed ? "var(--green-soft)" : "var(--blue-soft)",
+                      border: isFollowed ? "1px solid oklch(0.78 0.15 155 / 0.3)" : "1px solid oklch(0.72 0.16 245 / 0.35)",
+                      color: isFollowed ? "var(--green)" : "var(--blue)",
                       cursor: isFollowed ? "default" : "pointer",
-                      letterSpacing: "0.04em",
                     }}
                   >
                     {isFollowed ? "✓ Followed" : "Follow →"}
                   </button>
                 </div>
               </div>
-              <div style={{ fontSize: 12, color: "var(--sf-text-2)", lineHeight: 1.4 }}>
+              <div style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.4, paddingLeft: 44 }}>
                 {p.context}
               </div>
             </div>

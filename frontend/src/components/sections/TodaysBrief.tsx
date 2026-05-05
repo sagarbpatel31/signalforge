@@ -34,50 +34,46 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
           marginBottom: 16,
         }}
       >
-        <SectionLabel>Today&apos;s Brief</SectionLabel>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <Link href="/news" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-text-3)", textDecoration: "none", letterSpacing: "0.04em" }}>
-            View Feed →
-          </Link>
-          <span
+        <SectionLabel icon="📡">Today&apos;s Brief</SectionLabel>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <Link
+            href="/news"
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: 10,
-              color: "var(--sf-text-3)",
+              color: "var(--text-3)",
+              textDecoration: "none",
+              letterSpacing: "0.04em",
             }}
           >
+            View Feed →
+          </Link>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-4)" }}>
             {timestamp}
           </span>
           <button
             onClick={handleRegenerate}
             disabled={loading}
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-              padding: "4px 10px",
-              background: loading ? "var(--sf-bg3)" : "var(--sf-cyan-dim)",
-              border: `1px solid ${loading ? "var(--sf-border)" : "var(--sf-cyan)"}`,
-              color: loading ? "var(--sf-text-3)" : "var(--sf-cyan)",
-              cursor: loading ? "wait" : "pointer",
-              letterSpacing: "0.06em",
-              transition: "all 0.15s",
-            }}
+            className={`btn ${loading ? "" : "btn-blue"}`}
+            style={{ borderRadius: 8 }}
           >
             {loading ? "GENERATING..." : "⟳ AI BRIEF"}
           </button>
         </div>
       </div>
 
-      {/* Market pulse highlight */}
+      {/* Market pulse */}
       <div
         style={{
           fontFamily: "var(--font-mono)",
           fontSize: 11,
-          color: "var(--sf-cyan)",
-          background: "var(--sf-cyan-dim)",
+          color: "var(--blue)",
+          background: "var(--blue-soft)",
           padding: "10px 14px",
           marginBottom: 16,
-          borderLeft: "2px solid var(--sf-cyan)",
+          borderRadius: 10,
+          borderLeft: "2px solid var(--blue)",
+          lineHeight: 1.6,
         }}
       >
         ⟶ {market_pulse}
@@ -95,7 +91,7 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
               gap: 12,
               padding: "10px 0",
               borderBottom:
-                i < signals.length - 1 ? "1px solid var(--sf-border-subtle)" : "none",
+                i < signals.length - 1 ? "1px solid var(--hairline)" : "none",
             }}
           >
             <SfTag color={s.color}>{s.label}</SfTag>
@@ -103,20 +99,14 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: 11,
-                color:
-                  s.color === "muted" ? "var(--sf-text-3)" : `var(--sf-${s.color})`,
+                color: s.color === "muted" ? "var(--text-3)" : `var(--sf-${s.color})`,
                 alignSelf: "center",
+                fontWeight: 600,
               }}
             >
               {s.delta}
             </span>
-            <span
-              style={{
-                fontSize: 13,
-                color: "var(--sf-text-2)",
-                lineHeight: 1.5,
-              }}
-            >
+            <span style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.5 }}>
               {s.text}
             </span>
           </div>

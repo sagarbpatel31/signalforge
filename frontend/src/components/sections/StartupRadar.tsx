@@ -11,6 +11,32 @@ function signalColor(s: string): TagColor {
   return "muted";
 }
 
+function signalHeat(s: string): number {
+  if (s === "Hot") return 9;
+  if (s === "Watch") return 6;
+  return 3;
+}
+
+function HeatMeter({ level, color }: { level: number; color: string }) {
+  const bars = 10;
+  return (
+    <div style={{ display: "flex", gap: 2, alignItems: "flex-end" }}>
+      {Array.from({ length: bars }).map((_, i) => (
+        <span
+          key={i}
+          style={{
+            width: 3,
+            height: 6 + (i % 3) * 3,
+            borderRadius: 1,
+            background: i < level ? color : "var(--hairline-strong)",
+            transition: "background 0.2s",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export async function StartupRadar() {
   const startups = await fetchStartups();
   const visible = startups.slice(0, 4);
@@ -24,13 +50,13 @@ export async function StartupRadar() {
           marginBottom: 4,
         }}
       >
-        <SectionLabel>Startup Radar</SectionLabel>
+        <SectionLabel icon="🚀">Startup Radar</SectionLabel>
         <Link
           href="/startups"
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: 10,
-            color: "var(--sf-text-3)",
+            color: "var(--blue)",
             textDecoration: "none",
             letterSpacing: "0.04em",
           }}
@@ -39,43 +65,55 @@ export async function StartupRadar() {
         </Link>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {visible.map((s, i) => (
-          <div
-            key={i}
-            style={{
-              padding: "11px 0",
-              borderBottom:
-                i < visible.length - 1 ? "1px solid var(--sf-border-subtle)" : "none",
-            }}
-          >
+        {visible.map((s, i) => {
+          const sc = signalColor(s.signal);
+          const heatColor =
+            sc === "green" ? "var(--green)" : sc === "amber" ? "var(--orange)" : "var(--text-4)";
+          return (
             <div
+              key={i}
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 4,
+                padding: "12px 0",
+                borderBottom:
+                  i < visible.length - 1 ? "1px solid var(--hairline)" : "none",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {s.website ? (
-                  <a href={s.website} target="_blank" rel="noopener noreferrer"
-                    style={{ fontWeight: 600, fontSize: 13, color: "var(--sf-cyan)", textDecoration: "none" }}>
-                    {s.name}
-                  </a>
-                ) : (
-                  <span style={{ fontWeight: 600, fontSize: 13 }}>{s.name}</span>
-                )}
-                <SfTag color="muted">{s.stage}</SfTag>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 4,
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  {s.website ? (
+                    <a
+                      href={s.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 13,
+                        color: "var(--text)",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {s.name} ↗
+                    </a>
+                  ) : (
+                    <span style={{ fontWeight: 600, fontSize: 13 }}>{s.name}</span>
+                  )}
+                  <SfTag color="muted">{s.stage}</SfTag>
+                </div>
+                <HeatMeter level={signalHeat(s.signal)} color={heatColor} />
               </div>
-              <SfTag color={signalColor(s.signal)} dot={s.signal === "Hot"}>
-                {s.signal}
-              </SfTag>
+              <div style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.4 }}>
+                {s.note}
+              </div>
             </div>
-            <div style={{ fontSize: 12, color: "var(--sf-text-2)", lineHeight: 1.4 }}>
-              {s.note}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </SfCard>
   );

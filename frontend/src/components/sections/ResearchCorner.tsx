@@ -27,11 +27,20 @@ export async function ResearchCorner() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: 14,
+          marginBottom: 4,
         }}
       >
-        <SectionLabel>Research Corner</SectionLabel>
-        <Link href="/research" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-cyan)", textDecoration: "none", letterSpacing: "0.04em" }}>
+        <SectionLabel icon="📄">Research Corner</SectionLabel>
+        <Link
+          href="/research"
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "var(--blue)",
+            textDecoration: "none",
+            letterSpacing: "0.04em",
+          }}
+        >
           Browse all →
         </Link>
       </div>
@@ -41,8 +50,7 @@ export async function ResearchCorner() {
             key={i}
             style={{
               padding: "10px 0",
-              borderBottom:
-                i < papers.length - 1 ? "1px solid var(--sf-border-subtle)" : "none",
+              borderBottom: i < papers.length - 1 ? "1px solid var(--hairline)" : "none",
               opacity: p.read ? 0.5 : 1,
             }}
           >
@@ -61,35 +69,36 @@ export async function ResearchCorner() {
                     fontSize: 12,
                     lineHeight: 1.4,
                     marginBottom: 4,
-                    color: p.read ? "var(--sf-text-2)" : "var(--sf-text)",
+                    color: p.read ? "var(--text-2)" : "var(--text)",
                   }}
                 >
-                  {p.title}
+                  {p.url ? (
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      {p.title}
+                    </a>
+                  ) : p.title}
                 </div>
                 <div style={{ display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center" }}>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: 10,
-                      color: "var(--sf-text-3)",
-                    }}
-                  >
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-4)" }}>
                     {p.venue}
                   </span>
                   {p.tags.map((t) => (
-                    <SfTag key={t} color="muted">
-                      {t}
-                    </SfTag>
+                    <SfTag key={t} color="muted">{t}</SfTag>
                   ))}
                 </div>
               </div>
               {!p.read && (
                 <div
                   style={{
-                    width: 6,
-                    height: 6,
+                    width: 7,
+                    height: 7,
                     borderRadius: "50%",
-                    background: "var(--sf-cyan)",
+                    background: "var(--blue)",
                     flexShrink: 0,
                     marginTop: 4,
                   }}

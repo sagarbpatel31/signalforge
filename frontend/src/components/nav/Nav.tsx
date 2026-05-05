@@ -1,5 +1,4 @@
-import { LiveDot } from "@/components/ui/live-dot";
-import { SfTag } from "@/components/ui/sf-tag";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface NavProps {
   date: string;
@@ -18,68 +17,84 @@ function initials(name: string) {
 export function Nav({ date, userName }: NavProps) {
   return (
     <nav
+      className="nav-blur"
       style={{
         position: "sticky",
         top: 0,
         zIndex: 100,
-        background: "oklch(0.09 0.01 250 / 0.92)",
-        backdropFilter: "blur(12px)",
-        borderBottom: "1px solid var(--sf-border)",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 28px",
-        height: 52,
+        height: 56,
       }}
     >
-      {/* Left */}
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <rect x="1" y="1" width="20" height="20" stroke="var(--sf-cyan)" strokeWidth="1.5" />
-            <path d="M5 11 L9 7 L13 13 L17 9" stroke="var(--sf-cyan)" strokeWidth="1.5" strokeLinecap="square" />
-            <circle cx="17" cy="9" r="2" fill="var(--sf-cyan)" />
-          </svg>
-          <span style={{ fontWeight: 700, fontSize: 15, letterSpacing: "-0.02em", color: "var(--sf-text)" }}>
-            SignalForge
-          </span>
-        </div>
+      {/* Logo */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
+          <rect x="2" y="2" width="20" height="20" rx="5" fill="var(--blue-soft)" stroke="oklch(0.72 0.16 245 / 0.4)" strokeWidth="1" />
+          <path d="M6 12 L9.5 8 L13 14 L16 10.5" stroke="var(--blue)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="16" cy="10.5" r="2" fill="var(--blue)" />
+        </svg>
+        <span
+          style={{
+            fontWeight: 700,
+            fontSize: 15,
+            letterSpacing: "-0.03em",
+            background: "linear-gradient(135deg, var(--text) 40%, var(--blue))",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          SignalForge
+        </span>
         <span
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "var(--sf-text-3)",
-            borderLeft: "1px solid var(--sf-border)",
-            paddingLeft: 16,
-            letterSpacing: "0.04em",
+            fontSize: 9,
+            color: "var(--text-4)",
+            borderLeft: "1px solid var(--hairline-strong)",
+            paddingLeft: 12,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
           }}
         >
-          INTELLIGENCE TERMINAL
+          Intelligence Terminal
         </span>
       </div>
 
       {/* Right */}
-      <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--sf-text-3)" }}>
-          <LiveDot />
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "var(--text-3)",
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+          }}
+        >
+          <span className="pulse-dot" style={{ width: 6, height: 6 }} />
           {date}
         </span>
-        <SfTag color="cyan" dot>
-          LIVE
-        </SfTag>
+
+        <ThemeToggle />
+
         <div
           style={{
-            width: 30,
-            height: 30,
+            width: 32,
+            height: 32,
             borderRadius: "50%",
-            background: "var(--sf-cyan-dim)",
-            border: "1px solid var(--sf-cyan)",
+            background: "linear-gradient(135deg, var(--blue-soft), var(--purple-soft))",
+            border: "1px solid oklch(0.72 0.16 245 / 0.3)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontFamily: "var(--font-mono)",
             fontSize: 11,
-            color: "var(--sf-cyan)",
+            fontWeight: 600,
+            color: "var(--blue)",
           }}
         >
           {userName ? initials(userName) : "SF"}

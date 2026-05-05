@@ -34,9 +34,18 @@ export async function CareerRadar() {
   }
   return (
     <SfCard>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-        <SectionLabel>Career Radar</SectionLabel>
-        <Link href="/career" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-cyan)", textDecoration: "none", letterSpacing: "0.04em" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+        <SectionLabel icon="💼">Career Radar</SectionLabel>
+        <Link
+          href="/career"
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "var(--blue)",
+            textDecoration: "none",
+            letterSpacing: "0.04em",
+          }}
+        >
           View all →
         </Link>
       </div>
@@ -49,29 +58,24 @@ export async function CareerRadar() {
               alignItems: "center",
               justifyContent: "space-between",
               padding: "10px 0",
-              borderBottom:
-                i < roles.length - 1 ? "1px solid var(--sf-border-subtle)" : "none",
+              borderBottom: i < roles.length - 1 ? "1px solid var(--hairline)" : "none",
             }}
           >
             <div>
               <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 2 }}>
                 {r.url ? (
-                  <a href={r.url} target="_blank" rel="noopener noreferrer"
-                    style={{ color: "var(--sf-cyan)", textDecoration: "none", fontWeight: 600 }}>
-                    {r.company}
+                  <a
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 600 }}
+                  >
+                    {r.company} ↗
                   </a>
                 ) : r.company}{" "}
-                <span style={{ color: "var(--sf-text-2)", fontWeight: 400 }}>
-                  · {r.role}
-                </span>
+                <span style={{ color: "var(--text-2)", fontWeight: 400 }}>· {r.role}</span>
               </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 10,
-                  color: "var(--sf-text-3)",
-                }}
-              >
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-4)" }}>
                 {r.type}
               </div>
             </div>

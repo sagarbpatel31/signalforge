@@ -19,6 +19,7 @@ export function BuildThisWeek({ tasks }: { tasks: Task[] }) {
     setDone((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const doneCount = Object.values(done).filter(Boolean).length;
+  const pct = tasks.length ? Math.round((doneCount / tasks.length) * 100) : 0;
 
   return (
     <SfCard>
@@ -27,19 +28,24 @@ export function BuildThisWeek({ tasks }: { tasks: Task[] }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: 14,
+          marginBottom: 4,
         }}
       >
-        <SectionLabel>Build This Week</SectionLabel>
+        <SectionLabel icon="🔨">Build This Week</SectionLabel>
         <span
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: 10,
-            color: "var(--sf-text-3)",
+            color: pct === 100 ? "var(--green)" : "var(--text-3)",
           }}
         >
-          {doneCount}/{tasks.length} done
+          {doneCount}/{tasks.length}
         </span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="progress-bar" style={{ marginBottom: 14 }}>
+        <div className="progress-fill" style={{ width: `${pct}%` }} />
       </div>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -49,42 +55,43 @@ export function BuildThisWeek({ tasks }: { tasks: Task[] }) {
             onClick={() => toggle(t.id)}
             style={{
               display: "grid",
-              gridTemplateColumns: "18px 36px 1fr 50px",
+              gridTemplateColumns: "22px 40px 1fr 44px",
               gap: 10,
               alignItems: "center",
               padding: "10px 0",
               cursor: "pointer",
               borderBottom:
-                i < tasks.length - 1 ? "1px solid var(--sf-border-subtle)" : "none",
+                i < tasks.length - 1 ? "1px solid var(--hairline)" : "none",
               opacity: done[t.id] ? 0.4 : 1,
               transition: "opacity 0.2s",
             }}
           >
+            {/* Rounded checkbox */}
             <div
               style={{
-                width: 14,
-                height: 14,
-                border: `1px solid ${done[t.id] ? "var(--sf-green)" : "var(--sf-border)"}`,
-                background: done[t.id] ? "var(--sf-green-dim)" : "transparent",
+                width: 16,
+                height: 16,
+                borderRadius: 6,
+                border: `1.5px solid ${done[t.id] ? "var(--green)" : "var(--hairline-strong)"}`,
+                background: done[t.id] ? "var(--green-soft)" : "transparent",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 flexShrink: 0,
+                transition: "all 0.15s",
               }}
             >
               {done[t.id] && (
-                <span style={{ color: "var(--sf-green)", fontSize: 9, lineHeight: 1 }}>
-                  ✓
-                </span>
+                <span style={{ color: "var(--green)", fontSize: 9, lineHeight: 1 }}>✓</span>
               )}
             </div>
             <SfTag color={priorityColor(t.priority)}>{t.priority}</SfTag>
             <span
               style={{
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: 500,
                 textDecoration: done[t.id] ? "line-through" : "none",
-                color: done[t.id] ? "var(--sf-text-3)" : "var(--sf-text)",
+                color: done[t.id] ? "var(--text-4)" : "var(--text)",
               }}
             >
               {t.task}
@@ -93,7 +100,7 @@ export function BuildThisWeek({ tasks }: { tasks: Task[] }) {
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: 10,
-                color: "var(--sf-text-3)",
+                color: "var(--text-4)",
                 textAlign: "right",
               }}
             >

@@ -1,4 +1,5 @@
 import { Nav } from "@/components/nav/Nav";
+import { Hero } from "@/components/sections/Hero";
 import { StatBar } from "@/components/sections/StatBar";
 import { TodaysBrief } from "@/components/sections/TodaysBrief";
 import { TopOpportunities } from "@/components/sections/TopOpportunities";
@@ -9,12 +10,13 @@ import { PostOnX } from "@/components/sections/PostOnX";
 import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
+import { Footer } from "@/components/sections/Footer";
 import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchPeople } from "@/lib/api";
 import { readProfileFile } from "@/lib/server-cache";
 import { redirect } from "next/navigation";
 import type { UserProfile } from "@/lib/types";
 
-const GAP = 18;
+const GAP = 20;
 
 export default async function DashboardPage() {
   const [profile, posts, tasks, brief, people] = await Promise.all([
@@ -25,15 +27,14 @@ export default async function DashboardPage() {
     fetchPeople(),
   ]);
 
-  // Fallback: read profile from disk (works when backend HTTP is unreachable in preview sandbox)
   const resolvedProfile: UserProfile | null = profile ?? readProfileFile<UserProfile>();
   if (!resolvedProfile) redirect("/onboarding");
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--sf-bg)" }}>
-      <Nav date="May 1, 2026" userName={resolvedProfile!.name} />
+    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      <Nav date="May 3, 2026" userName={resolvedProfile!.name} />
 
-      {/* Subtle background grid texture */}
+      {/* Subtle dot-grid background */}
       <div
         style={{
           position: "fixed",
@@ -41,9 +42,9 @@ export default async function DashboardPage() {
           zIndex: 0,
           pointerEvents: "none",
           backgroundImage:
-            "linear-gradient(var(--sf-border-subtle) 1px, transparent 1px), linear-gradient(90deg, var(--sf-border-subtle) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-          opacity: 0.3,
+            "radial-gradient(circle, var(--hairline) 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+          opacity: 0.6,
         }}
       />
 
@@ -51,27 +52,32 @@ export default async function DashboardPage() {
         style={{
           position: "relative",
           zIndex: 1,
-          maxWidth: 1280,
+          maxWidth: 1320,
           margin: "0 auto",
-          padding: `24px 24px 60px`,
+          padding: "32px 28px 0",
         }}
       >
+        {/* Hero */}
+        <div className="fade-up fade-up-1">
+          <Hero userName={resolvedProfile!.name} brief={brief} />
+        </div>
+
         {/* Stat bar */}
         <div className="fade-up fade-up-1">
           <StatBar />
         </div>
 
-        {/* Row 1: Today's Brief */}
+        {/* Today's Brief */}
         <div className="fade-up fade-up-2" style={{ marginBottom: GAP }}>
           <TodaysBrief initialBrief={brief} />
         </div>
 
-        {/* Row 2: Top Opportunities */}
+        {/* Skills × Targets */}
         <div className="fade-up fade-up-2" style={{ marginBottom: GAP }}>
           <TopOpportunities />
         </div>
 
-        {/* Row 3: Startup Radar · Career Radar · Research Corner */}
+        {/* Row: Startup · Career · Research */}
         <div
           className="fade-up fade-up-3"
           style={{
@@ -86,7 +92,7 @@ export default async function DashboardPage() {
           <ResearchCorner />
         </div>
 
-        {/* Row 4: Post on X · Build This Week · People */}
+        {/* Row: Post · Build · People */}
         <div
           className="fade-up fade-up-4"
           style={{
@@ -101,10 +107,12 @@ export default async function DashboardPage() {
           <PeopleFollowUp people={people} />
         </div>
 
-        {/* Row 5: Weekly Strategic Review */}
-        <div className="fade-up fade-up-5">
+        {/* Weekly Review */}
+        <div className="fade-up fade-up-5" style={{ marginBottom: GAP }}>
           <WeeklyStrategicReview />
         </div>
+
+        <Footer />
       </main>
     </div>
   );

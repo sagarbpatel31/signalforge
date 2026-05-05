@@ -19,7 +19,6 @@ function signalColor(signal: string): TagColor {
   return "muted";
 }
 
-// Map skill title → slug for linking
 const SKILL_SLUG: Record<string, string> = Object.fromEntries(
   SKILLS.map((s) => [s.title, s.slug])
 );
@@ -28,7 +27,7 @@ export async function TopOpportunities() {
   const opportunities = await fetchOpportunities();
   return (
     <SfCard>
-      <SectionLabel>Skills × Targets</SectionLabel>
+      <SectionLabel icon="🎯">Skills × Targets</SectionLabel>
       <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
         {opportunities.map((op, i) => {
           const slug = SKILL_SLUG[op.title];
@@ -42,10 +41,17 @@ export async function TopOpportunities() {
                 alignItems: "center",
                 padding: "12px 0",
                 borderBottom:
-                  i < opportunities.length - 1 ? "1px solid var(--sf-border-subtle)" : "none",
+                  i < opportunities.length - 1 ? "1px solid var(--hairline)" : "none",
               }}
             >
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--sf-text-3)" }}>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 11,
+                  color: "var(--text-4)",
+                  fontWeight: 600,
+                }}
+              >
                 {op.rank}
               </span>
               <div style={{ minWidth: 0 }}>
@@ -53,7 +59,7 @@ export async function TopOpportunities() {
                   {slug ? (
                     <Link
                       href={`/skills/${slug}`}
-                      style={{ color: "var(--sf-cyan)", textDecoration: "none" }}
+                      style={{ color: "var(--blue)", textDecoration: "none" }}
                     >
                       {op.title} →
                     </Link>
@@ -61,27 +67,25 @@ export async function TopOpportunities() {
                 </div>
                 {op.why.startsWith("Target:") ? (
                   <div style={{ fontSize: 11, lineHeight: 1.5 }}>
-                    <span style={{ color: "var(--sf-text-3)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
+                    <span style={{ color: "var(--text-4)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
                       Target:{" "}
                     </span>
-                    <span style={{ color: "var(--sf-text-2)" }}>
+                    <span style={{ color: "var(--text-2)" }}>
                       {op.why.replace("Target: ", "").split(" → ")[0]}
                     </span>
                     {op.why.includes(" → ") && (
                       <>
-                        <span style={{ color: "var(--sf-text-3)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
+                        <span style={{ color: "var(--text-4)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
                           {" → "}
                         </span>
-                        <span style={{ color: "var(--sf-amber)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
+                        <span style={{ color: "var(--orange)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
                           {op.why.split(" → ")[1]}
                         </span>
                       </>
                     )}
                   </div>
                 ) : (
-                  <div style={{ fontSize: 12, color: "var(--sf-text-2)", lineHeight: 1.4 }}>
-                    {op.why}
-                  </div>
+                  <div style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.4 }}>{op.why}</div>
                 )}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
@@ -92,14 +96,27 @@ export async function TopOpportunities() {
                 <div
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontSize: 16,
-                    fontWeight: 500,
-                    color: op.fit > 85 ? "var(--sf-cyan)" : op.fit > 75 ? "var(--sf-amber)" : "var(--sf-text-2)",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    letterSpacing: "-0.03em",
+                    color:
+                      op.fit > 85
+                        ? "var(--blue)"
+                        : op.fit > 75
+                        ? "var(--orange)"
+                        : "var(--text-2)",
                   }}
                 >
                   {op.fit}
                 </div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--sf-text-3)", letterSpacing: "0.06em" }}>
+                <div
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 9,
+                    color: "var(--text-4)",
+                    letterSpacing: "0.08em",
+                  }}
+                >
                   FIT
                 </div>
               </div>

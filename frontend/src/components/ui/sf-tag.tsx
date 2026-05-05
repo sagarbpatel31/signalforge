@@ -1,11 +1,11 @@
 import type { TagColor } from "@/lib/types";
 
-const colorMap: Record<TagColor, { bg: string; text: string; border: string }> = {
-  cyan:  { bg: "var(--sf-cyan-dim)",  text: "var(--sf-cyan)",  border: "oklch(0.72 0.14 198 / 0.3)" },
-  amber: { bg: "var(--sf-amber-dim)", text: "var(--sf-amber)", border: "oklch(0.78 0.14 65 / 0.3)" },
-  green: { bg: "var(--sf-green-dim)", text: "var(--sf-green)", border: "oklch(0.72 0.14 150 / 0.3)" },
-  red:   { bg: "var(--sf-red-dim)",   text: "var(--sf-red)",   border: "oklch(0.65 0.14 25 / 0.3)" },
-  muted: { bg: "var(--sf-bg3)",       text: "var(--sf-text-2)", border: "var(--sf-border)" },
+const colorMap: Record<TagColor, { bg: string; text: string }> = {
+  cyan:  { bg: "var(--blue-soft)",   text: "var(--blue)"   },
+  amber: { bg: "var(--orange-soft)", text: "var(--orange)" },
+  green: { bg: "var(--green-soft)",  text: "var(--green)"  },
+  red:   { bg: "var(--red-soft)",    text: "var(--red)"    },
+  muted: { bg: "var(--hairline)",    text: "var(--text-3)" },
 };
 
 interface SfTagProps {
@@ -18,21 +18,8 @@ export function SfTag({ children, color = "cyan", dot = false }: SfTagProps) {
   const c = colorMap[color];
   return (
     <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 5,
-        fontFamily: "var(--font-mono)",
-        fontSize: 10,
-        fontWeight: 500,
-        letterSpacing: "0.06em",
-        textTransform: "uppercase",
-        padding: "2px 7px",
-        border: `1px solid ${c.border}`,
-        background: c.bg,
-        color: c.text,
-        whiteSpace: "nowrap",
-      }}
+      className="pill"
+      style={{ background: c.bg, color: c.text }}
     >
       {dot && (
         <span
