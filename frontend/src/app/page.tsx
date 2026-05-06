@@ -18,12 +18,25 @@ import type { UserProfile } from "@/lib/types";
 
 const GAP = 20;
 
+const TZ = "America/Los_Angeles";
+
+function getPSTHour(): number {
+  // Extract hour in PST/PDT regardless of server timezone
+  const hourStr = new Date().toLocaleString("en-US", {
+    hour: "numeric",
+    hour12: false,
+    timeZone: TZ,
+  });
+  return parseInt(hourStr, 10);
+}
+
 function formatNavDate(): string {
   return new Date().toLocaleDateString("en-US", {
     weekday: "short",
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: TZ,
   });
 }
 
@@ -35,8 +48,7 @@ function getGreeting(hour: number): string {
 }
 
 export default async function DashboardPage() {
-  const now = new Date();
-  const hour = now.getHours();
+  const hour = getPSTHour();
   const greeting = getGreeting(hour);
   const navDate = formatNavDate();
 
