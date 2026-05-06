@@ -31,7 +31,7 @@ OPPORTUNITIES: list[Opportunity] = [
     Opportunity(rank="01", title="TinyML / INT4 Quantization",
                 domain="Edge AI", signal="HIGH", fit=94,
                 why="Target: Hailo, Axelera AI, Tenstorrent, Etched → Compiler / Inference Eng roles"),
-    Opportunity(rank="02", title="ROS2 + Nav2 + Gazebo Simulation",
+    Opportunity(rank="02", title="ROS2 + Nav2 + Gazebo",
                 domain="Robotics", signal="HIGH", fit=88,
                 why="Target: Figure, Agility, Apptronik, Boston Dynamics → Robotics SW Eng"),
     Opportunity(rank="03", title="NVIDIA Isaac Lab / Sim-to-Real RL",
@@ -232,23 +232,26 @@ PEOPLE: list[Person] = [
 ]
 
 WEEKLY_WINS = [
-    "Completed ROS2 Nav2 stack tutorial — nav through sim obstacle course.",
-    "Applied to Hailo Compiler Eng role — referral from Marcus confirmed.",
-    "Benchmarked Gemma 4B GGUF on Jetson Orin: 18 tok/s — beats prior baseline.",
+    "Shipped INT4 quant demo on STM32H7 — 6ms latency, 40% better than baseline. 3 founder DMs.",
+    "Applied to Hailo Compiler Eng + Inferix — referral from Marcus at Hailo BD confirmed.",
+    "Completed ROS2 Nav2 + Gazebo sim — autonomous nav through dynamic obstacle course.",
 ]
 
 WEEKLY_GAPS = [
-    "Isaac Lab policy rollout blocked — CUDA driver mismatch on Orin, unresolved.",
-    "No cold outreach done — need to message 2 Edge AI founders this week.",
+    "Isaac Lab CUDA mismatch on Orin unresolved — driver rollback needed before any policy runs.",
+    "Zero cold outreach sent — 2 Edge AI founders still not contacted. Non-negotiable this week.",
+    "Zephyr OTA PR not drafted — blocked by missing FDA 510(k) scope clarity.",
 ]
 
 CONVICTION_BETS: list[ConvictionBet] = [
-    ConvictionBet(label="Edge compiler toolchain", conviction=90),
-    ConvictionBet(label="Isaac Lab sim-to-real pipeline", conviction=78),
-    ConvictionBet(label="Embedded OS for medical devices", conviction=63),
+    ConvictionBet(label="Edge AI compiler toolchain gap", conviction=92),
+    ConvictionBet(label="Isaac Lab sim-to-real pipeline", conviction=81),
+    ConvictionBet(label="Zephyr RTOS for medical devices", conviction=67),
 ]
 
 NEXT_WEEK_FOCUS = (
-    "Fix Isaac Lab CUDA issue + run first policy rollout. "
-    "Message 2 Edge AI founders cold. Ship Zephyr OTA PR draft."
+    "Resolve Isaac Lab CUDA driver on Orin (rollback to 11.8), run first dexterous policy rollout. "
+    "DM @kargarx + @DrJimFan cold — intro ask, not a pitch. "
+    "Get Zephyr OTA PR into draft state — even 50% is progress. "
+    "Post INT4 benchmark thread on X with real numbers."
 )

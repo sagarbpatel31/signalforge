@@ -18,7 +18,28 @@ import type { UserProfile } from "@/lib/types";
 
 const GAP = 20;
 
+function formatNavDate(): string {
+  return new Date().toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function getGreeting(hour: number): string {
+  if (hour >= 5 && hour < 12) return "Good morning,";
+  if (hour >= 12 && hour < 17) return "Good afternoon,";
+  if (hour >= 17 && hour < 21) return "Good evening,";
+  return "Burning midnight oil,";
+}
+
 export default async function DashboardPage() {
+  const now = new Date();
+  const hour = now.getHours();
+  const greeting = getGreeting(hour);
+  const navDate = formatNavDate();
+
   const [profile, posts, tasks, brief, people] = await Promise.all([
     fetchProfile(),
     fetchPosts(),
@@ -32,7 +53,7 @@ export default async function DashboardPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
-      <Nav date="May 3, 2026" userName={resolvedProfile!.name} />
+      <Nav date={navDate} userName={resolvedProfile!.name} />
 
       {/* Subtle dot-grid background */}
       <div
@@ -59,7 +80,7 @@ export default async function DashboardPage() {
       >
         {/* Hero */}
         <div className="fade-up fade-up-1">
-          <Hero userName={resolvedProfile!.name} brief={brief} />
+          <Hero userName={resolvedProfile!.name} brief={brief} greeting={greeting} />
         </div>
 
         {/* Stat bar */}

@@ -4,9 +4,10 @@ import type { BriefResponse } from "@/lib/api";
 interface HeroProps {
   userName?: string;
   brief?: BriefResponse;
+  greeting?: string;
 }
 
-export function Hero({ userName, brief }: HeroProps) {
+export function Hero({ userName, brief, greeting = "Good morning," }: HeroProps) {
   const first = userName?.split(" ")[0] ?? "Engineer";
   const signals = brief?.signals?.slice(0, 3) ?? [];
 
@@ -54,7 +55,7 @@ export function Hero({ userName, brief }: HeroProps) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Good morning,
+            {greeting}
           </span>
           <br />
           <span

@@ -40,7 +40,12 @@ ARXIV_QUERIES = [
 # Google Sheet — company watchlist (public CSV export)
 GSHEET_CSV_URL = (
     "https://docs.google.com/spreadsheets/d/"
-    "1QezZa9Y8OK-XImA_wqZg2vNoon5L8e_qv9xKsQ1aKiA/export?format=csv"
+    "1AS7C8_upNOad-PS2aTu7rVIxyIy1V23NdUj0yIdOtvs/export?format=csv"
+)
+# Second sheet tab (gid from URL)
+GSHEET_CSV_URL_2 = (
+    "https://docs.google.com/spreadsheets/d/"
+    "1AS7C8_upNOad-PS2aTu7rVIxyIy1V23NdUj0yIdOtvs/export?format=csv&gid=0"
 )
 
 # Role keywords to match (user-specified)
@@ -118,6 +123,20 @@ GREENHOUSE_COMPANIES = [
 REMOTIVE_SEARCHES = [
     "robotics", "embedded systems", "edge ai", "machine learning engineer",
     "firmware engineer", "perception engineer", "autonomous systems",
+]
+
+# Ashby (jobsbyashby.com) slugs — robotics/AI companies
+ASHBY_COMPANIES = [
+    "anduril-industries",
+    "scale-ai",
+    "viam-robotics",
+    "cohere",
+    "surge-ai",
+    "skydio",       # may also be on Greenhouse, deduped by URL
+    "overjet",
+    "dexterity-inc",
+    "apptronik",    # may also be on Greenhouse
+    "nuro",         # may also be on Greenhouse
 ]
 
 _HEADERS = {"User-Agent": "SignalForge/1.0 (intelligence terminal)"}
@@ -288,11 +307,36 @@ async def _remotive_jobs() -> list:
     return jobs
 
 
-async def fetch_jobs(limit: int = 50) -> list:
+async def _ashby_jobs(client: httpx.AsyncClient, company: str) -> list:
+    try:
+        resp = await client.get(
+            f"https://api.ashbyhq.com/posting-api/job-board/{company}",
+            headers=_HEADERS,
+        )
+        if resp.status_code != 200:
+            return []
+        jobs = []
+        for j in resp.json().get("jobs", [])[:6]:
+            jobs.append({
+                "title": j.get("title", ""),
+                "company": j.get("companyName", company.replace("-", " ").title()),
+                "location": j.get("locationName", "Remote"),
+                "url": j.get("jobUrl", ""),
+                "job_type": j.get("employmentType", "Full-time"),
+                "tags": _extract_tags(j.get("title", "") + " " + j.get("department", "")),
+                "source": "Ashby",
+            })
+        return jobs
+    except Exception:
+        return []
+
+
+async def fetch_jobs(limit: int = 100) -> list:
     async with httpx.AsyncClient(timeout=12, follow_redirects=True) as client:
         tasks = (
             [_lever_jobs(client, co) for co in LEVER_COMPANIES] +
-            [_greenhouse_jobs(client, co) for co in GREENHOUSE_COMPANIES]
+            [_greenhouse_jobs(client, co) for co in GREENHOUSE_COMPANIES] +
+            [_ashby_jobs(client, co) for co in ASHBY_COMPANIES]
         )
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
