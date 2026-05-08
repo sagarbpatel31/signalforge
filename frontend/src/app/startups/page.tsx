@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SubNav } from "@/components/nav/SubNav";
 import { fetchStartups } from "@/lib/api";
 import { SfTag } from "@/components/ui/sf-tag";
 import type { Metadata } from "next";
@@ -16,19 +16,15 @@ export default async function StartupsPage() {
   const startups = await fetchStartups();
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--sf-bg)", padding: "32px 24px 60px" }}>
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      <SubNav backLabel="Dashboard" />
 
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ marginBottom: 6 }}>
-            <Link href="/" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-text-3)", letterSpacing: "0.08em", textDecoration: "none" }}>
-              ← DASHBOARD
-            </Link>
-          </div>
-          <h1 style={{ fontSize: 20, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px 60px" }}>
+        <div style={{ marginBottom: 28 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.03em", marginBottom: 4 }}>
             Startup Radar
           </h1>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-text-3)", margin: "4px 0 0", letterSpacing: "0.06em" }}>
+          <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-3)", letterSpacing: "0.06em" }}>
             {startups.length} STARTUPS · EDGE AI · ROBOTICS · PHYSICAL AI · EMBEDDED
           </p>
         </div>
@@ -38,8 +34,9 @@ export default async function StartupsPage() {
             <div
               key={i}
               style={{
-                background: "var(--sf-bg2)",
-                border: "1px solid var(--sf-border)",
+                background: "var(--surface)",
+                border: "1px solid var(--hairline)",
+                borderRadius: i === 0 ? "12px 12px 4px 4px" : i === startups.length - 1 ? "4px 4px 12px 12px" : 4,
                 padding: "16px 18px",
                 display: "grid",
                 gridTemplateColumns: "1fr auto",
@@ -48,10 +45,14 @@ export default async function StartupsPage() {
               }}
             >
               <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
                   {s.website ? (
-                    <a href={s.website} target="_blank" rel="noopener noreferrer"
-                      style={{ fontWeight: 600, fontSize: 14, color: "var(--sf-cyan)", textDecoration: "none" }}>
+                    <a
+                      href={s.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ fontWeight: 600, fontSize: 14, color: "var(--blue)", textDecoration: "none" }}
+                    >
                       {s.name} ↗
                     </a>
                   ) : (
@@ -60,7 +61,7 @@ export default async function StartupsPage() {
                   <SfTag color="muted">{s.stage}</SfTag>
                   <SfTag color="muted">{s.domain}</SfTag>
                 </div>
-                <div style={{ fontSize: 12, color: "var(--sf-text-2)", lineHeight: 1.5 }}>
+                <div style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.5 }}>
                   {s.note}
                 </div>
               </div>
@@ -71,7 +72,7 @@ export default async function StartupsPage() {
           ))}
 
           {startups.length === 0 && (
-            <div style={{ padding: "40px 0", textAlign: "center", color: "var(--sf-text-3)", fontFamily: "var(--font-mono)", fontSize: 12 }}>
+            <div style={{ padding: "48px 0", textAlign: "center", color: "var(--text-3)", fontFamily: "var(--font-mono)", fontSize: 12 }}>
               No startups tracked yet.
             </div>
           )}

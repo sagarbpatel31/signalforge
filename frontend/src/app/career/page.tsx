@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SubNav } from "@/components/nav/SubNav";
 import { fetchAllCareer, fetchProfile } from "@/lib/api";
 import { SfTag } from "@/components/ui/sf-tag";
 import type { Metadata } from "next";
@@ -9,22 +9,18 @@ export default async function CareerPage() {
   const [roles, profile] = await Promise.all([fetchAllCareer(), fetchProfile()]);
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--sf-bg)", padding: "32px 24px 60px" }}>
-      <div style={{ maxWidth: 960, margin: "0 auto" }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      <SubNav backLabel="Dashboard" />
 
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 24px 60px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
           <div>
-            <div style={{ marginBottom: 6 }}>
-              <Link href="/" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-text-3)", letterSpacing: "0.08em", textDecoration: "none" }}>
-                ← DASHBOARD
-              </Link>
-            </div>
-            <h1 style={{ fontSize: 20, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>
+            <h1 style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.03em", marginBottom: 4 }}>
               Career Radar
             </h1>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-text-3)", margin: "4px 0 0", letterSpacing: "0.06em" }}>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-3)", letterSpacing: "0.06em" }}>
               {roles.length} ROLES · FILTERED FOR{" "}
-              {profile?.domains.map(d => d.toUpperCase()).join(", ") ?? "YOUR PROFILE"}
+              {profile?.domains.map((d) => d.toUpperCase()).join(", ") ?? "YOUR PROFILE"}
             </p>
           </div>
           <SfTag color="cyan" dot>LIVE</SfTag>
@@ -35,8 +31,9 @@ export default async function CareerPage() {
             <div
               key={i}
               style={{
-                background: "var(--sf-bg2)",
-                border: "1px solid var(--sf-border)",
+                background: "var(--surface)",
+                border: "1px solid var(--hairline)",
+                borderRadius: i === 0 ? "12px 12px 4px 4px" : i === roles.length - 1 ? "4px 4px 12px 12px" : 4,
                 padding: "14px 18px",
                 display: "grid",
                 gridTemplateColumns: "1fr auto",
@@ -45,13 +42,13 @@ export default async function CareerPage() {
               }}
             >
               <div style={{ minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
                   <span style={{ fontWeight: 600, fontSize: 13 }}>{role.company}</span>
-                  <span style={{ color: "var(--sf-text-3)", fontSize: 12 }}>·</span>
-                  <span style={{ fontSize: 13, color: "var(--sf-text-2)" }}>{role.role}</span>
+                  <span style={{ color: "var(--text-4)", fontSize: 12 }}>·</span>
+                  <span style={{ fontSize: 13, color: "var(--text-2)" }}>{role.role}</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--sf-text-3)" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-3)" }}>
                     {role.type}
                   </span>
                   <SfTag color={role.color}>{role.signal}</SfTag>
@@ -62,18 +59,8 @@ export default async function CareerPage() {
                   href={role.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 10,
-                    padding: "6px 14px",
-                    background: "var(--sf-cyan-dim)",
-                    border: "1px solid var(--sf-cyan)",
-                    color: "var(--sf-cyan)",
-                    textDecoration: "none",
-                    letterSpacing: "0.06em",
-                    whiteSpace: "nowrap",
-                    flexShrink: 0,
-                  }}
+                  className="btn btn-blue"
+                  style={{ borderRadius: 8, whiteSpace: "nowrap" }}
                 >
                   Apply →
                 </a>
@@ -82,7 +69,7 @@ export default async function CareerPage() {
           ))}
 
           {roles.length === 0 && (
-            <div style={{ padding: "40px 0", textAlign: "center", color: "var(--sf-text-3)", fontFamily: "var(--font-mono)", fontSize: 12 }}>
+            <div style={{ padding: "48px 0", textAlign: "center", color: "var(--text-3)", fontFamily: "var(--font-mono)", fontSize: 12 }}>
               No roles cached yet — trigger ingestion from dashboard.
             </div>
           )}

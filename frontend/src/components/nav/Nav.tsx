@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { SearchModal } from "@/components/ui/SearchModal";
 import { useState, useEffect } from "react";
@@ -85,6 +86,35 @@ export function Nav({ date, userName }: NavProps) {
 
         {/* Right */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {/* Digest */}
+          <Link
+            href="/digest"
+            className="btn hide-mobile"
+            style={{ borderRadius: 8, gap: 5 }}
+            title="Intelligence Digest"
+          >
+            📋 Digest
+          </Link>
+
+          {/* Bookmarks */}
+          <Link
+            href="/bookmarks"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              color: "var(--text-3)",
+              textDecoration: "none",
+              padding: "5px 9px",
+              borderRadius: 7,
+              border: "1px solid var(--hairline)",
+              letterSpacing: "0.04em",
+              lineHeight: 1,
+            }}
+            title="Bookmarks"
+          >
+            🔖
+          </Link>
+
           {/* ⌘K search button */}
           <button
             onClick={() => setSearchOpen(true)}
