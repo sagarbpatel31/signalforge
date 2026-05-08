@@ -3,6 +3,7 @@ import { fetchStartups } from "@/lib/api";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import type { TagColor } from "@/lib/types";
 
 function signalColor(s: string): TagColor {
@@ -106,7 +107,10 @@ export async function StartupRadar() {
                   )}
                   <SfTag color="muted">{s.stage}</SfTag>
                 </div>
-                <HeatMeter level={signalHeat(s.signal)} color={heatColor} />
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <HeatMeter level={signalHeat(s.signal)} color={heatColor} />
+                  <BookmarkButton item={{ id: s.website ?? s.name, title: s.name, sub: s.stage, url: s.website, type: "startup" }} />
+                </div>
               </div>
               <div style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.4 }}>
                 {s.note}

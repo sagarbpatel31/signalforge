@@ -4,6 +4,7 @@ import { readCacheFile } from "@/lib/server-cache";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import type { Paper } from "@/lib/types";
 
 export async function ResearchCorner() {
@@ -92,18 +93,21 @@ export async function ResearchCorner() {
                   ))}
                 </div>
               </div>
-              {!p.read && (
-                <div
-                  style={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: "50%",
-                    background: "var(--blue)",
-                    flexShrink: 0,
-                    marginTop: 4,
-                  }}
-                />
-              )}
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 4 }}>
+                {!p.read && (
+                  <div
+                    style={{
+                      width: 7,
+                      height: 7,
+                      borderRadius: "50%",
+                      background: "var(--blue)",
+                      flexShrink: 0,
+                      marginTop: 4,
+                    }}
+                  />
+                )}
+                <BookmarkButton item={{ id: p.url ?? p.title, title: p.title, sub: p.venue, url: p.url, type: "paper" }} />
+              </div>
             </div>
           </div>
         ))}

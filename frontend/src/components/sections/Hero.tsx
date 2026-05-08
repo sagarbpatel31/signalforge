@@ -13,6 +13,7 @@ export function Hero({ userName, brief, greeting = "Good morning," }: HeroProps)
 
   return (
     <div
+      className="hero-grid"
       style={{
         display: "grid",
         gridTemplateColumns: "1fr auto",

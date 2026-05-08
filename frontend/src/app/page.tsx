@@ -11,7 +11,8 @@ import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
 import { Footer } from "@/components/sections/Footer";
-import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchPeople } from "@/lib/api";
+import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchPeople, fetchWeekly } from "@/lib/api";
+import type { WeeklyResponse } from "@/lib/api";
 import { readProfileFile } from "@/lib/server-cache";
 import { redirect } from "next/navigation";
 import type { UserProfile } from "@/lib/types";
@@ -52,12 +53,13 @@ export default async function DashboardPage() {
   const greeting = getGreeting(hour);
   const navDate = formatNavDate();
 
-  const [profile, posts, tasks, brief, people] = await Promise.all([
+  const [profile, posts, tasks, brief, people, weekly] = await Promise.all([
     fetchProfile(),
     fetchPosts(),
     fetchTasks(),
     fetchBrief(),
     fetchPeople(),
+    fetchWeekly(),
   ]);
 
   const resolvedProfile: UserProfile | null = profile ?? readProfileFile<UserProfile>();
@@ -112,7 +114,7 @@ export default async function DashboardPage() {
 
         {/* Row: Startup · Career · Research */}
         <div
-          className="fade-up fade-up-3"
+          className="fade-up fade-up-3 grid-3"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
@@ -127,7 +129,7 @@ export default async function DashboardPage() {
 
         {/* Row: Post · Build · People */}
         <div
-          className="fade-up fade-up-4"
+          className="fade-up fade-up-4 grid-3"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
@@ -142,7 +144,7 @@ export default async function DashboardPage() {
 
         {/* Weekly Review */}
         <div className="fade-up fade-up-5" style={{ marginBottom: GAP }}>
-          <WeeklyStrategicReview />
+          <WeeklyStrategicReview initialWeekly={weekly as WeeklyResponse} />
         </div>
 
         <Footer />

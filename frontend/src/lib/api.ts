@@ -134,3 +134,64 @@ export async function generatePosts(): Promise<Post[]> {
   if (!res.ok) throw new Error(`generate/posts failed: ${res.status}`);
   return res.json() as Promise<Post[]>;
 }
+
+export async function generateTasks(): Promise<Task[]> {
+  const res = await fetch(`${API_BASE}/api/generate/tasks`, { method: "POST" });
+  if (!res.ok) throw new Error(`generate/tasks failed: ${res.status}`);
+  return res.json() as Promise<Task[]>;
+}
+
+export async function generateWeekly(): Promise<WeeklyResponse> {
+  const res = await fetch(`${API_BASE}/api/generate/weekly`, { method: "POST" });
+  if (!res.ok) throw new Error(`generate/weekly failed: ${res.status}`);
+  return res.json() as Promise<WeeklyResponse>;
+}
+
+/**
+ * Stream the AI brief via SSE. Calls onChunk for each partial text chunk,
+ * resolves with the final parsed BriefResponse when done.
+ */
+export async function generateBriefStream(
+  onChunk: (text: string) => void
+): Promise<BriefResponse> {
+  const res = await fetch(`${API_BASE}/api/generate/brief`, { method: "POST" });
+  if (!res.ok) throw new Error(`generate/brief failed: ${res.status}`);
+  const body = res.body;
+  if (!body) throw new Error("No response body");
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+
+  return new Promise((resolve, reject) => {
+    async function pump() {
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const text = decoder.decode(value, { stream: true });
+          const lines = text.split("\n");
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            try {
+              const json = JSON.parse(line.slice(6));
+              if (json.chunk) {
+                onChunk(json.chunk as string);
+              } else if (json.done && json.result) {
+                resolve(json.result as BriefResponse);
+                return;
+              } else if (json.error) {
+                reject(new Error(json.error as string));
+                return;
+              }
+            } catch {
+              // skip malformed lines
+            }
+          }
+        }
+        reject(new Error("Stream ended without result"));
+      } catch (err) {
+        reject(err);
+      }
+    }
+    pump();
+  });
+}

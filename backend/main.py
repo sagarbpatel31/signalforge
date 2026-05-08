@@ -9,7 +9,7 @@ load_dotenv(Path(__file__).parent / ".env")
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate, feeds
+from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate, feeds, email
 from app.ingestion.scheduler import create_scheduler, run_ingestion
 
 logging.basicConfig(level=logging.INFO)
@@ -53,6 +53,7 @@ for router in [
     profile.router,
     generate.router,
     feeds.router,
+    email.router,
 ]:
     app.include_router(router)
 
@@ -73,4 +74,11 @@ async def health() -> dict:
 @app.get("/api/ingest")
 async def trigger_ingest() -> dict:
     from app.ingestion.scheduler import run_ingestion
-    return await run_ingestion()
+    result = await run_ingestion()
+    # Send daily digest email after ingestion (best-effort — never block ingest)
+    try:
+        from app.routers.email import send_digest
+        await send_digest()
+    except Exception:
+        pass
+    return result

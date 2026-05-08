@@ -1,18 +1,43 @@
-import { fetchWeekly } from "@/lib/api";
+"use client";
+
+import { useState } from "react";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
+import { generateWeekly } from "@/lib/api";
+import type { WeeklyResponse } from "@/lib/api";
 
-export async function WeeklyStrategicReview() {
-  const {
-    wins: weeklyWins,
-    gaps: weeklyGaps,
-    conviction_bets: convictionBets,
-    next_week_focus: nextWeekFocus,
-  } = await fetchWeekly();
+export function WeeklyStrategicReview({ initialWeekly }: { initialWeekly: WeeklyResponse }) {
+  const [data, setData] = useState<WeeklyResponse>(initialWeekly);
+  const [regen, setRegen] = useState(false);
+
+  async function handleRegen() {
+    setRegen(true);
+    try {
+      const fresh = await generateWeekly();
+      setData(fresh);
+    } catch {
+      // keep existing
+    } finally {
+      setRegen(false);
+    }
+  }
+
+  const { wins: weeklyWins, gaps: weeklyGaps, conviction_bets: convictionBets, next_week_focus: nextWeekFocus } = data;
 
   return (
     <SfCard>
-      <SectionLabel icon="📊">Weekly Strategic Review</SectionLabel>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <SectionLabel icon="📊">Weekly Strategic Review</SectionLabel>
+        <button
+          onClick={handleRegen}
+          disabled={regen}
+          className={`btn ${regen ? "" : "btn-blue"}`}
+          style={{ padding: "4px 11px", fontSize: 9, borderRadius: 6 }}
+        >
+          {regen ? "GENERATING…" : "⟳ AI REVIEW"}
+        </button>
+      </div>
+
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24 }}>
         {/* Wins */}
         <div>
@@ -120,7 +145,7 @@ export async function WeeklyStrategicReview() {
         </div>
       </div>
 
-      {/* Next week focus — Instrument Serif italic block */}
+      {/* Next week focus */}
       <div
         style={{
           marginTop: 20,

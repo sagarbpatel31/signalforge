@@ -4,6 +4,7 @@ import { readCacheFile } from "@/lib/server-cache";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import type { Role, TagColor } from "@/lib/types";
 
 const COLOR_MAP: Record<string, TagColor> = {
@@ -79,7 +80,10 @@ export async function CareerRadar() {
                 {r.type}
               </div>
             </div>
-            <SfTag color={r.color}>{r.signal}</SfTag>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <SfTag color={r.color}>{r.signal}</SfTag>
+              <BookmarkButton item={{ id: r.url ?? `${r.company}-${r.role}`, title: `${r.company} · ${r.role}`, sub: r.type ?? "", url: r.url, type: "role" }} />
+            </div>
           </div>
         ))}
       </div>

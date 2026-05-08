@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { generateTasks } from "@/lib/api";
 import type { TagColor, Task } from "@/lib/types";
 
 function priorityColor(p: string): TagColor {
@@ -12,11 +13,26 @@ function priorityColor(p: string): TagColor {
   return "muted";
 }
 
-export function BuildThisWeek({ tasks }: { tasks: Task[] }) {
+export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [done, setDone] = useState<Record<number, boolean>>({});
+  const [regen, setRegen] = useState(false);
 
   const toggle = (id: number) =>
     setDone((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  async function handleRegen() {
+    setRegen(true);
+    try {
+      const fresh = await generateTasks();
+      setTasks(fresh);
+      setDone({});
+    } catch {
+      // keep existing
+    } finally {
+      setRegen(false);
+    }
+  }
 
   const doneCount = Object.values(done).filter(Boolean).length;
   const pct = tasks.length ? Math.round((doneCount / tasks.length) * 100) : 0;
@@ -32,15 +48,25 @@ export function BuildThisWeek({ tasks }: { tasks: Task[] }) {
         }}
       >
         <SectionLabel icon="🔨">Build This Week</SectionLabel>
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: pct === 100 ? "var(--green)" : "var(--text-3)",
-          }}
-        >
-          {doneCount}/{tasks.length}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              color: pct === 100 ? "var(--green)" : "var(--text-3)",
+            }}
+          >
+            {doneCount}/{tasks.length}
+          </span>
+          <button
+            onClick={handleRegen}
+            disabled={regen}
+            className={`btn ${regen ? "" : "btn-blue"}`}
+            style={{ padding: "3px 9px", fontSize: 9, borderRadius: 6 }}
+          >
+            {regen ? "…" : "⟳ AI"}
+          </button>
+        </div>
       </div>
 
       {/* Progress bar */}

@@ -15,6 +15,8 @@ KEYWORDS = [
     "transformer", "diffusion", "reinforcement learning", "computer vision",
     "foundation model", "inference", "ros2", "manipulation", "locomotion",
     "simulation", "imitation learning", "world model",
+    "pre-seed", "seed round", "series a", "series b", "valuation",
+    "acquisition", "acqui-hire", "ipo", "crunchbase",
 ]
 
 RSS_SOURCES = [
@@ -26,6 +28,8 @@ RSS_SOURCES = [
     ("Hacker News", "https://news.ycombinator.com/rss"),
     ("OpenAI", "https://openai.com/news/rss.xml"),
     ("Hugging Face", "https://huggingface.co/blog/feed.xml"),
+    ("TechCrunch Startups", "https://techcrunch.com/category/startups/feed/"),
+    ("Crunchbase News", "https://news.crunchbase.com/feed/"),
 ]
 
 ARXIV_QUERIES = [
