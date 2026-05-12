@@ -135,6 +135,13 @@ export async function generatePosts(): Promise<Post[]> {
   return res.json() as Promise<Post[]>;
 }
 
+/** Refresh post drafts from live news cache — no Claude needed. */
+export async function refreshPosts(): Promise<Post[]> {
+  const res = await fetch(`${API_BASE}/api/posts/refresh`, { method: "POST" });
+  if (!res.ok) throw new Error(`posts/refresh failed: ${res.status}`);
+  return res.json() as Promise<Post[]>;
+}
+
 export async function generateTasks(): Promise<Task[]> {
   const res = await fetch(`${API_BASE}/api/generate/tasks`, { method: "POST" });
   if (!res.ok) throw new Error(`generate/tasks failed: ${res.status}`);

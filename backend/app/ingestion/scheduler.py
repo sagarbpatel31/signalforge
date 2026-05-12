@@ -38,15 +38,15 @@ async def run_ingestion() -> dict:
 
     logger.info("Ingestion complete: %s", counts)
 
-    # Auto-generate digest if OpenAI key present (skipped on Vercel cron — too slow)
-    if not os.environ.get("VERCEL") and os.environ.get("OPENAI_API_KEY", "") not in ("", "your_key_here"):
-        try:
-            from ..routers.generate import _generate_digest_content
-            digest = await _generate_digest_content()
-            write_cache("digest", digest)
-            logger.info("  digest: generated")
-        except Exception as exc:
-            logger.error("  digest failed: %s", exc)
+    # Refresh daily X post drafts from live news (no API key needed)
+    try:
+        from ..routers.twitter import generate_posts_from_cache
+        posts = generate_posts_from_cache()
+        if posts:
+            write_cache("posts", [p.model_dump() for p in posts])
+            logger.info("  posts: %d drafts refreshed", len(posts))
+    except Exception as exc:
+        logger.error("  posts refresh failed: %s", exc)
 
     return counts
 

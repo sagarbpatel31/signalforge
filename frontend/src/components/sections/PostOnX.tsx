@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
-import { generatePosts } from "@/lib/api";
+import { refreshPosts } from "@/lib/api";
 import type { Post } from "@/lib/types";
 
 export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
@@ -15,7 +15,7 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
   async function handleRegenerate() {
     setLoading(true);
     try {
-      const fresh = await generatePosts();
+      const fresh = await refreshPosts();
       setPosts(fresh);
       setSelected(0);
     } finally {
@@ -134,11 +134,20 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
           </button>
           <button
             onClick={() => navigator.clipboard.writeText(post.text)}
-            className="btn btn-blue"
+            className="btn"
             style={{ borderRadius: 8 }}
           >
-            Copy Draft
+            Copy
           </button>
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.text)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-blue"
+            style={{ borderRadius: 8, textDecoration: "none" }}
+          >
+            Post →
+          </a>
         </div>
       </div>
     </SfCard>
