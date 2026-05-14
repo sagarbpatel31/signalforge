@@ -171,39 +171,35 @@ POSTS: list[Post] = [
     Post(
         angle="Take",
         text=(
-            "Edge AI inference is hitting an inflection. Hailo raised $136M Series C. "
-            "Axelera closing. Qualcomm AI Hub crossed 1M downloads.\n\n"
-            "The NPU war is moving down-stack to MCUs. Next 18 months: whoever owns the "
-            "compiler layer owns the market.\n\n"
-            "INT4 quantization on STM32H7 hit 6ms — real-time on a $4 chip. "
-            "This is not a research story anymore."
+            "NPU war moving down-stack to MCUs.\n\n"
+            "INT4 on STM32H7 = 6ms inference on a $4 chip. "
+            "Whoever owns the compiler layer owns edge AI.\n\n"
+            "#EdgeAI #EmbeddedAI"
         ),
-        tags=["EdgeAI", "Semiconductors", "EmbeddedAI"],
-        source_ref="Hailo Series C Feb 2026 · Axelera round Mar 2026 · QC AI Hub 1M DL Apr 2026",
+        tags=["EdgeAI", "EmbeddedAI"],
+        source_ref="Hailo Series C · QC AI Hub 1M downloads",
     ),
     Post(
         angle="Thread",
         text=(
-            "Humanoid robots are commercially real in 2026. Here's what the market actually looks like:\n\n"
-            "1/ Figure raised $675M. First commercial deployment with BMW this quarter.\n"
-            "2/ Apptronik: NASA-heritage Apollo humanoid in warehouse pilots at GXO.\n"
-            "3/ Agility Robotics: Digit at Amazon — 500 units ordered.\n"
-            "4/ Skild AI: Foundation model for robot policy. The 'GPT moment' for manipulation.\n\n"
-            "The dexterity API layer is still wide open. That's the gap."
+            "🧵 Humanoid robots hit commercial scale in 2026.\n\n"
+            "Figure @ BMW. Agility @ Amazon. Apptronik @ GXO.\n\n"
+            "The dexterity layer is still wide open — that's the gap.\n\n"
+            "#Robotics #PhysicalAI"
         ),
-        tags=["Robotics", "PhysicalAI", "Startups"],
-        source_ref="Figure/BMW Jan 2026 · Agility/Amazon Oct 2025 · Skild raise Dec 2025",
+        tags=["Robotics", "PhysicalAI"],
+        source_ref="Figure/BMW · Agility/Amazon · Apptronik/GXO 2026",
     ),
     Post(
         angle="Contrarian",
         text=(
-            "Hot take: ROS2 will not be the OS for commercial robotics at scale.\n\n"
-            "It's a research tool — jitter at 10kHz, no deterministic OTA, fleet mgmt bolted on.\n\n"
-            "The winner ships: deterministic real-time + secure OTA + fleet telemetry in one stack. "
-            "Nobody has it yet. That's a company worth building right now."
+            "Hot take: ROS2 won't scale to commercial fleets.\n\n"
+            "No deterministic OTA. No fleet telemetry. Jitter at 10kHz.\n\n"
+            "The winner ships all three in one stack. Nobody has it yet.\n\n"
+            "#Robotics #Founder"
         ),
-        tags=["Robotics", "ROS2", "Founder"],
-        source_ref="ROS2 latency benchmarks ICRA 2025 · Apex.OS vs ROS2 comparison 2025",
+        tags=["Robotics", "Founder"],
+        source_ref="ROS2 latency benchmarks ICRA 2025",
     ),
 ]
 
