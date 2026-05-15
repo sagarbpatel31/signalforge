@@ -76,6 +76,22 @@ LEVER_COMPANIES = [
     "shield-ai",
     "physical-intelligence",
     "skild-ai",
+    # Additional Lever companies
+    "symbotic",
+    "brightmachines",
+    "canvas",
+    "machina-labs",
+    "vention",
+    "intrinsic",
+    "apian",
+    "daring-foods",       # FSD/robotics
+    "outrider",
+    "ascend-elements",
+    "rovo",
+    "tangram-vision",
+    "dyno-therapeutics",  # biorobotics
+    "sarcos",
+    "neura-robotics",
 ]
 
 # Greenhouse slugs (verified or high-confidence from sheet companies)
@@ -122,11 +138,33 @@ GREENHOUSE_COMPANIES = [
     "tenstorrent",
     "sifive",
     "memfault",
+    # Additional Greenhouse companies
+    "humanoid-robotics",
+    "arc-boats",
+    "zipline",
+    "navatek",
+    "cobalt-robotics",
+    "canvas-construction",
+    "machine-science",
+    "gray-orange",
+    "pickle-robot",
+    "dexai-robotics",
+    "softbank-robotics",
+    "berkshire-grey",
+    "vecna-robotics",
+    "cobot-systems",
+    "nuro-ai",
+    "arc-institute",
+    "rad-ai",
+    "clarifai",
+    "osmo",
+    "reflex",
 ]
 
 REMOTIVE_SEARCHES = [
     "robotics", "embedded systems", "edge ai", "machine learning engineer",
     "firmware engineer", "perception engineer", "autonomous systems",
+    "robotics software", "embedded linux", "ros2", "physical ai",
 ]
 
 # Ashby (jobsbyashby.com) slugs — robotics/AI companies
@@ -141,6 +179,21 @@ ASHBY_COMPANIES = [
     "dexterity-inc",
     "apptronik",    # may also be on Greenhouse
     "nuro",         # may also be on Greenhouse
+    # Additional Ashby companies
+    "covariant-ai",
+    "arc-robotics",
+    "hello-robot",
+    "standard-ai",
+    "kepler",
+    "coreweave",
+    "lambda-labs",
+    "modal-labs",
+    "fixie",
+    "wandb",
+    "hugging-face",
+    "replit",
+    "runway",
+    "genesis",
 ]
 
 _HEADERS = {"User-Agent": "SignalForge/1.0 (intelligence terminal)"}

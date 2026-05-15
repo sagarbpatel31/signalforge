@@ -80,6 +80,7 @@ export interface Task {
   task: string;
   domain: string;
   time: string;
+  description?: string;
 }
 
 export interface Person {

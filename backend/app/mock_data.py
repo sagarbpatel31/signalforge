@@ -204,12 +204,108 @@ POSTS: list[Post] = [
 ]
 
 TASKS: list[Task] = [
-    Task(id=1, priority="P0", task="Apply to Hailo + Inferix — send tailored resume today", domain="Edge AI", time="1h"),
-    Task(id=2, priority="P0", task="Complete ROS2 Nav2 tutorial in Gazebo sim", domain="Robotics", time="2h"),
-    Task(id=3, priority="P1", task="Run first Isaac Lab policy rollout on Jetson Orin", domain="Physical AI", time="3h"),
-    Task(id=4, priority="P1", task="Deploy + benchmark Google Gemma 4 on-device (GGUF)", domain="Edge AI", time="2h"),
-    Task(id=5, priority="P1", task="Submit Zephyr RTOS driver PR for medical OTA module", domain="Embedded", time="2h"),
-    Task(id=6, priority="P2", task="Publish INT4 benchmark thread on X with data", domain="Edge AI", time="1h"),
+    Task(
+        id=1, priority="P0",
+        task="Apply to Physical Intelligence, Figure AI, Skild AI",
+        domain="Job Applications", time="1.5h",
+        description=(
+            "1. Physical Intelligence (pi.ai) — Research Engineer / Robotics Software. "
+            "Tailor resume: highlight sim-to-real, policy training, Isaac Lab. "
+            "2. Figure AI (figure.ai/careers) — Software Engineer, Robot Learning. "
+            "Lead with ROS2 experience + embedded systems. "
+            "3. Skild AI (skild.ai) — Robot Foundation Models team. "
+            "Mention transformer-based policy work. "
+            "Tip: personalize each cover letter with the company's latest paper or deployment news."
+        ),
+    ),
+    Task(
+        id=2, priority="P0",
+        task="NeetCode Blind 75 — Trees + Graphs (5 problems)",
+        domain="Coding Practice", time="2h",
+        description=(
+            "Focus: Binary Tree Level Order Traversal, Word Ladder, Number of Islands, "
+            "Course Schedule (cycle detect), Clone Graph. "
+            "Platform: neetcode.io/roadmap → Graphs section. "
+            "Tip: time yourself — aim for ≤20 min per medium. "
+            "After: review the editorial for any you needed hints on. "
+            "Goal: be fluent in BFS/DFS pattern recognition before FAANG-style interviews."
+        ),
+    ),
+    Task(
+        id=3, priority="P1",
+        task="Run NVIDIA Isaac Lab locomotion policy on Jetson Orin",
+        domain="Physical AI", time="3h",
+        description=(
+            "1. Clone Isaac Lab: github.com/isaac-sim/IsaacLab — follow Orbit migration guide. "
+            "2. Run AnymalC locomotion example on local GPU first to verify setup. "
+            "3. Export trained policy via ONNX: python scripts/export_policy.py. "
+            "4. Deploy on Jetson Orin using TensorRT — measure inference latency (target <8ms). "
+            "5. If Orin not available: use Isaac Gym preview in Colab. "
+            "Bonus: log reward curves to W&B — screenshot for your portfolio."
+        ),
+    ),
+    Task(
+        id=4, priority="P1",
+        task="Build ROS2 Nav2 autonomous navigation in Gazebo Harmonic",
+        domain="Robotics", time="2h",
+        description=(
+            "1. Install ROS2 Jazzy + Gazebo Harmonic (Ubuntu 24.04 recommended). "
+            "2. Clone Nav2 bringup: ros-planning/navigation2 — use turtlebot3 world. "
+            "3. Tune DWB controller params: max_vel_x, min_vel_theta in nav2_params.yaml. "
+            "4. Add a custom costmap layer (e.g. semantic obstacles). "
+            "5. Record a rosbag of a full autonomous run → post clip to X/LinkedIn. "
+            "Goal: show recruiters you can go from sim → tuned navigation stack."
+        ),
+    ),
+    Task(
+        id=5, priority="P1",
+        task="Study NVIDIA Cosmos + Isaac Sim world model — implement one demo",
+        domain="Physical AI", time="2h",
+        description=(
+            "1. Read Cosmos paper: arxiv.org/abs/2501.03575 (World Foundation Models). "
+            "2. Watch NVIDIA GTC 2025 keynote segment on Physical AI (YouTube, 18 min). "
+            "3. Run the Isaac Sim + Cosmos video generation demo from NGC catalog. "
+            "4. Replicate a single task: generate a synthetic manipulation video using prompts. "
+            "5. Note latency, resolution limits, downstream policy quality. "
+            "Good talking point in interviews: 'I tested Cosmos for data augmentation in sim-to-real.'"
+        ),
+    ),
+    Task(
+        id=6, priority="P1",
+        task="Benchmark INT4/INT8 quantization — llama.cpp on Jetson or M-series",
+        domain="Edge AI", time="2h",
+        description=(
+            "1. Pull latest llama.cpp: github.com/ggml-org/llama.cpp — build with CUDA/Metal. "
+            "2. Download Llama-3.1-8B-Instruct GGUF Q4_K_M from HuggingFace. "
+            "3. Run: ./llama-bench -m model.gguf -p 512 -n 128 -r 5. "
+            "4. Compare Q8_0 vs Q4_K_M vs Q4_0: tokens/sec, VRAM usage, perplexity. "
+            "5. Post results as a table on X with #TinyML #EdgeAI — this gets engagement."
+        ),
+    ),
+    Task(
+        id=7, priority="P2",
+        task="Read π0 (Physical Intelligence) + RT-2 papers — note architecture diffs",
+        domain="Physical AI", time="1.5h",
+        description=(
+            "π0: arxiv.org/abs/2410.24164 — flow matching for generalist robot policy. "
+            "RT-2: arxiv.org/abs/2307.15818 — VLM-based robot learning from internet data. "
+            "Focus on: action representation, training data pipeline, sim-to-real gap handling. "
+            "Write 3-5 bullet takeaways in your notes — use them in interviews when asked "
+            "'what research are you following?'"
+        ),
+    ),
+    Task(
+        id=8, priority="P2",
+        task="Apply to Covariant, Waymo, Helsing — research-focused roles",
+        domain="Job Applications", time="1h",
+        description=(
+            "Covariant (covariant.ai) — Robot Foundation Model team. Remote-friendly. "
+            "Waymo (waymo.com/careers) — Perception / Robotics ML roles. "
+            "Helsing (helsing.ai) — Defense AI, embedded ML. EU-based but remote eng roles exist. "
+            "Angle: all three care about production-grade ML on constrained hardware. "
+            "Lead with edge inference + real-world deployment experience."
+        ),
+    ),
 ]
 
 PEOPLE: list[Person] = [

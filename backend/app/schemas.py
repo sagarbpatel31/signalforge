@@ -70,6 +70,7 @@ class Task(BaseModel):
     task: str
     domain: str
     time: str
+    description: Optional[str] = None  # expandable detail shown on click
 
 
 class Person(BaseModel):
