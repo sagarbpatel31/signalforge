@@ -39,6 +39,20 @@ ARXIV_QUERIES = [
     ("cat:eess.SY", "Systems & Control"),
     ("all:edge+ai+inference", "Edge AI"),
     ("all:humanoid+robot+learning", "Physical AI"),
+    ("all:imitation+learning+robot", "Imitation Learning"),
+    ("all:reinforcement+learning+manipulation", "RL Manipulation"),
+    ("all:foundation+model+robot", "Foundation Models"),
+    ("all:tinyml+on-device+inference", "TinyML"),
+    ("all:sim-to-real+transfer", "Sim-to-Real"),
+    ("all:large+language+model+agent", "LLM Agents"),
+]
+
+RSS_SOURCES_EXTRA = [
+    ("The Robot Report",    "https://www.therobotreport.com/feed/"),
+    ("Robohub",             "https://robohub.org/feed/"),
+    ("NVIDIA Developer",    "https://developer.nvidia.com/blog/feed"),
+    ("Embedded.com",        "https://www.embedded.com/feed/"),
+    ("Ars Technica AI",     "https://arstechnica.com/tag/machine-learning/feed/"),
 ]
 
 # Google Sheet — company watchlist (public CSV export)
@@ -220,10 +234,11 @@ def _extract_tags(text: str) -> list:
     return found[:3] if found else ["tech"]
 
 
-async def fetch_news(limit: int = 50) -> list:
+async def fetch_news(limit: int = 60) -> list:
     items = []
-    async with httpx.AsyncClient(timeout=12, follow_redirects=True) as client:
-        for name, url in RSS_SOURCES:
+    all_sources = RSS_SOURCES + RSS_SOURCES_EXTRA
+    async with httpx.AsyncClient(timeout=7, follow_redirects=True) as client:
+        for name, url in all_sources:
             try:
                 resp = await client.get(url, headers=_HEADERS)
                 feed = feedparser.parse(resp.text)
@@ -249,16 +264,16 @@ async def fetch_news(limit: int = 50) -> list:
     return unique[:limit]
 
 
-async def fetch_papers(limit: int = 24) -> list:
+async def fetch_papers(limit: int = 48) -> list:
     papers = []
-    async with httpx.AsyncClient(timeout=15, follow_redirects=True) as client:
+    async with httpx.AsyncClient(timeout=7, follow_redirects=True) as client:
         for query, label in ARXIV_QUERIES:
             try:
                 resp = await client.get(
                     "http://export.arxiv.org/api/query",
                     params={
                         "search_query": query,
-                        "max_results": 6,
+                        "max_results": 5,
                         "sortBy": "submittedDate",
                         "sortOrder": "descending",
                     },
@@ -339,7 +354,7 @@ async def _greenhouse_jobs(client: httpx.AsyncClient, company: str) -> list:
 async def _remotive_jobs() -> list:
     jobs = []
     try:
-        async with httpx.AsyncClient(timeout=15, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=7, follow_redirects=True) as client:
             for term in REMOTIVE_SEARCHES:
                 try:
                     resp = await client.get(
@@ -389,7 +404,7 @@ async def _ashby_jobs(client: httpx.AsyncClient, company: str) -> list:
 
 
 async def fetch_jobs(limit: int = 100) -> list:
-    async with httpx.AsyncClient(timeout=12, follow_redirects=True) as client:
+    async with httpx.AsyncClient(timeout=7, follow_redirects=True) as client:
         tasks = (
             [_lever_jobs(client, co) for co in LEVER_COMPANIES] +
             [_greenhouse_jobs(client, co) for co in GREENHOUSE_COMPANIES] +
@@ -418,7 +433,7 @@ async def fetch_jobs(limit: int = 100) -> list:
 async def fetch_sheet_companies() -> list:
     """Parse company names from the Google Sheet watchlist CSV."""
     try:
-        async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=7, follow_redirects=True) as client:
             resp = await client.get(GSHEET_CSV_URL, headers=_HEADERS)
             if resp.status_code != 200:
                 return []

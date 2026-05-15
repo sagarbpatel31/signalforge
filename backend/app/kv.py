@@ -49,7 +49,7 @@ def kv_get(key: str):
     return None
 
 
-def kv_set(key: str, value, ttl: int = 172_800) -> None:
+def kv_set(key: str, value, ttl: int = 86_400) -> None:  # 24h default; cron overwrites every 12h
     r = _redis()
     if r is not None:
         try:

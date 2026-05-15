@@ -1,6 +1,6 @@
 import re
 from typing import Optional
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 from ..schemas import Role
 from ..mock_data import ROLES
 from ..ingestion.sources import read_cache
@@ -123,6 +123,16 @@ def _job_to_role(job: dict) -> Role:
     )
 
 
+async def _bg_fetch_jobs():
+    try:
+        from ..ingestion.sources import fetch_jobs, write_cache
+        jobs = await fetch_jobs(limit=100)
+        if jobs:
+            write_cache("jobs", jobs)
+    except Exception:
+        pass
+
+
 def _get_filtered_roles(limit: Optional[int] = None) -> list[Role]:
     cached = read_cache("jobs")
     if not cached:
@@ -156,10 +166,14 @@ def _get_filtered_roles(limit: Optional[int] = None) -> list[Role]:
 
 
 @router.get("/career", response_model=list[Role])
-async def get_career() -> list[Role]:
+async def get_career(background_tasks: BackgroundTasks) -> list[Role]:
+    if not read_cache("jobs"):
+        background_tasks.add_task(_bg_fetch_jobs)
     return _get_filtered_roles(limit=4)
 
 
 @router.get("/career/all", response_model=list[Role])
-async def get_career_all() -> list[Role]:
+async def get_career_all(background_tasks: BackgroundTasks) -> list[Role]:
+    if not read_cache("jobs"):
+        background_tasks.add_task(_bg_fetch_jobs)
     return _get_filtered_roles(limit=None)
