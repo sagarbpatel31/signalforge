@@ -1,12 +1,25 @@
-import { fetchStats } from "@/lib/api";
+"use client";
 
-// Deterministic pseudo-sparkline points for each stat (visual decoration)
+import { useEffect, useState } from "react";
+import { fetchStats } from "@/lib/api";
+import type { Stat } from "@/lib/types";
+
+// Deterministic pseudo-sparkline points (visual decoration)
 const SPARKLINES = [
   [2, 5, 3, 7, 4, 8, 6, 9, 7, 10],
   [8, 6, 7, 5, 8, 9, 7, 10, 8, 9],
   [3, 5, 4, 6, 5, 8, 7, 9, 8, 10],
   [6, 4, 7, 5, 8, 6, 9, 7, 10, 8],
   [5, 7, 6, 8, 5, 9, 7, 8, 9, 7],
+];
+
+// Placeholder stats shown while loading — match shape of real data
+const SKELETON: Stat[] = [
+  { label: "Signals Tracked",  value: "—",  delta: "loading…", up: null },
+  { label: "Opportunities",    value: "—",  delta: "loading…", up: null },
+  { label: "Startups Flagged", value: "—",  delta: "loading…", up: null },
+  { label: "Hiring Signals",   value: "—",  delta: "loading…", up: null },
+  { label: "Research Papers",  value: "—",  delta: "loading…", up: null },
 ];
 
 function Sparkline({ data, color }: { data: number[]; color: string }) {
@@ -20,7 +33,6 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
     return `${x},${y}`;
   });
   const polyline = pts.join(" ");
-  // Close polygon for gradient fill
   const fill = `${polyline} ${W},${H} 0,${H}`;
   return (
     <svg width={W} height={H} style={{ display: "block", overflow: "visible" }}>
@@ -31,13 +43,29 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
         </linearGradient>
       </defs>
       <polygon points={fill} fill={`url(#sg-${color})`} />
-      <polyline points={polyline} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline
+        points={polyline}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
-export async function StatBar() {
-  const stats = await fetchStats();
+export function StatBar() {
+  const [stats, setStats] = useState<Stat[]>(SKELETON);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    fetchStats().then((data) => {
+      if (data && data.length > 0) setStats(data);
+      setLoaded(true);
+    });
+  }, []);
+
   return (
     <div
       className="card"
@@ -50,17 +78,27 @@ export async function StatBar() {
       }}
     >
       {stats.map((s, i) => {
-        const sparkColor = s.up === true ? "var(--green)" : s.up === false ? "var(--red)" : "var(--blue)";
+        const sparkColor =
+          s.up === true
+            ? "var(--green)"
+            : s.up === false
+            ? "var(--red)"
+            : "var(--blue)";
         const sparkData = SPARKLINES[i % SPARKLINES.length];
+        const isLoading = !loaded;
+
         return (
           <div
             key={i}
             style={{
               padding: "16px 20px",
-              borderRight: i < stats.length - 1 ? "1px solid var(--hairline)" : "none",
+              borderRight:
+                i < stats.length - 1 ? "1px solid var(--hairline)" : "none",
               display: "flex",
               flexDirection: "column",
               gap: 2,
+              transition: "opacity 0.3s",
+              opacity: isLoading ? 0.5 : 1,
             }}
           >
             <div
@@ -74,7 +112,14 @@ export async function StatBar() {
             >
               {s.label}
             </div>
-            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 8 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "space-between",
+                gap: 8,
+              }}
+            >
               <div>
                 <div
                   style={{
@@ -83,6 +128,7 @@ export async function StatBar() {
                     letterSpacing: "-0.04em",
                     color: "var(--text)",
                     lineHeight: 1.1,
+                    fontVariantNumeric: "tabular-nums",
                   }}
                 >
                   {s.value}
@@ -100,7 +146,6 @@ export async function StatBar() {
                         : "var(--text-3)",
                   }}
                 >
-                  {s.up === true ? "↑ " : s.up === false ? "↓ " : ""}
                   {s.delta}
                 </div>
               </div>

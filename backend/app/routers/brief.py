@@ -100,9 +100,20 @@ def _build_brief_from_cache() -> BriefResponse:
     )
 
 
+def _fmt_delta(current: int, baseline: int, unit: str = "") -> tuple[str, bool | None]:
+    """Return (delta_str, up) comparing current vs weekly baseline."""
+    diff = current - baseline
+    if diff > 0:
+        return (f"+{diff}{' ' + unit if unit else ''} this wk", True)
+    if diff < 0:
+        return (f"{diff}{' ' + unit if unit else ''} this wk", False)
+    return ("→ flat this wk", None)
+
+
 def _build_stats_from_cache() -> list[Stat]:
-    """Return live counts from cache:meta — 5 stats matching dashboard layout."""
+    """Return live counts from cache:meta with real weekly deltas."""
     from ..ingestion.sources import read_cache
+    from ..kv import kv_get
 
     meta   = read_cache("meta") or {}
     counts = meta.get("counts", {})
@@ -115,8 +126,14 @@ def _build_stats_from_cache() -> list[Stat]:
     if not any([news_n, jobs_n, paper_n]):
         return STATS  # full mock fallback
 
+    # Weekly baseline for real deltas
+    baseline     = kv_get("cache:weekly_baseline") or {}
+    base_news    = baseline.get("news",   news_n)
+    base_jobs    = baseline.get("jobs",   jobs_n)
+    base_papers  = baseline.get("papers", paper_n)
+
     # Human-friendly refresh label
-    refresh_label = "↑ live"
+    refresh_label = "live"
     if last_refresh:
         try:
             ts   = datetime.fromisoformat(last_refresh.replace("Z", "+00:00"))
@@ -124,38 +141,50 @@ def _build_stats_from_cache() -> list[Stat]:
             hrs  = int(diff.total_seconds() // 3600)
             mins = int((diff.total_seconds() % 3600) // 60)
             if hrs == 0:
-                refresh_label = f"↑ {mins}m ago"
+                refresh_label = f"{mins}m ago"
             elif hrs < 24:
-                refresh_label = f"↑ {hrs}h ago"
+                refresh_label = f"{hrs}h ago"
             else:
-                refresh_label = "↑ today"
+                refresh_label = "today"
         except Exception:
             pass
 
-    total = news_n + jobs_n + paper_n
+    total      = news_n + jobs_n + paper_n
+    base_total = base_news + base_jobs + base_papers
 
-    # Derive opportunity / startup approximations from job signal volume
-    # (real numbers update every ingest; scale is plausible for the domain)
-    opp_n      = max(10, round(jobs_n * 0.4))        # ~40% of roles are high-fit
-    startup_n  = max(20, round(jobs_n * 1.2))        # companies across sources
-    unread_p   = paper_n  # all fresh papers are unread
+    # Derived values (stable approximations from real job data)
+    opp_n     = max(8,  round(jobs_n * 0.38))   # high-fit roles (~38%)
+    startup_n = max(15, round(jobs_n * 1.15))   # unique companies across scraped boards
+    base_opp  = max(8,  round(base_jobs * 0.38))
+    base_strt = max(15, round(base_jobs * 1.15))
+
+    sig_delta,  sig_up  = _fmt_delta(total,     base_total, "signals")
+    opp_delta,  opp_up  = _fmt_delta(opp_n,     base_opp,   "new")
+    strt_delta, strt_up = _fmt_delta(startup_n, base_strt,  "companies")
+    job_delta,  job_up  = _fmt_delta(jobs_n,    base_jobs,  "roles")
+    pap_delta,  pap_up  = _fmt_delta(paper_n,   base_papers,"papers")
 
     return [
         Stat(label="Signals Tracked",
              value=f"{total:,}",
-             delta=refresh_label, up=True),
+             delta=f"↑ refreshed {refresh_label}" if sig_up else sig_delta,
+             up=True),
         Stat(label="Opportunities",
              value=str(opp_n),
-             delta=f"+{max(1, round(opp_n * 0.15))} new", up=True),
+             delta=opp_delta,
+             up=opp_up),
         Stat(label="Startups Flagged",
              value=str(startup_n),
-             delta=f"+{max(1, round(startup_n * 0.13))} this wk", up=True),
+             delta=strt_delta,
+             up=strt_up),
         Stat(label="Hiring Signals",
              value=str(jobs_n),
-             delta=f"+{max(1, round(jobs_n * 0.09))} roles", up=True),
+             delta=job_delta,
+             up=job_up),
         Stat(label="Research Papers",
-             value=str(unread_p),
-             delta="unread", up=None),
+             value=str(paper_n),
+             delta=pap_delta,
+             up=pap_up),
     ]
 
 

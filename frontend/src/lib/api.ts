@@ -71,7 +71,7 @@ export const fetchBrief = () =>
   });
 
 export const fetchStats = () =>
-  apiFetch<Stat[]>("/api/stats", fallbackStats);
+  apiFetchLive<Stat[]>("/api/stats", fallbackStats);
 
 export const fetchOpportunities = () =>
   apiFetch<Opportunity[]>("/api/opportunities", fallbackOpportunities);
