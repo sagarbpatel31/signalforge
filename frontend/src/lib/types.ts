@@ -106,6 +106,15 @@ export interface UserProfile {
   current_projects: string;
 }
 
+export interface FlaggedCompany {
+  name: string;
+  job_count: number;
+  tags: string[];
+  source: string;
+  is_new: boolean;
+  roles_preview: string[];
+}
+
 export const DOMAINS = [
   "Robotics",
   "Edge AI",

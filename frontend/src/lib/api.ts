@@ -1,7 +1,7 @@
 import type {
   Signal, Stat, Opportunity, Startup, Role,
   Paper, Post, Task, Person, ConvictionBet, UserProfile,
-  JobListing, NewsItem,
+  JobListing, NewsItem, FlaggedCompany,
 } from "./types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -128,6 +128,9 @@ export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
   if (!res.ok) throw new Error("Failed to save profile");
   return res.json() as Promise<UserProfile>;
 }
+
+export const fetchFlaggedStartups = () =>
+  apiFetchLive<FlaggedCompany[]>("/api/startups/flagged", []);
 
 export const fetchJobsFull = () =>
   apiFetchLive<JobListing[]>("/api/feeds/jobs", []);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { fetchStats } from "@/lib/api";
 import type { Stat } from "@/lib/types";
 
@@ -12,6 +13,15 @@ const SPARKLINES = [
   [6, 4, 7, 5, 8, 6, 9, 7, 10, 8],
   [5, 7, 6, 8, 5, 9, 7, 8, 9, 7],
 ];
+
+// Route mapping for each stat label
+const STAT_ROUTES: Record<string, string> = {
+  "Signals Tracked": "/news",
+  "Opportunities": "/opportunities",
+  "Startups Flagged": "/startups",
+  "Hiring Signals": "/career",
+  "Research Papers": "/research",
+};
 
 // Placeholder stats shown while loading — match shape of real data
 const SKELETON: Stat[] = [
@@ -86,72 +96,100 @@ export function StatBar() {
             : "var(--blue)";
         const sparkData = SPARKLINES[i % SPARKLINES.length];
         const isLoading = !loaded;
+        const href = STAT_ROUTES[s.label] ?? "/";
 
         return (
-          <div
+          <Link
             key={i}
+            href={href}
             style={{
-              padding: "16px 20px",
+              textDecoration: "none",
+              color: "inherit",
+              display: "block",
               borderRight:
                 i < stats.length - 1 ? "1px solid var(--hairline)" : "none",
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              transition: "opacity 0.3s",
+              transition: "background 0.15s, opacity 0.3s",
               opacity: isLoading ? 0.5 : 1,
             }}
+            className="stat-bar-cell"
           >
             <div
               style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 9,
-                color: "var(--text-4)",
-                letterSpacing: "0.10em",
-                textTransform: "uppercase",
-              }}
-            >
-              {s.label}
-            </div>
-            <div
-              style={{
+                padding: "16px 20px",
                 display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "space-between",
-                gap: 8,
+                flexDirection: "column",
+                gap: 2,
               }}
             >
-              <div>
-                <div
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 24,
-                    letterSpacing: "-0.04em",
-                    color: "var(--text)",
-                    lineHeight: 1.1,
-                    fontVariantNumeric: "tabular-nums",
-                  }}
-                >
-                  {s.value}
-                </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <div
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontSize: 10,
-                    marginTop: 3,
-                    color:
-                      s.up === true
-                        ? "var(--green)"
-                        : s.up === false
-                        ? "var(--red)"
-                        : "var(--text-3)",
+                    fontSize: 9,
+                    color: "var(--text-4)",
+                    letterSpacing: "0.10em",
+                    textTransform: "uppercase",
                   }}
                 >
-                  {s.delta}
+                  {s.label}
                 </div>
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 8,
+                    color: "var(--text-4)",
+                  }}
+                >
+                  →
+                </span>
               </div>
-              <Sparkline data={sparkData} color={sparkColor} />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                  gap: 8,
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 24,
+                      letterSpacing: "-0.04em",
+                      color: "var(--text)",
+                      lineHeight: 1.1,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    {s.value}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 10,
+                      marginTop: 3,
+                      color:
+                        s.up === true
+                          ? "var(--green)"
+                          : s.up === false
+                          ? "var(--red)"
+                          : "var(--text-3)",
+                    }}
+                  >
+                    {s.delta}
+                  </div>
+                </div>
+                <Sparkline data={sparkData} color={sparkColor} />
+              </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>

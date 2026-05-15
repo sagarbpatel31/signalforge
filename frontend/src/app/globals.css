@@ -262,6 +262,14 @@ body {
   .hide-mobile { display: none !important; }
 }
 
+/* ── StatBar clickable cells ─────────────────────────────────────── */
+.stat-bar-cell {
+  cursor: pointer;
+}
+.stat-bar-cell:hover {
+  background: var(--blue-soft);
+}
+
 /* ── Search modal ────────────────────────────────────────────────── */
 .search-overlay {
   position: fixed;
