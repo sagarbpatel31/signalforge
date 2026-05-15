@@ -6,9 +6,21 @@ import type {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+/** Standard fetch — 60s ISR cache at Next.js layer (for structured data that rarely changes). */
 async function apiFetch<T>(path: string, fallback: T): Promise<T> {
   try {
     const res = await fetch(`${API_BASE}${path}`, { next: { revalidate: 60 } });
+    if (!res.ok) throw new Error(`${res.status}`);
+    return res.json() as Promise<T>;
+  } catch {
+    return fallback;
+  }
+}
+
+/** Live fetch — no Next.js cache. For feeds data backed by Redis (backend manages 12h TTL). */
+async function apiFetchLive<T>(path: string, fallback: T): Promise<T> {
+  try {
+    const res = await fetch(`${API_BASE}${path}`, { cache: "no-store" });
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json() as Promise<T>;
   } catch {
@@ -68,16 +80,16 @@ export const fetchStartups = () =>
   apiFetch<Startup[]>("/api/startups", fallbackStartups);
 
 export const fetchCareer = () =>
-  apiFetch<Role[]>("/api/career", fallbackRoles);
+  apiFetchLive<Role[]>("/api/career", fallbackRoles);
 
 export const fetchAllCareer = () =>
-  apiFetch<Role[]>("/api/career/all", fallbackRoles);
+  apiFetchLive<Role[]>("/api/career/all", fallbackRoles);
 
 export const fetchResearch = () =>
-  apiFetch<Paper[]>("/api/research", fallbackPapers);
+  apiFetchLive<Paper[]>("/api/research", fallbackPapers);
 
 export const fetchAllResearch = () =>
-  apiFetch<Paper[]>("/api/research/all", fallbackPapers);
+  apiFetchLive<Paper[]>("/api/research/all", fallbackPapers);
 
 export const fetchPosts = () =>
   apiFetch<Post[]>("/api/posts", fallbackPosts);
@@ -118,10 +130,17 @@ export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
 }
 
 export const fetchJobsFull = () =>
-  apiFetch<JobListing[]>("/api/feeds/jobs", []);
+  apiFetchLive<JobListing[]>("/api/feeds/jobs", []);
 
 export const fetchNewsItems = () =>
-  apiFetch<NewsItem[]>("/api/feeds/news", []);
+  apiFetchLive<NewsItem[]>("/api/feeds/news", []);
+
+/** Trigger a full ingest run (cron equivalent — populates all Redis caches). */
+export async function triggerIngest(): Promise<{ news: number; papers: number; jobs: number }> {
+  const res = await fetch(`${API_BASE}/api/ingest`);
+  if (!res.ok) throw new Error(`ingest failed: ${res.status}`);
+  return res.json();
+}
 
 export async function generateBrief(): Promise<BriefResponse> {
   const res = await fetch(`${API_BASE}/api/generate/brief`, { method: "POST" });
