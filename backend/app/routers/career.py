@@ -9,32 +9,59 @@ from ..routers.profile import _load as _load_profile
 router = APIRouter(prefix="/api", tags=["career"])
 
 _DOMAIN_MAP: dict = {
-    "Robotics":          {
+    "Robotics": {
         "tags": {"robotics", "physical-ai"},
-        "kws":  ["robot", "ros", "manipulation", "locomotion", "mechatron", "lidar", "slam", "actuator"],
-        "cos":  {"figure", "waymo", "apptronik", "nuro", "motional", "helsing", "agility", "boston dynamics", "boston-dynamics"},
+        "kws":  ["robot", "ros", "ros2", "manipulation", "locomotion", "mechatron",
+                 "lidar", "slam", "actuator", "motion planning", "pick and place",
+                 "grasping", "arm", "mobile robot", "drone", "uav"],
+        "cos":  {"figure", "apptronik", "nuro", "motional", "agility", "boston dynamics",
+                 "boston-dynamics", "covariant", "collaborative robotics", "gecko robotics",
+                 "skild", "physical intelligence", "1x", "1x technologies", "neura",
+                 "fourier", "unitree", "machina labs", "viam", "dexterity", "locus",
+                 "seegrid", "berkshire grey", "symbotic", "gray orange", "pickle robot",
+                 "formant", "polymath robotics", "scythe robotics", "built robotics",
+                 "dusty robotics", "carbon robotics", "robust ai", "field ai"},
     },
-    "Edge AI":           {
+    "Edge AI": {
         "tags": {"edge-ai", "embedded"},
-        "kws":  ["edge inference", "tinyml", "jetson", "fpga", "on-device", "mlops", "edge computing"],
-        "cos":  {"helsing", "motional", "waymo"},
+        "kws":  ["edge inference", "tinyml", "jetson", "fpga", "on-device", "edge computing",
+                 "quantization", "int4", "int8", "npu", "neural processing", "onnx",
+                 "tensorrt", "openvino", "llama.cpp", "gguf", "hailo", "groq", "inference chip",
+                 "model compression", "pruning", "distillation", "mlperf"],
+        "cos":  {"hailo", "axelera", "tenstorrent", "etched", "groq", "cerebras", "d-matrix",
+                 "recogni", "perceive", "qualcomm", "arm", "sifive", "untether", "quadric",
+                 "helsinki", "motional", "waymo", "mobileye", "luminar", "ouster"},
     },
-    "Physical AI":       {
+    "Physical AI": {
         "tags": {"physical-ai", "robotics"},
-        "kws":  ["physical", "humanoid", "embodied", "sim-to-real", "dexterous", "locomotion"],
-        "cos":  {"figure", "apptronik", "agility", "1x", "sanctuary"},
+        "kws":  ["physical ai", "humanoid", "embodied", "sim-to-real", "dexterous",
+                 "locomotion", "foundation model robot", "vla", "vision language action",
+                 "policy learning", "imitation learning", "teleoperation", "diffusion policy",
+                 "isaac lab", "groot", "cosmos", "genesis sim", "world model"],
+        "cos":  {"figure", "apptronik", "agility", "1x", "1x technologies", "sanctuary",
+                 "physical intelligence", "skild", "covariant", "neura", "fourier",
+                 "unitree", "boston dynamics", "deepmind", "google deepmind"},
     },
-    "Embedded Systems":  {
+    "Embedded Systems": {
         "tags": {"embedded", "edge-ai"},
-        "kws":  ["embedded", "firmware", "rtos", "mcu", "microcontroller", "baremetal", "c++", "fpga"],
-        "cos":  set(),
+        "kws":  ["embedded", "firmware", "rtos", "mcu", "microcontroller", "baremetal",
+                 "c++", "fpga", "bare metal", "zephyr", "freertos", "linux kernel",
+                 "device driver", "ota update", "can bus", "uart", "spi", "i2c",
+                 "motor control", "foc", "stm32", "esp32", "cortex-m"],
+        "cos":  {"memfault", "nordic semi", "st microelectronics", "nxp", "ti", "microchip",
+                 "silicon labs", "espressif"},
     },
-    "Generative AI":     {
+    "Generative AI": {
         "tags": {"llm", "generative", "agentic"},
-        "kws":  ["llm", "generative", "transformer", "language model", "multimodal", "diffusion", "foundation model"],
-        "cos":  {"anthropic", "mistral", "openai"},
+        "kws":  ["llm", "generative", "transformer", "language model", "multimodal",
+                 "diffusion", "foundation model", "fine-tuning", "rlhf", "alignment",
+                 "agent", "agentic", "retrieval", "rag", "vla", "vlm", "gpt", "claude",
+                 "gemini", "mistral", "llama", "inference optimization"],
+        "cos":  {"anthropic", "mistral", "openai", "cohere", "inflection", "adept",
+                 "imbue", "cognition", "perplexity", "hugging face", "modal", "together ai",
+                 "lambda labs", "coreweave", "groq"},
     },
-    "Startup Ecosystem": {"tags": set(), "kws": [], "cos": set()},  # all jobs qualify
+    "Startup Ecosystem": {"tags": set(), "kws": [], "cos": set()},
 }
 
 _TECH_RE = re.compile(
@@ -46,13 +73,19 @@ _TECH_RE = re.compile(
     r"automation systems|ai automation|ai deployed|full stack ai|founding engineer|"
     r"research engineer|autonomous systems|reinforcement learning|ai infrastructure|"
     r"nvidia research|gen ai engineer|"
+    r"robot learning|humanoid|locomotion engineer|manipulation engineer|"
+    r"foundation model|policy engineer|sim-to-real|simulation engineer|"
+    r"inference engineer|compiler engineer|kernel engineer|"
+    r"vla|vision language|multimodal|diffusion policy|"
+    r"edge inference|tinyml|quantization engineer|npu|"
+    r"devops|mlops|platform|infrastructure|"
     r"engineer(?:ing)?|scientist|researcher|developer|architect|"
     r"software|hardware|firmware|robotics|autonomy|perception|"
     r"simulation|embedded|fpga|inference|"
     r"machine learning|deep learning|computer vision|"
     r"motion planning|path planning|control systems|"
-    r"platform engineer|infrastructure|"
-    r"tech lead|staff eng|principal eng"
+    r"tech lead|staff eng|principal eng|"
+    r"founding|staff|principal|senior|lead"
     r")\b",
     re.IGNORECASE,
 )

@@ -241,35 +241,51 @@ POSTS: list[Post] = [
     Post(
         angle="Take",
         text=(
-            "NPU war moving down-stack to MCUs.\n\n"
-            "INT4 on STM32H7 = 6ms inference on a $4 chip. "
-            "Whoever owns the compiler layer owns edge AI.\n\n"
-            "#EdgeAI #EmbeddedAI"
+            "GROOT N1 ships VLA policy at 200Hz on Jetson Thor.\n\n"
+            "This is what the inflection point looks like. Not hype — production.\n\n"
+            "#EdgeAI #Robotics"
         ),
-        tags=["EdgeAI", "EmbeddedAI"],
-        source_ref="Hailo Series C · QC AI Hub 1M downloads",
+        tags=["EdgeAI", "Robotics"],
+        source_ref="NVIDIA GROOT N1 launch · GTC 2025",
     ),
     Post(
         angle="Thread",
         text=(
             "🧵 Humanoid robots hit commercial scale in 2026.\n\n"
-            "Figure @ BMW. Agility @ Amazon. Apptronik @ GXO.\n\n"
-            "The dexterity layer is still wide open — that's the gap.\n\n"
-            "#Robotics #PhysicalAI"
+            "What every Robotics engineer needs to know right now:"
         ),
-        tags=["Robotics", "PhysicalAI"],
+        tags=["Robotics"],
         source_ref="Figure/BMW · Agility/Amazon · Apptronik/GXO 2026",
     ),
     Post(
         angle="Contrarian",
         text=(
-            "Hot take: ROS2 won't scale to commercial fleets.\n\n"
-            "No deterministic OTA. No fleet telemetry. Jitter at 10kHz.\n\n"
-            "The winner ships all three in one stack. Nobody has it yet.\n\n"
-            "#Robotics #Founder"
+            "Hot take: foundation model robots get all the attention.\n\n"
+            "But the real moat is in the runtime layer. Nobody talks about that.\n\n"
+            "#Robotics #EdgeAI"
         ),
-        tags=["Robotics", "Founder"],
+        tags=["Robotics", "EdgeAI"],
         source_ref="ROS2 latency benchmarks ICRA 2025",
+    ),
+    Post(
+        angle="Job Hunt",
+        text=(
+            "The companies hiring aggressively right now are all working on humanoid deployment.\n\n"
+            "If you're a Robotics engineer, this is your moment. The wave is here.\n\n"
+            "#Robotics #EdgeAI"
+        ),
+        tags=["Robotics", "EdgeAI"],
+        source_ref="Figure · Physical Intelligence · Skild AI hiring 2025",
+    ),
+    Post(
+        angle="Research",
+        text=(
+            "New research on diffusion policy for dexterous manipulation.\n\n"
+            "This changes the baseline assumption everyone was working from.\n\n"
+            "#Robotics #EdgeAI"
+        ),
+        tags=["Robotics", "EdgeAI"],
+        source_ref="π0 paper · Physical Intelligence 2025",
     ),
 ]
 
