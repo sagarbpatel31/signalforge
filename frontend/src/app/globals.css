@@ -326,3 +326,5 @@ body {
 .search-row:hover, .search-row.active { background: var(--blue-soft); }
 .search-row-title { font-size: 13px; color: var(--text); font-weight: 500; }
 .search-row-sub   { font-size: 11px; color: var(--text-3); }
+
+.nav-avatar:hover { opacity: 0.75; }
