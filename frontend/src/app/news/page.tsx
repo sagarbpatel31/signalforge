@@ -1,10 +1,20 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { SubNav } from "@/components/nav/SubNav";
 import { SfTag } from "@/components/ui/sf-tag";
+import { FilterTabs, matchesFilter } from "@/components/ui/FilterTabs";
 import { fetchNewsItems, triggerIngest } from "@/lib/api";
 import type { NewsItem, TagColor } from "@/lib/types";
+import type { FilterTab } from "@/components/ui/FilterTabs";
+
+const NEWS_FILTERS: FilterTab[] = [
+  { key: "all",       label: "All",          tags: [] },
+  { key: "robotics",  label: "Robotics",     tags: ["robotics", "physical-ai"] },
+  { key: "edge-ai",   label: "Edge AI",      tags: ["edge-ai", "embedded"] },
+  { key: "genai",     label: "Generative AI", tags: ["llm", "generative", "agentic"] },
+  { key: "startups",  label: "Startups",     tags: ["startup"] },
+];
 
 const SOURCE_COLOR: Record<string, TagColor> = {
   "TechCrunch AI":       "cyan",
@@ -40,6 +50,23 @@ export default function NewsPage() {
   const [loading, setLoading]   = useState(true);
   const [ingesting, setIngesting] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<string>("");
+  const [activeFilter, setActiveFilter] = useState("all");
+
+  const filtered = useMemo(() => {
+    const tab = NEWS_FILTERS.find((f) => f.key === activeFilter);
+    if (!tab || tab.tags.length === 0) return items;
+    return items.filter((item) => matchesFilter(item.tags, tab.tags));
+  }, [items, activeFilter]);
+
+  const counts = useMemo(() => {
+    const result: Record<string, number> = {};
+    for (const tab of NEWS_FILTERS) {
+      result[tab.key] = tab.tags.length === 0
+        ? items.length
+        : items.filter((item) => matchesFilter(item.tags, tab.tags)).length;
+    }
+    return result;
+  }, [items]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -120,7 +147,7 @@ export default function NewsPage() {
             >
               {loading || ingesting
                 ? "LOADING…"
-                : `${items.length} SIGNALS · REFRESHED EVERY 12H · ROBOTICS · AI · EDGE · STARTUPS`}
+                : `${filtered.length}${filtered.length !== items.length ? ` / ${items.length}` : ""} SIGNALS · REFRESHED EVERY 12H`}
               {lastRefresh && !loading && !ingesting && (
                 <span style={{ marginLeft: 12, color: "var(--green)" }}>
                   ↑ {lastRefresh}
@@ -143,6 +170,16 @@ export default function NewsPage() {
             {ingesting ? "Fetching…" : "⟳ Refresh Feed"}
           </button>
         </div>
+
+        {/* Filter tabs */}
+        {!loading && items.length > 0 && (
+          <FilterTabs
+            tabs={NEWS_FILTERS}
+            active={activeFilter}
+            counts={counts}
+            onChange={setActiveFilter}
+          />
+        )}
 
         {/* Loading skeleton */}
         {(loading || ingesting) && (
@@ -187,7 +224,12 @@ export default function NewsPage() {
         {/* Feed items */}
         {!loading && !ingesting && items.length > 0 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            {items.map((item, i) => (
+            {filtered.length === 0 && (
+              <div style={{ padding: "32px 0", textAlign: "center", color: "var(--text-3)", fontFamily: "var(--font-mono)", fontSize: 11 }}>
+                No signals match this filter yet — data refreshes every 12h.
+              </div>
+            )}
+            {filtered.map((item, i) => (
               <div
                 key={i}
                 style={{
@@ -196,7 +238,7 @@ export default function NewsPage() {
                   borderRadius:
                     i === 0
                       ? "12px 12px 4px 4px"
-                      : i === items.length - 1
+                      : i === filtered.length - 1
                       ? "4px 4px 12px 12px"
                       : 4,
                   padding: "12px 18px",
