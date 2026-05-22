@@ -153,6 +153,7 @@ def _job_to_role(job: dict) -> Role:
         signal=f"LIVE · {job.get('source', '')}",
         color=color,
         url=job.get("url", ""),
+        tags=tags,
     )
 
 

@@ -39,6 +39,7 @@ export interface Role {
   signal: string;
   color: TagColor;
   url?: string;
+  tags?: string[];
 }
 
 export interface Paper {

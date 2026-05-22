@@ -47,6 +47,7 @@ class Role(BaseModel):
     signal: str
     color: Literal["cyan", "amber", "green", "red", "muted"]
     url: str = ""
+    tags: list[str] = []
 
 
 class Paper(BaseModel):
