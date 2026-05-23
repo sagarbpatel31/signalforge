@@ -4,20 +4,21 @@ from .schemas import (
 )
 
 MARKET_PULSE = (
-    "NVIDIA GROOT N1 ships as first open humanoid foundation model. "
-    "Physical AI deployment cycle accelerating — Figure at BMW, Agility at Amazon, 1X at scale. "
-    "Edge inference cost floor dropped 60% YoY; on-device fine-tuning now viable for production."
+    "Humanoid deployments at commercial scale — 12 platforms shipping, $4.3B raised in 2026. "
+    "Skild AI hits $14B valuation on generalist robot brain. "
+    "Claude Code 78% SWE-bench + MCP-native; agentic infra becoming table stakes. "
+    "Edge AI chip market up to $11.6B — Axelera $250M Series C, Jetson Thor 7.5× over Orin."
 )
 
 SIGNALS: list[Signal] = [
-    Signal(label="GROOT N1 Launch", delta="+9", color="cyan",
-           text="NVIDIA open-sources GROOT N1 humanoid foundation model. Isaac Lab + Cosmos pipeline now end-to-end. Biggest physical AI infra drop of 2025."),
-    Signal(label="Humanoid Deployments", delta="+6", color="green",
-           text="Figure at BMW Leipzig. Agility Digit at Amazon fulfillment. 1X NEO commercial pilots live. 2026 = year one of humanoid at scale."),
-    Signal(label="Edge Inference Cost", delta="+4", color="amber",
-           text="llama.cpp Q4_K_M hits 80 tok/s on Jetson Orin. Groq LPU at $0.27/M tokens. On-device fine-tuning under $50/run now standard."),
-    Signal(label="Genesis Sim", delta="+3", color="muted",
-           text="Genesis physics engine (MIT/CMU) open-sourced — 430,000× faster than real time. Sim-to-real gap narrowing faster than any prior year."),
+    Signal(label="Skild AI $1.4B Series C", delta="+11", color="cyan",
+           text="Skild AI raises $1.4B at $14B valuation — generalist robot foundation model. CMU/Meta lineage. Biggest private robotics round of 2026. Hiring across policy learning, sim-to-real, and inference."),
+    Signal(label="Humanoid Scale Tipping", delta="+9", color="green",
+           text="12 commercial humanoid platforms shipping as of Q2 2026. Apptronik $520M Series A (Google-led), Apollo in Mercedes + GXO. Japan Airlines deploying at Haneda. $4.3B humanoid funding — 6× vs 2018."),
+    Signal(label="Agentic AI + MCP Native", delta="+7", color="amber",
+           text="Claude Code 78.4% SWE-bench, fully MCP-native. Cursor at 67.2%. MCP adoption accelerating across Cursor, Codex, Replit. Agentic toolchain infra now a core hiring signal at every AI lab."),
+    Signal(label="Edge AI Chip War", delta="+5", color="muted",
+           text="Axelera AI $250M Series C (Feb 2026), Europa chip benchmarked. MLPerf v6.0: industry at 200+ TOPS/watt. Edge AI market $9.5B → $11.6B in 12 months. Jetson Thor adopted by Amazon Robotics + Figure."),
 ]
 
 STATS: list[Stat] = [
@@ -29,41 +30,44 @@ STATS: list[Stat] = [
 ]
 
 OPPORTUNITIES: list[Opportunity] = [
-    Opportunity(rank="01", title="NVIDIA Isaac Lab + GROOT N1 Policy Training",
-                domain="Physical AI", signal="HIGH", fit=96,
-                why="GROOT N1 open-source = urgent need for engineers who can fine-tune humanoid policies. Target: NVIDIA, Physical Intelligence, Figure, 1X. Hottest skill on the market right now."),
-    Opportunity(rank="02", title="TinyML / INT4 Quantization on Edge Hardware",
-                domain="Edge AI", signal="HIGH", fit=93,
-                why="llama.cpp + Groq + Hailo all accelerating. Target: Hailo, Axelera AI, Tenstorrent, Etched, Qualcomm AI → Compiler / Inference Eng. INT4 fluency = instant top-of-funnel."),
-    Opportunity(rank="03", title="ROS2 + Nav2 + Gazebo Harmonic Stack",
+    Opportunity(rank="01", title="Generalist Robot Policy Engineer (VLA / Diffusion)",
+                domain="Physical AI", signal="HIGH", fit=97,
+                why="Skild $14B + PI + Covariant all hiring policy engineers. VLA (π0, RT-2), diffusion policy, and Isaac Lab experience = top-of-funnel instantly. 12 humanoid platforms need policy talent now."),
+    Opportunity(rank="02", title="MCP Server / Agentic Infra Engineer",
+                domain="Generative AI", signal="HIGH", fit=94,
+                why="MCP is the standard agentic protocol — Claude Code native, Cursor/Codex adopting fast. Every AI product team building MCP servers. Target: Anthropic, Cursor, Replit, Modal, any AI-native startup."),
+    Opportunity(rank="03", title="Edge Inference Compiler / NPU Optimization",
+                domain="Edge AI", signal="HIGH", fit=91,
+                why="Axelera $250M Series C, Jetson Thor, MLPerf 200+ TOPS/watt. Edge AI chip market $11.6B. Target: Hailo, Axelera AI, Tenstorrent, Groq, Qualcomm AI — Compiler / Inference Eng. INT4/INT8 fluency = hire."),
+    Opportunity(rank="04", title="ROS2 + Gazebo Harmonic + Nav2 Stack",
                 domain="Robotics", signal="HIGH", fit=88,
-                why="Every humanoid/mobile robot startup hiring for ROS2. Target: Figure, Agility, Apptronik, Boston Dynamics, Covariant, Collaborative Robotics → Robotics SW Eng."),
-    Opportunity(rank="04", title="Sim-to-Real via Genesis / Isaac Sim",
+                why="Apptronik, Figure, Agility, Collaborative Robotics all scaling teams post-Series B/C. ROS2 fluency + real hardware experience = strong signal. Target: 12 humanoid platforms actively hiring SW."),
+    Opportunity(rank="05", title="Sim-to-Real: Isaac Lab + Genesis Engine",
                 domain="Physical AI", signal="HIGH", fit=85,
-                why="Genesis (430k× faster than realtime) + Isaac Sim = new sim-to-real frontier. Target: Skild AI, Physical Intelligence, DeepMind Robotics → Research / ML Policy Eng."),
-    Opportunity(rank="05", title="Zephyr RTOS + Embedded Linux Firmware",
-                domain="Embedded", signal="MEDIUM", fit=79,
-                why="Robotics companies need firmware engineers for motor control, sensor fusion, safety. Target: Memfault, Nordic Semi, Agility, Figure hardware teams → Embedded SW Eng."),
-    Opportunity(rank="06", title="Vision-Language-Action (VLA) Models",
-                domain="Physical AI", signal="HIGH", fit=77,
-                why="π0, RT-2, GR-2 papers driving VLA adoption. Target: Google DeepMind, Covariant, Physical Intelligence → Research Engineer / Robot Learning roles."),
-    Opportunity(rank="07", title="On-Device Multimodal + Edge Vision",
-                domain="Edge AI", signal="MEDIUM", fit=72,
-                why="Perception at the edge (cameras, LiDAR, radar fusion) critical for AV + robotics. Target: Waymo, Motional, Wayve, Mobileye, Helsing → Perception / ML Eng roles."),
+                why="Genesis (430k× realtime) + Isaac Lab dominating sim infra. Skild, Physical Intelligence, NVIDIA Research all hiring. Sim-to-real = the bottleneck everyone is racing to solve."),
+    Opportunity(rank="06", title="Agentic Coding Tool / SWE-Agent Developer",
+                domain="Generative AI", signal="MEDIUM", fit=80,
+                why="Claude Code at 78.4%, Cursor at 67.2% SWE-bench — proving ground for agentic coding. Tooling, evals, and agent orchestration engineers in high demand. Target: Anthropic, Cognition, any coding-AI startup."),
+    Opportunity(rank="07", title="Embedded Linux + Motor Control (Humanoid HW)",
+                domain="Embedded", signal="MEDIUM", fit=76,
+                why="Every humanoid robot has firmware under the policy layer. FOC motor control, CAN bus, Zephyr/FreeRTOS for actuators. Target: Figure HW, Apptronik HW, Unitree, 1X Technologies → Embedded SW Eng."),
+    Opportunity(rank="08", title="On-Device Multimodal Perception (Camera + LiDAR)",
+                domain="Edge AI", signal="MEDIUM", fit=71,
+                why="AV + humanoid perception runs at the edge. Jetson Thor adoption by Amazon Robotics + Boston Dynamics. Target: Waymo, Luminar, Ouster, Wayve, Mobileye → Perception / ML Eng."),
 ]
 
 STARTUPS: list[Startup] = [
     Startup(name="Physical Intelligence", stage="Series B", domain="Physical AI", signal="Hot",
             note="π0 VLA model — generalist robot policy. $400M raised. π0.5 shipping to partners Q2 2026.",
             website="https://physicalintelligence.company"),
-    Startup(name="Skild AI", stage="Series A", domain="Physical AI", signal="Hot",
-            note="Generalist robot brain — GPT moment for manipulation. CMU/Meta spinout.",
+    Startup(name="Skild AI", stage="Series C", domain="Physical AI", signal="Hot",
+            note="$1.4B Series C at $14B valuation (2026). Generalist robot foundation model. CMU/Meta spinout. Largest private robotics round of 2026.",
             website="https://skild.ai"),
     Startup(name="Hailo", stage="Series C", domain="Edge AI", signal="Hot",
             note="$136M Series C. Hailo-8L NPU shipping in cameras, drones, edge boxes.",
             website="https://hailo.ai"),
-    Startup(name="Axelera AI", stage="Series B", domain="Edge AI", signal="Hot",
-            note="In-memory compute chip, 214 TOPS/$. Closing round now. Amsterdam.",
+    Startup(name="Axelera AI", stage="Series C", domain="Edge AI", signal="Hot",
+            note="$250M+ Series C (Feb 2026). Europa chip — in-memory compute, competitive with Hailo on TOPS/watt. Amsterdam.",
             website="https://axelera.ai"),
     Startup(name="1X Technologies", stage="Series B", domain="Physical AI", signal="Watch",
             note="Humanoid NEO. OpenAI-backed. Commercial pilots in 2026.",
@@ -80,8 +84,8 @@ STARTUPS: list[Startup] = [
     Startup(name="Agility Robotics", stage="Series B", domain="Physical AI", signal="Track",
             note="Digit humanoid. 500 units ordered by Amazon. GXO warehouse pilots.",
             website="https://agilityrobotics.com"),
-    Startup(name="Apptronik", stage="Series A", domain="Physical AI", signal="Track",
-            note="Apollo humanoid. NASA heritage. GXO logistics deployment.",
+    Startup(name="Apptronik", stage="Series A", domain="Physical AI", signal="Hot",
+            note="$520M Series A at $5B valuation — Google-led (2026). Apollo humanoid in Mercedes + GXO. NASA heritage.",
             website="https://apptronik.com"),
     Startup(name="Etched", stage="Seed", domain="Edge AI", signal="Watch",
             note="Transformer-only ASIC (Sohu). 144M TOPS. Beats H100 for inference.",
@@ -292,15 +296,15 @@ POSTS: list[Post] = [
 TASKS: list[Task] = [
     Task(
         id=1, priority="P0",
-        task="Apply to Physical Intelligence, Figure AI, Skild AI",
+        task="Apply to Skild AI, Apptronik, Physical Intelligence — policy/robot-learning roles",
         domain="Job Applications", time="1.5h",
         description=(
-            "1. Physical Intelligence (pi.ai) — Research Engineer / Robotics Software. "
-            "Tailor resume: highlight sim-to-real, policy training, Isaac Lab. "
-            "2. Figure AI (figure.ai/careers) — Software Engineer, Robot Learning. "
-            "Lead with ROS2 experience + embedded systems. "
-            "3. Skild AI (skild.ai) — Robot Foundation Models team. "
-            "Mention transformer-based policy work. "
+            "1. Skild AI (skild.ai) — $14B valuation post-Series C. Hiring policy engineers, sim-to-real ML. "
+            "Lead with diffusion policy + Isaac Lab. Reference their generalist robot brain thesis. "
+            "2. Apptronik (apptronik.com) — $520M Series A (Google-led). Apollo in Mercedes + GXO. "
+            "Highlight ROS2 + embedded control + real hardware. NASA heritage = safety-critical mindset matters. "
+            "3. Physical Intelligence (pi.ai) — π0.5 shipping to partners. Research Eng / Robot Learning. "
+            "Tailor: VLA fine-tuning, flow matching, dataset curation pipeline. "
             "Tip: personalize each cover letter with the company's latest paper or deployment news."
         ),
     ),
@@ -382,14 +386,16 @@ TASKS: list[Task] = [
     ),
     Task(
         id=8, priority="P2",
-        task="Apply to Covariant, Waymo, Helsing — research-focused roles",
-        domain="Job Applications", time="1h",
+        task="Build MCP server for personal toolchain — add to GitHub portfolio",
+        domain="Generative AI", time="1.5h",
         description=(
-            "Covariant (covariant.ai) — Robot Foundation Model team. Remote-friendly. "
-            "Waymo (waymo.com/careers) — Perception / Robotics ML roles. "
-            "Helsing (helsing.ai) — Defense AI, embedded ML. EU-based but remote eng roles exist. "
-            "Angle: all three care about production-grade ML on constrained hardware. "
-            "Lead with edge inference + real-world deployment experience."
+            "MCP (Model Context Protocol) is the standard agentic protocol — Claude Code natively uses it, "
+            "Cursor + Codex adopting fast. Building an MCP server signals you understand agentic infra. "
+            "1. Pick a tool you use: GitHub, Notion, linear, or your own script. "
+            "2. Implement a basic MCP server in Python (anthropic MCP SDK). "
+            "3. Register it in Claude Code / Cursor and demo a real workflow. "
+            "4. Push to GitHub — write a README with demo GIF. "
+            "This is a strong portfolio signal for any AI-native company: Anthropic, Cursor, Cognition, Modal."
         ),
     ),
 ]
