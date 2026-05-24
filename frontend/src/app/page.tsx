@@ -11,7 +11,7 @@ import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
 import { Footer } from "@/components/sections/Footer";
-import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchPeople, fetchWeekly } from "@/lib/api";
+import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchWeekly } from "@/lib/api";
 import type { WeeklyResponse } from "@/lib/api";
 import { readProfileFile } from "@/lib/server-cache";
 import { redirect } from "next/navigation";
@@ -53,12 +53,11 @@ export default async function DashboardPage() {
   const greeting = getGreeting(hour);
   const navDate = formatNavDate();
 
-  const [profile, posts, tasks, brief, people, weekly] = await Promise.all([
+  const [profile, posts, tasks, brief, weekly] = await Promise.all([
     fetchProfile(),
     fetchPosts(),
     fetchTasks(),
     fetchBrief(),
-    fetchPeople(),
     fetchWeekly(),
   ]);
 
@@ -139,7 +138,7 @@ export default async function DashboardPage() {
         >
           <PostOnX posts={posts} />
           <BuildThisWeek tasks={tasks} />
-          <PeopleFollowUp people={people} />
+          <PeopleFollowUp />
         </div>
 
         {/* Weekly Review */}

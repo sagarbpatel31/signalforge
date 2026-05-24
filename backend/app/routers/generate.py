@@ -10,6 +10,9 @@ from ..routers.profile import _load as _load_profile
 
 router = APIRouter(prefix="/api/generate", tags=["generate"])
 
+# Override with ANTHROPIC_MODEL env var to pin a different Claude model.
+MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-opus-4-7")
+
 # ── System prompts ────────────────────────────────────────────────────────
 
 _SIGNALS_SYSTEM = """You are SignalForge, an AI intelligence terminal for engineers and founders in deep-tech.
@@ -179,7 +182,7 @@ async def _stream_brief_generator() -> AsyncGenerator[str, None]:
     accumulated = ""
     try:
         async with client.messages.stream(
-            model="claude-opus-4-7",
+            model=MODEL,
             max_tokens=1200,
             system=[{"type": "text", "text": _SIGNALS_SYSTEM, "cache_control": {"type": "ephemeral"}}],
             messages=[{"role": "user", "content": user_content}],
@@ -226,7 +229,7 @@ async def generate_posts():
     )
 
     message = await client.messages.create(
-        model="claude-opus-4-7",
+        model=MODEL,
         max_tokens=1200,
         system=[{"type": "text", "text": _POSTS_SYSTEM, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": user_content}],
@@ -260,7 +263,7 @@ async def generate_tasks():
     )
 
     message = await client.messages.create(
-        model="claude-opus-4-7",
+        model=MODEL,
         max_tokens=800,
         system=[{"type": "text", "text": _TASKS_SYSTEM, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": user_content}],
@@ -290,7 +293,7 @@ async def generate_weekly():
     )
 
     message = await client.messages.create(
-        model="claude-opus-4-7",
+        model=MODEL,
         max_tokens=800,
         system=[{"type": "text", "text": _WEEKLY_SYSTEM, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": user_content}],
@@ -334,7 +337,7 @@ async def _generate_digest_content() -> dict:
     )
 
     message = await client.messages.create(
-        model="claude-opus-4-7",
+        model=MODEL,
         max_tokens=1500,
         system=[{"type": "text", "text": _DIGEST_SYSTEM, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": user_content}],

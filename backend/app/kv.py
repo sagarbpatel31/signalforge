@@ -10,7 +10,9 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-_DATA_DIR = Path(__file__).parent.parent.parent / "data"
+# backend/data — kv.py lives at backend/app/, so two parents up is backend/.
+# The frontend's server-side fallback (server-cache.ts) reads this same dir.
+_DATA_DIR = Path(__file__).parent.parent / "data"
 _CACHE_DIR = _DATA_DIR / "cache"
 
 

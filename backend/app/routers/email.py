@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 
 router = APIRouter(prefix="/api", tags=["email"])
 
-TO_EMAIL   = os.environ.get("DIGEST_EMAIL", "sagarpat3199@gmail.com")
+TO_EMAIL   = os.environ.get("DIGEST_EMAIL", "")
 # Set RESEND_FROM in Vercel env vars.
 # Free Resend accounts can only send from onboarding@resend.dev until you
 # verify a domain. Set RESEND_FROM=onboarding@resend.dev while testing.
@@ -161,6 +161,8 @@ def _render_html(data: dict) -> str:
 @router.post("/send-digest")
 async def send_digest():
     """Send daily digest email via Resend. Uses cached data — no Claude needed."""
+    if not TO_EMAIL:
+        raise HTTPException(status_code=503, detail="DIGEST_EMAIL not configured")
     resend    = _resend_client()
     data      = _build_digest_from_cache()
     html      = _render_html(data)
