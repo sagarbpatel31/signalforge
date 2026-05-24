@@ -51,6 +51,16 @@ async def _bg_fetch_papers():
         pass
 
 
+@router.post("/refresh")
+async def refresh_feeds(background_tasks: BackgroundTasks):
+    """Client-triggered refresh: schedules background fetches for news/jobs/papers.
+    Returns immediately and sends no email — the cron-only /api/ingest owns the digest."""
+    background_tasks.add_task(_bg_fetch_news)
+    background_tasks.add_task(_bg_fetch_jobs)
+    background_tasks.add_task(_bg_fetch_papers)
+    return {"status": "refreshing"}
+
+
 @router.get("/news")
 async def get_news(background_tasks: BackgroundTasks):
     cached = read_cache("news")

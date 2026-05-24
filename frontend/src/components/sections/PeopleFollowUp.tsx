@@ -316,7 +316,7 @@ export function PeopleFollowUp({ people: _initialPeople }: { people: Person[] })
               color: "var(--text-4)",
             }}
           >
-            You've followed everyone in the current batch.
+            You&apos;ve followed everyone in the current batch.
             <br />
             New suggestions rotate in 2 days.
           </div>

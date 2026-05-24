@@ -35,6 +35,13 @@ export default function RootLayout({
       data-theme="dark"
       className={`${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('sf-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         {children}
       </body>

@@ -79,25 +79,26 @@ export default function NewsPage() {
     }
   }, []);
 
-  // On mount: load, and if empty auto-trigger ingest once
+  // On mount: load, and if empty auto-trigger a refresh once
   useEffect(() => {
-    load().then(async () => {
-      // If still empty after load, trigger ingest + reload after delay
+    let cancelled = false;
+    (async () => {
+      await load();
+      // If still empty after load, trigger refresh + reload after delay
       const data = await fetchNewsItems();
-      if (data.length === 0) {
-        setIngesting(true);
-        try {
-          await triggerIngest();
-          // Wait for ingest to write to Redis, then reload
-          await new Promise(r => setTimeout(r, 3000));
-          await load();
-        } catch { /* silent */ } finally {
-          setIngesting(false);
-        }
+      if (cancelled || data.length > 0) return;
+      setIngesting(true);
+      try {
+        await triggerIngest();
+        // Wait for the background fetch to write to Redis, then reload
+        await new Promise(r => setTimeout(r, 3000));
+        if (!cancelled) await load();
+      } catch { /* silent */ } finally {
+        if (!cancelled) setIngesting(false);
       }
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    })();
+    return () => { cancelled = true; };
+  }, [load]);
 
   async function handleRefresh() {
     setIngesting(true);

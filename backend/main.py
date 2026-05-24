@@ -1,4 +1,5 @@
 import asyncio
+import hmac
 import logging
 from contextlib import asynccontextmanager
 
@@ -7,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent / ".env")
 
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate, feeds, email
 from app.ingestion.scheduler import create_scheduler, run_ingestion
@@ -71,8 +72,20 @@ async def health() -> dict:
     }
 
 
+def _verify_cron(authorization: str | None) -> None:
+    """Guard the cron ingest endpoint. Vercel cron sends the secret as a Bearer token.
+    When CRON_SECRET is unset (local dev / unconfigured), the endpoint stays open."""
+    secret = os.environ.get("CRON_SECRET", "")
+    if not secret:
+        return
+    expected = f"Bearer {secret}"
+    if not authorization or not hmac.compare_digest(authorization, expected):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+
 @app.get("/api/ingest")
-async def trigger_ingest() -> dict:
+async def trigger_ingest(authorization: str | None = Header(default=None)) -> dict:
+    _verify_cron(authorization)
     from app.ingestion.scheduler import run_ingestion
     result = await run_ingestion()
     # Send daily digest email after ingestion (best-effort — never block ingest)

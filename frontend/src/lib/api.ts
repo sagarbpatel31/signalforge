@@ -138,10 +138,11 @@ export const fetchJobsFull = () =>
 export const fetchNewsItems = () =>
   apiFetchLive<NewsItem[]>("/api/feeds/news", []);
 
-/** Trigger a full ingest run (cron equivalent — populates all Redis caches). */
-export async function triggerIngest(): Promise<{ news: number; papers: number; jobs: number }> {
-  const res = await fetch(`${API_BASE}/api/ingest`);
-  if (!res.ok) throw new Error(`ingest failed: ${res.status}`);
+/** Trigger a feed refresh — schedules background fetches that repopulate the Redis caches.
+ * Lightweight and email-free; the cron-protected /api/ingest owns the daily digest. */
+export async function triggerIngest(): Promise<{ status: string }> {
+  const res = await fetch(`${API_BASE}/api/feeds/refresh`, { method: "POST" });
+  if (!res.ok) throw new Error(`refresh failed: ${res.status}`);
   return res.json();
 }
 
