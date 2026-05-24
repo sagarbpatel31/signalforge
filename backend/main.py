@@ -1,7 +1,9 @@
 import asyncio
 import hmac
 import logging
+import re
 from contextlib import asynccontextmanager
+from urllib.parse import urlparse
 
 from pathlib import Path
 from dotenv import load_dotenv
@@ -33,10 +35,25 @@ app = FastAPI(title="SignalForge API", version="0.2.0", lifespan=lifespan)
 _extra = os.environ.get("FRONTEND_URL", "")
 _allowed_origins = ["http://localhost:3000"] + ([_extra] if _extra else [])
 
+
+def _build_origin_regex() -> str | None:
+    """Scope the Vercel preview wildcard to THIS project's subdomains instead of
+    allowing every *.vercel.app. Override with CORS_ALLOW_ORIGIN_REGEX if needed."""
+    override = os.environ.get("CORS_ALLOW_ORIGIN_REGEX", "")
+    if override:
+        return override
+    host = urlparse(_extra).hostname or ""
+    if host.endswith(".vercel.app"):
+        slug = re.escape(host.split(".")[0])
+        # Production (<slug>.vercel.app) + previews (<slug>-<hash|branch>.vercel.app)
+        return rf"https://{slug}(-[\w-]+)?\.vercel\.app"
+    return None
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_allowed_origins,
-    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_origin_regex=_build_origin_regex(),
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
