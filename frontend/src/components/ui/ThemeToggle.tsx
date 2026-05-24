@@ -1,24 +1,33 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useSyncExternalStore } from "react";
+
+const listeners = new Set<() => void>();
+
+function subscribe(cb: () => void) {
+  listeners.add(cb);
+  return () => {
+    listeners.delete(cb);
+  };
+}
+
+// The pre-hydration script in layout.tsx applies the stored theme before paint,
+// so reading the live attribute here keeps the toggle in sync without a flash.
+function isDark(): boolean {
+  return document.documentElement.getAttribute("data-theme") !== "light";
+}
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState(true);
+  const dark = useSyncExternalStore(subscribe, isDark, () => true);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("sf-theme");
-    if (stored === "light") {
-      setDark(false);
-      document.documentElement.setAttribute("data-theme", "light");
-    }
+  const toggle = useCallback(() => {
+    const next = isDark() ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem("sf-theme", next);
+    } catch {}
+    listeners.forEach((l) => l());
   }, []);
-
-  function toggle() {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.setAttribute("data-theme", next ? "dark" : "light");
-    localStorage.setItem("sf-theme", next ? "dark" : "light");
-  }
 
   return (
     <button

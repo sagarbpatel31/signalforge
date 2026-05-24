@@ -1,39 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
-import type { BookmarkItem } from "@/lib/useBookmarks";
-
-interface Bookmarks {
-  papers:   BookmarkItem[];
-  startups: BookmarkItem[];
-  roles:    BookmarkItem[];
-}
-
-function empty(): Bookmarks { return { papers: [], startups: [], roles: [] }; }
-
-function readBookmarks(): Bookmarks {
-  try {
-    const raw = localStorage.getItem("sf-bookmarks");
-    return raw ? JSON.parse(raw) : empty();
-  } catch { return empty(); }
-}
-
-function removeBookmark(type: keyof Bookmarks, id: string, current: Bookmarks): Bookmarks {
-  const updated = { ...current, [type]: current[type].filter((b) => b.id !== id) };
-  try { localStorage.setItem("sf-bookmarks", JSON.stringify(updated)); } catch {}
-  return updated;
-}
+import {
+  subscribe,
+  getSnapshot,
+  getServerSnapshot,
+  removeBookmark,
+  type BookmarkItem,
+  type Bookmarks,
+} from "@/lib/useBookmarks";
 
 function ItemRow({
   item,
-  type,
   onRemove,
 }: {
   item: BookmarkItem;
-  type: keyof Bookmarks;
   onRemove: () => void;
 }) {
   return (
@@ -101,17 +85,9 @@ const SECTIONS: { key: keyof Bookmarks; icon: string; label: string }[] = [
 ];
 
 export default function BookmarksPage() {
-  const [bookmarks, setBookmarks] = useState<Bookmarks>(empty());
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setBookmarks(readBookmarks());
-    setMounted(true);
-  }, []);
+  const bookmarks = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const total = bookmarks.papers.length + bookmarks.startups.length + bookmarks.roles.length;
-
-  if (!mounted) return null;
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)", padding: "32px 28px" }}>
@@ -170,10 +146,7 @@ export default function BookmarksPage() {
                       <ItemRow
                         key={item.id}
                         item={item}
-                        type={key}
-                        onRemove={() =>
-                          setBookmarks((prev) => removeBookmark(key, item.id, prev))
-                        }
+                        onRemove={() => removeBookmark(key, item.id)}
                       />
                     ))}
                   </div>
