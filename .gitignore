@@ -22,7 +22,10 @@ frontend/.env.production
 *.log
 .env
 
-# Backend data cache (runtime-generated, not versioned)
+# Data cache (runtime-generated, not versioned). The backend's file fallback
+# writes to the repo-root data/ dir; backend/data/ is kept for older checkouts.
+data/cache/*.json
+data/profile.json
 backend/data/cache/*.json
 backend/data/profile.json
 .vercel

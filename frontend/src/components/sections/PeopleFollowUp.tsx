@@ -110,7 +110,7 @@ function pickBatch(followedHandles: Set<string>): Person[] {
   return batch;
 }
 
-export function PeopleFollowUp({ people: _initialPeople }: { people: Person[] }) {
+export function PeopleFollowUp() {
   const [followedHandles, setFollowedHandles] = useState<Set<string>>(() => {
     if (typeof window === "undefined") return new Set();
     try {
