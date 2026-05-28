@@ -303,11 +303,21 @@ POSTS: list[Post] = [
         angle="Research",
         text=(
             "New research on diffusion policy for dexterous manipulation.\n\n"
-            "This changes the baseline assumption everyone was working from.\n\n"
+            "Changes the baseline assumption everyone was working from. Read before your next system design.\n\n"
             "#Robotics #EdgeAI"
         ),
         tags=["Robotics", "EdgeAI"],
         source_ref="π0 paper · Physical Intelligence 2025",
+    ),
+    Post(
+        angle="Founder Signal",
+        text=(
+            "Skild AI hits $14B valuation. Apptronik closes $520M (Google-led). Same quarter.\n\n"
+            "When the market picks winners this fast, the infrastructure play is now. Physical AI + edge inference = the stack.\n\n"
+            "#Robotics #PhysicalAI"
+        ),
+        tags=["Robotics", "PhysicalAI"],
+        source_ref="Skild AI Series C · Apptronik Series A · Q2 2026",
     ),
 ]
 
