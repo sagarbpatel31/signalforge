@@ -4,6 +4,10 @@
 /* ── V3 Design Tokens (OKLCH) ──────────────────────────────────────── */
 
 :root, [data-theme="dark"] {
+  --font-sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+
   /* Backgrounds */
   --bg:             oklch(0.15 0.006 250);
   --bg-elev:        oklch(0.19 0.006 250);
