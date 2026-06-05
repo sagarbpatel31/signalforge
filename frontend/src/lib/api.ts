@@ -3,13 +3,19 @@ import type {
   Paper, Post, Task, Person, ConvictionBet, UserProfile,
   JobListing, NewsItem, FlaggedCompany,
 } from "./types";
+import type { FeedMeta } from "./intelligence";
+import type { WorkbenchState } from "./useWorkbench";
+import { getUserHeaders } from "./identity";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 /** Standard fetch — 60s ISR cache at Next.js layer (for structured data that rarely changes). */
-async function apiFetch<T>(path: string, fallback: T): Promise<T> {
+async function apiFetch<T>(path: string, fallback: T, userKey?: string): Promise<T> {
   try {
-    const res = await fetch(`${API_BASE}${path}`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API_BASE}${path}`, {
+      next: { revalidate: 60 },
+      headers: await getUserHeaders(userKey),
+    });
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json() as Promise<T>;
   } catch {
@@ -18,9 +24,12 @@ async function apiFetch<T>(path: string, fallback: T): Promise<T> {
 }
 
 /** Live fetch — no Next.js cache. For feeds data backed by Redis (backend manages 12h TTL). */
-async function apiFetchLive<T>(path: string, fallback: T): Promise<T> {
+async function apiFetchLive<T>(path: string, fallback: T, userKey?: string): Promise<T> {
   try {
-    const res = await fetch(`${API_BASE}${path}`, { cache: "no-store" });
+    const res = await fetch(`${API_BASE}${path}`, {
+      cache: "no-store",
+      headers: await getUserHeaders(userKey),
+    });
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json() as Promise<T>;
   } catch {
@@ -52,6 +61,8 @@ export interface BriefResponse {
   market_pulse: string;
   signals: Signal[];
   timestamp: string;
+  source_mode: "live" | "fallback";
+  source_detail: string;
 }
 
 export interface WeeklyResponse {
@@ -67,7 +78,9 @@ export const fetchBrief = () =>
   apiFetch<BriefResponse>("/api/brief", {
     market_pulse: fallbackPulse,
     signals: fallbackSignals,
-    timestamp: "07:42 UTC · May 1",
+    timestamp: "Curated fallback · Jun 4, 2026",
+    source_mode: "fallback",
+    source_detail: "API unavailable. Using built-in fallback brief.",
   });
 
 export const fetchStats = () =>
@@ -79,11 +92,11 @@ export const fetchOpportunities = () =>
 export const fetchStartups = () =>
   apiFetch<Startup[]>("/api/startups", fallbackStartups);
 
-export const fetchCareer = () =>
-  apiFetchLive<Role[]>("/api/career", fallbackRoles);
+export const fetchCareer = (userKey?: string) =>
+  apiFetchLive<Role[]>("/api/career", fallbackRoles, userKey);
 
-export const fetchAllCareer = () =>
-  apiFetchLive<Role[]>("/api/career/all", fallbackRoles);
+export const fetchAllCareer = (userKey?: string) =>
+  apiFetchLive<Role[]>("/api/career/all", fallbackRoles, userKey);
 
 export const fetchResearch = () =>
   apiFetchLive<Paper[]>("/api/research", fallbackPapers);
@@ -108,9 +121,12 @@ export const fetchWeekly = () =>
     next_week_focus: nextWeekFocus,
   });
 
-export async function fetchProfile(): Promise<UserProfile | null> {
+export async function fetchProfile(userKey?: string): Promise<UserProfile | null> {
   try {
-    const res = await fetch(`${API_BASE}/api/profile`, { cache: "no-store" });
+    const res = await fetch(`${API_BASE}/api/profile`, {
+      cache: "no-store",
+      headers: await getUserHeaders(userKey),
+    });
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json() as Promise<UserProfile>;
@@ -119,14 +135,49 @@ export async function fetchProfile(): Promise<UserProfile | null> {
   }
 }
 
-export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
+export async function saveProfile(profile: UserProfile, userKey?: string): Promise<UserProfile> {
   const res = await fetch(`${API_BASE}/api/profile`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(await getUserHeaders(userKey)),
+    },
     body: JSON.stringify(profile),
   });
   if (!res.ok) throw new Error("Failed to save profile");
   return res.json() as Promise<UserProfile>;
+}
+
+export async function fetchWorkbench(userKey?: string): Promise<WorkbenchState> {
+  const res = await apiFetchLive<{ dismissed?: string[]; custom_tasks?: Task[] }>(
+    "/api/workbench",
+    { dismissed: [], custom_tasks: [] },
+    userKey
+  );
+  return {
+    dismissed: Array.isArray(res.dismissed) ? res.dismissed : [],
+    customTasks: Array.isArray(res.custom_tasks) ? res.custom_tasks : [],
+  };
+}
+
+export async function saveWorkbench(state: WorkbenchState): Promise<WorkbenchState> {
+  const res = await fetch(`${API_BASE}/api/workbench`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(await getUserHeaders()),
+    },
+    body: JSON.stringify({
+      dismissed: state.dismissed,
+      custom_tasks: state.customTasks,
+    }),
+  });
+  if (!res.ok) throw new Error("Failed to save workbench");
+  const data = await res.json() as { dismissed?: string[]; custom_tasks?: Task[] };
+  return {
+    dismissed: Array.isArray(data.dismissed) ? data.dismissed : [],
+    customTasks: Array.isArray(data.custom_tasks) ? data.custom_tasks : [],
+  };
 }
 
 export const fetchFlaggedStartups = () =>
@@ -137,6 +188,14 @@ export const fetchJobsFull = () =>
 
 export const fetchNewsItems = () =>
   apiFetchLive<NewsItem[]>("/api/feeds/news", []);
+
+export const fetchFeedMeta = () =>
+  apiFetchLive<FeedMeta>("/api/feeds/meta", {
+    last_refresh: null,
+    counts: {},
+    source_mode: "fallback",
+    source_detail: "Feed meta unavailable. Treating UI as fallback-safe.",
+  });
 
 /** Trigger a feed refresh — schedules background fetches that repopulate the Redis caches.
  * Lightweight and email-free; the cron-protected /api/ingest owns the daily digest. */

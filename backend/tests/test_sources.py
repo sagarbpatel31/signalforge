@@ -1,4 +1,21 @@
 from app.ingestion.sources import _is_relevant, _extract_tags, _role_matches_keywords
+from app.routers.brief import _build_brief_from_cache
+from app.routers.feeds import get_meta
+from app.schemas import FeedMetaResponse
+
+
+def test_brief_marks_fallback_when_cache_is_cold(monkeypatch):
+    monkeypatch.setattr("app.ingestion.sources.read_cache", lambda _: [])
+    brief = _build_brief_from_cache()
+    assert brief.source_mode == "fallback"
+    assert "Cache cold" in brief.source_detail
+
+
+def test_feed_meta_marks_fallback_when_empty(monkeypatch):
+    monkeypatch.setattr("app.routers.feeds.read_cache", lambda _: {"last_refresh": None, "counts": {}})
+    meta = __import__("asyncio").run(get_meta())
+    assert isinstance(meta, FeedMetaResponse)
+    assert meta.source_mode == "fallback"
 
 
 def test_is_relevant_matches_keywords():

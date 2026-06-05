@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { SubNav } from "@/components/nav/SubNav";
 import { SfTag } from "@/components/ui/sf-tag";
 import { BookmarkButton } from "@/components/ui/BookmarkButton";
+import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import { FilterTabs, matchesFilter } from "@/components/ui/FilterTabs";
 import { fetchAllCareer } from "@/lib/api";
 import type { Role } from "@/lib/types";
@@ -136,6 +137,7 @@ export default function CareerPage() {
                     </span>
                     <SfTag color={role.color}>{role.signal}</SfTag>
                   </div>
+                  <CuratedMeta lastVerified={role.last_verified} sources={role.sources} />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <BookmarkButton

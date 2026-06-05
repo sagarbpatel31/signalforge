@@ -1,6 +1,7 @@
 import asyncio
 from fastapi import APIRouter, BackgroundTasks
 from ..ingestion.sources import read_cache, fetch_sheet_companies
+from ..schemas import FeedMetaResponse
 
 router = APIRouter(prefix="/api/feeds", tags=["feeds"])
 
@@ -125,9 +126,26 @@ async def get_digest():
     return read_cache("digest") or {"headline": None, "sections": [], "action_item": None, "generated_at": None}
 
 
-@router.get("/meta")
-async def get_meta():
-    return read_cache("meta") or {"last_refresh": None, "counts": {}}
+@router.get("/meta", response_model=FeedMetaResponse)
+async def get_meta() -> FeedMetaResponse:
+    meta = read_cache("meta") or {"last_refresh": None, "counts": {}}
+    counts = meta.get("counts", {}) if isinstance(meta, dict) else {}
+    total = sum(v for v in counts.values() if isinstance(v, int))
+
+    if total > 0:
+        return FeedMetaResponse(
+            last_refresh=meta.get("last_refresh"),
+            counts=counts,
+            source_mode="live",
+            source_detail=f"Cache contains {total} tracked feed items.",
+        )
+
+    return FeedMetaResponse(
+        last_refresh=meta.get("last_refresh") if isinstance(meta, dict) else None,
+        counts=counts,
+        source_mode="fallback",
+        source_detail="Feed cache is cold. Endpoints may fall back to built-in mock data until refresh completes.",
+    )
 
 
 @router.get("/sheet-companies")

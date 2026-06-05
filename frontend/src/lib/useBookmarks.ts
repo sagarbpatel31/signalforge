@@ -7,17 +7,18 @@ export interface BookmarkItem {
   title: string;
   sub: string;      // venue / company+type / stage
   url?: string;
-  type: "paper" | "startup" | "role";
+  type: "paper" | "startup" | "role" | "opportunity";
 }
 
 export interface Bookmarks {
   papers:   BookmarkItem[];
   startups: BookmarkItem[];
   roles:    BookmarkItem[];
+  opportunities: BookmarkItem[];
 }
 
 const STORAGE_KEY = "sf-bookmarks";
-const EMPTY: Bookmarks = { papers: [], startups: [], roles: [] };
+const EMPTY: Bookmarks = { papers: [], startups: [], roles: [], opportunities: [] };
 
 // Single shared store so every BookmarkButton and the /bookmarks page stay in sync.
 const listeners = new Set<() => void>();

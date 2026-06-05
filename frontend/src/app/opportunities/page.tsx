@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SubNav } from "@/components/nav/SubNav";
 import { fetchOpportunities } from "@/lib/api";
 import { SfTag } from "@/components/ui/sf-tag";
+import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import type { Opportunity } from "@/lib/types";
 
 function signalTagColor(signal: Opportunity["signal"]) {
@@ -166,17 +167,25 @@ export default function OpportunitiesPage() {
                   </span>
                 </div>
 
-                {/* Why text */}
-                <p
-                  style={{
-                    fontSize: 12,
-                    color: "var(--text-2)",
-                    lineHeight: 1.55,
-                    margin: 0,
-                  }}
-                >
-                  {opp.why}
-                </p>
+                <div style={{ display: "grid", gap: 10 }}>
+                  <div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--text-4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4 }}>
+                      Sourced Fact
+                    </div>
+                    <p style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.55, margin: 0 }}>
+                      {opp.sourced_fact ?? opp.why}
+                    </p>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--text-4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4 }}>
+                      Editorial Take
+                    </div>
+                    <p style={{ fontSize: 12, color: "var(--text)", lineHeight: 1.55, margin: 0 }}>
+                      {opp.editorial_take ?? opp.why}
+                    </p>
+                  </div>
+                  <CuratedMeta lastVerified={opp.last_verified} sources={opp.sources} />
+                </div>
               </div>
 
               {/* Explore button */}

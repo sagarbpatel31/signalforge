@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveProfile } from "@/lib/api";
+import { deriveUserKey, setActiveUserKey } from "@/lib/identity";
 import { DOMAINS, EXPERIENCE_LEVELS, GOALS } from "@/lib/types";
 import type { UserProfile } from "@/lib/types";
 
@@ -136,7 +137,9 @@ export function OnboardingForm() {
   const handleSubmit = async () => {
     setSaving(true);
     try {
-      await saveProfile(form);
+      const userKey = deriveUserKey(form);
+      await saveProfile(form, userKey);
+      setActiveUserKey(userKey);
       router.push("/");
     } catch {
       setSaving(false);

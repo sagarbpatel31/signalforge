@@ -4,7 +4,8 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { SubNav } from "@/components/nav/SubNav";
 import { SfTag } from "@/components/ui/sf-tag";
 import { FilterTabs, matchesFilter } from "@/components/ui/FilterTabs";
-import { fetchNewsItems, triggerIngest } from "@/lib/api";
+import { fetchFeedMeta, fetchNewsItems, triggerIngest } from "@/lib/api";
+import { summarizeFeedStatus } from "@/lib/intelligence";
 import type { NewsItem, TagColor } from "@/lib/types";
 import type { FilterTab } from "@/components/ui/FilterTabs";
 
@@ -50,6 +51,7 @@ export default function NewsPage() {
   const [loading, setLoading]   = useState(true);
   const [ingesting, setIngesting] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<string>("");
+  const [feedDetail, setFeedDetail] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
 
   const filtered = useMemo(() => {
@@ -71,8 +73,9 @@ export default function NewsPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await fetchNewsItems();
+      const [data, meta] = await Promise.all([fetchNewsItems(), fetchFeedMeta()]);
       setItems(data);
+      setFeedDetail(summarizeFeedStatus(meta).detail);
       if (data.length > 0) setLastRefresh(new Date().toLocaleTimeString());
     } finally {
       setLoading(false);
@@ -155,6 +158,18 @@ export default function NewsPage() {
                 </span>
               )}
             </p>
+            {feedDetail && !loading && (
+              <p
+                style={{
+                  marginTop: 8,
+                  fontSize: 12,
+                  color: "var(--text-3)",
+                  lineHeight: 1.5,
+                }}
+              >
+                {feedDetail}
+              </p>
+            )}
           </div>
 
           <button

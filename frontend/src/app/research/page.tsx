@@ -5,6 +5,7 @@ import { SubNav } from "@/components/nav/SubNav";
 import { SfTag } from "@/components/ui/sf-tag";
 import { FilterTabs, matchesFilter } from "@/components/ui/FilterTabs";
 import { BookmarkButton } from "@/components/ui/BookmarkButton";
+import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import { fetchAllResearch } from "@/lib/api";
 import type { Paper } from "@/lib/types";
 import type { FilterTab } from "@/components/ui/FilterTabs";
@@ -133,6 +134,7 @@ export default function ResearchPage() {
                       <SfTag key={t} color="muted">{t}</SfTag>
                     ))}
                   </div>
+                  <CuratedMeta lastVerified={p.last_verified} sources={p.sources} />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <BookmarkButton

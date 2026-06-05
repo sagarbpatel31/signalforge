@@ -1,6 +1,6 @@
 import re
 from typing import Optional
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, Header
 from ..schemas import Role
 from ..mock_data import ROLES
 from ..ingestion.sources import read_cache
@@ -167,12 +167,12 @@ async def _bg_fetch_jobs():
         pass
 
 
-def _get_filtered_roles(limit: Optional[int] = None) -> list[Role]:
+def _get_filtered_roles(limit: Optional[int] = None, user_key: str | None = None) -> list[Role]:
     cached = read_cache("jobs")
     if not cached:
         return ROLES[:limit] if limit else ROLES
 
-    profile = _load_profile()
+    profile = _load_profile(user_key)
     domains = profile.domains if profile else []
     all_pass = _is_startup_ecosystem(domains) or not domains
     tag_set, kw_list, co_set = _relevant_sets(domains)
@@ -200,14 +200,14 @@ def _get_filtered_roles(limit: Optional[int] = None) -> list[Role]:
 
 
 @router.get("/career", response_model=list[Role])
-async def get_career(background_tasks: BackgroundTasks) -> list[Role]:
+async def get_career(background_tasks: BackgroundTasks, x_signalforge_user: str | None = Header(default=None)) -> list[Role]:
     if not read_cache("jobs"):
         background_tasks.add_task(_bg_fetch_jobs)
-    return _get_filtered_roles(limit=4)
+    return _get_filtered_roles(limit=4, user_key=x_signalforge_user)
 
 
 @router.get("/career/all", response_model=list[Role])
-async def get_career_all(background_tasks: BackgroundTasks) -> list[Role]:
+async def get_career_all(background_tasks: BackgroundTasks, x_signalforge_user: str | None = Header(default=None)) -> list[Role]:
     if not read_cache("jobs"):
         background_tasks.add_task(_bg_fetch_jobs)
-    return _get_filtered_roles(limit=None)
+    return _get_filtered_roles(limit=None, user_key=x_signalforge_user)

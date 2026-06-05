@@ -5,6 +5,7 @@ import Link from "next/link";
 import { SubNav } from "@/components/nav/SubNav";
 import { fetchStartups, fetchFlaggedStartups, triggerIngest } from "@/lib/api";
 import { SfTag } from "@/components/ui/sf-tag";
+import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import type { Startup, FlaggedCompany, TagColor } from "@/lib/types";
 
 function signalColor(s: string): TagColor {
@@ -314,8 +315,24 @@ export default function StartupsPage() {
                     <SfTag color="muted">{s.stage}</SfTag>
                     <SfTag color="muted">{s.domain}</SfTag>
                   </div>
-                  <div style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.5 }}>
-                    {s.note}
+                  <div style={{ display: "grid", gap: 10 }}>
+                    <div>
+                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--text-4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4 }}>
+                        Sourced Fact
+                      </div>
+                      <div style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.5 }}>
+                        {s.sourced_fact ?? s.note}
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--text-4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4 }}>
+                        Editorial Take
+                      </div>
+                      <div style={{ fontSize: 12, color: "var(--text)", lineHeight: 1.5 }}>
+                        {s.editorial_take ?? s.note}
+                      </div>
+                    </div>
+                    <CuratedMeta lastVerified={s.last_verified} sources={s.sources} />
                   </div>
                 </div>
                 <SfTag color={signalColor(s.signal)} dot={s.signal === "Hot"}>

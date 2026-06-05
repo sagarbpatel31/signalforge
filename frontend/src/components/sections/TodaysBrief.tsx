@@ -30,6 +30,7 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
   }
 
   const { market_pulse, signals, timestamp } = brief;
+  const briefTone = brief.source_mode === "live" ? "var(--green)" : "var(--orange)";
 
   return (
     <SfCard glow>
@@ -57,6 +58,17 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
           </Link>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-4)" }}>
             {timestamp}
+          </span>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              color: briefTone,
+              letterSpacing: "0.04em",
+            }}
+            title={brief.source_detail}
+          >
+            {brief.source_mode === "live" ? "LIVE" : "FALLBACK"}
           </span>
           <button
             onClick={handleRegenerate}
@@ -107,6 +119,19 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
           }}
         >
           ⟶ {market_pulse}
+        </div>
+      )}
+
+      {!loading && (
+        <div
+          style={{
+            marginBottom: 14,
+            fontSize: 12,
+            color: "var(--text-3)",
+            lineHeight: 1.5,
+          }}
+        >
+          {brief.source_detail}
         </div>
       )}
 

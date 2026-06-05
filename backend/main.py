@@ -12,7 +12,7 @@ load_dotenv(Path(__file__).parent / ".env")
 import os
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate, feeds, email
+from app.routers import brief, opportunities, startups, career, research, twitter, tasks, people, weekly, profile, generate, feeds, email, workbench
 from app.ingestion.scheduler import create_scheduler, run_ingestion
 
 logging.basicConfig(level=logging.INFO)
@@ -69,6 +69,7 @@ for router in [
     people.router,
     weekly.router,
     profile.router,
+    workbench.router,
     generate.router,
     feeds.router,
     email.router,

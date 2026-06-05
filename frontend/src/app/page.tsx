@@ -10,10 +10,13 @@ import { PostOnX } from "@/components/sections/PostOnX";
 import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
+import { DashboardFrame } from "@/components/sections/DashboardFrame";
 import { Footer } from "@/components/sections/Footer";
 import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchWeekly } from "@/lib/api";
 import type { WeeklyResponse } from "@/lib/api";
-import { readProfileFile } from "@/lib/server-cache";
+import { readCacheFile, readProfileFile } from "@/lib/server-cache";
+import { getServerUserKey } from "@/lib/server-identity";
+import { summarizeFeedStatus } from "@/lib/intelligence";
 import { redirect } from "next/navigation";
 import type { UserProfile } from "@/lib/types";
 
@@ -52,17 +55,19 @@ export default async function DashboardPage() {
   const hour = getPSTHour();
   const greeting = getGreeting(hour);
   const navDate = formatNavDate();
+  const activeUserKey = await getServerUserKey();
 
   const [profile, posts, tasks, brief, weekly] = await Promise.all([
-    fetchProfile(),
+    fetchProfile(activeUserKey),
     fetchPosts(),
     fetchTasks(),
     fetchBrief(),
     fetchWeekly(),
   ]);
 
-  const resolvedProfile: UserProfile | null = profile ?? readProfileFile<UserProfile>();
+  const resolvedProfile: UserProfile | null = profile ?? readProfileFile<UserProfile>(activeUserKey);
   if (!resolvedProfile) redirect("/onboarding");
+  const feedStatus = summarizeFeedStatus(readCacheFile("meta"));
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -91,62 +96,67 @@ export default async function DashboardPage() {
           padding: "32px 28px 0",
         }}
       >
-        {/* Hero */}
-        <div className="fade-up fade-up-1">
-          <Hero userName={resolvedProfile!.name} brief={brief} greeting={greeting} />
-        </div>
-
-        {/* Stat bar */}
-        <div className="fade-up fade-up-1">
-          <StatBar />
-        </div>
-
-        {/* Today's Brief */}
-        <div className="fade-up fade-up-2" style={{ marginBottom: GAP }}>
-          <TodaysBrief initialBrief={brief} />
-        </div>
-
-        {/* Skills × Targets */}
-        <div className="fade-up fade-up-2" style={{ marginBottom: GAP }}>
-          <TopOpportunities />
-        </div>
-
-        {/* Row: Startup · Career · Research */}
-        <div
-          className="fade-up fade-up-3 grid-3"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gap: GAP,
-            marginBottom: GAP,
-          }}
-        >
-          <StartupRadar />
-          <CareerRadar />
-          <ResearchCorner />
-        </div>
-
-        {/* Row: Post · Build · People */}
-        <div
-          className="fade-up fade-up-4 grid-3"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gap: GAP,
-            marginBottom: GAP,
-          }}
-        >
-          <PostOnX posts={posts} />
-          <BuildThisWeek tasks={tasks} />
-          <PeopleFollowUp />
-        </div>
-
-        {/* Weekly Review */}
-        <div className="fade-up fade-up-5" style={{ marginBottom: GAP }}>
-          <WeeklyStrategicReview initialWeekly={weekly as WeeklyResponse} />
-        </div>
-
-        <Footer />
+        <DashboardFrame
+          feedLabel={feedStatus.label}
+          feedDetail={feedStatus.detail}
+          tone={feedStatus.tone}
+          hero={(
+            <div className="fade-up fade-up-1">
+              <Hero userName={resolvedProfile.name} brief={brief} greeting={greeting} />
+            </div>
+          )}
+          statBar={(
+            <div className="fade-up fade-up-1">
+              <StatBar />
+            </div>
+          )}
+          brief={(
+            <div className="fade-up fade-up-2" style={{ marginBottom: GAP }}>
+              <TodaysBrief initialBrief={brief} />
+            </div>
+          )}
+          opportunities={(
+            <div className="fade-up fade-up-2" style={{ marginBottom: GAP }}>
+              <TopOpportunities profile={resolvedProfile} />
+            </div>
+          )}
+          radarRow={(
+            <div
+              className="fade-up fade-up-3 grid-3"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+              gap: GAP,
+              marginBottom: GAP,
+            }}
+          >
+            <StartupRadar />
+            <CareerRadar userKey={activeUserKey} />
+            <ResearchCorner />
+          </div>
+          )}
+          actionRow={(
+            <div
+              className="fade-up fade-up-4 grid-3"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gap: GAP,
+                marginBottom: GAP,
+              }}
+            >
+              <PostOnX posts={posts} />
+              <BuildThisWeek tasks={tasks} />
+              <PeopleFollowUp />
+            </div>
+          )}
+          weekly={(
+            <div className="fade-up fade-up-5" style={{ marginBottom: GAP }}>
+              <WeeklyStrategicReview initialWeekly={weekly as WeeklyResponse} />
+            </div>
+          )}
+          footer={<Footer />}
+        />
       </main>
     </div>
   );

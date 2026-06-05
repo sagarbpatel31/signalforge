@@ -16,6 +16,10 @@ export function readCacheFile<T>(name: string): T | null {
   return readJson<T>(path.join(DATA_ROOT, "cache", `${name}.json`));
 }
 
-export function readProfileFile<T>(): T | null {
+export function readProfileFile<T>(userKey?: string): T | null {
+  if (userKey && userKey !== "default") {
+    const scoped = readJson<T>(path.join(DATA_ROOT, "profiles", `${userKey}.json`));
+    if (scoped) return scoped;
+  }
   return readJson<T>(path.join(DATA_ROOT, "profile.json"));
 }

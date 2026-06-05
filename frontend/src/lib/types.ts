@@ -7,6 +7,14 @@ export interface Signal {
   text: string;
 }
 
+export type SourceMode = "live" | "fallback";
+
+export interface CuratedSource {
+  label: string;
+  url: string;
+  published_at?: string;
+}
+
 export interface Stat {
   label: string;
   value: string;
@@ -21,6 +29,10 @@ export interface Opportunity {
   signal: "HIGH" | "MEDIUM" | "LOW";
   fit: number;
   why: string;
+  sourced_fact?: string;
+  editorial_take?: string;
+  last_verified?: string;
+  sources?: CuratedSource[];
 }
 
 export interface Startup {
@@ -30,6 +42,10 @@ export interface Startup {
   signal: "Hot" | "Watch" | "Track";
   note: string;
   website?: string;
+  sourced_fact?: string;
+  editorial_take?: string;
+  last_verified?: string;
+  sources?: CuratedSource[];
 }
 
 export interface Role {
@@ -40,6 +56,8 @@ export interface Role {
   color: TagColor;
   url?: string;
   tags?: string[];
+  last_verified?: string;
+  sources?: CuratedSource[];
 }
 
 export interface Paper {
@@ -48,6 +66,8 @@ export interface Paper {
   tags: string[];
   read: boolean;
   url?: string;
+  last_verified?: string;
+  sources?: CuratedSource[];
 }
 
 export interface JobListing {
@@ -76,7 +96,7 @@ export interface Post {
 }
 
 export interface Task {
-  id: number;
+  id: number | string;
   priority: "P0" | "P1" | "P2";
   task: string;
   domain: string;

@@ -97,6 +97,12 @@ def _build_brief_from_cache() -> BriefResponse:
         market_pulse=pulse,
         signals=signals,
         timestamp=datetime.now(timezone.utc).strftime("%H:%M UTC · %b %-d"),
+        source_mode="live" if news else "fallback",
+        source_detail=(
+            f"Derived from {len(news)} cached feed items."
+            if news
+            else "Cache cold. Using rotating market pulse defaults."
+        ),
     )
 
 
@@ -198,6 +204,8 @@ async def get_brief() -> BriefResponse:
                 market_pulse=MARKET_PULSE,
                 signals=SIGNALS,
                 timestamp=datetime.now(timezone.utc).strftime("%H:%M UTC · %b %-d"),
+                source_mode="fallback",
+                source_detail="Using built-in fallback brief because cached feed signals were not meaningful.",
             )
         return brief
     except Exception:
@@ -205,6 +213,8 @@ async def get_brief() -> BriefResponse:
             market_pulse=MARKET_PULSE,
             signals=SIGNALS,
             timestamp=datetime.now(timezone.utc).strftime("%H:%M UTC · %b %-d"),
+            source_mode="fallback",
+            source_detail="Using built-in fallback brief because the cache-backed brief could not be built.",
         )
 
 

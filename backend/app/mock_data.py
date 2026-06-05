@@ -1,50 +1,61 @@
 from .schemas import (
-    Signal, Stat, Opportunity, Startup, Role,
+    CuratedSource, Signal, Stat, Opportunity, Startup, Role,
     Paper, Post, Task, Person, ConvictionBet,
 )
 
 MARKET_PULSE = (
-    "Humanoid deployments at commercial scale — 12 platforms shipping, $4.3B raised in 2026. "
-    "Skild AI hits $14B valuation on generalist robot brain. "
-    "Claude Code 78% SWE-bench + MCP-native; agentic infra becoming table stakes. "
-    "Edge AI chip market up to $11.6B — Axelera $250M Series C, Jetson Thor 7.5× over Orin."
+    "As of June 2026: Skild AI has raised $1.4B at a valuation above $14B, "
+    "Apptronik has extended its Series A to more than $935M, Figure says BotQ has delivered "
+    "350+ Figure 03 robots and reached a one-robot-per-hour production pace, and edge AI has "
+    "moved decisively into mass-market deployment across robotics, security, and on-device GenAI."
 )
 
 SIGNALS: list[Signal] = [
-    Signal(label="Skild AI $1.4B Series C", delta="+11", color="cyan",
-           text="Skild AI raises $1.4B at $14B valuation — generalist robot foundation model. CMU/Meta lineage. Biggest private robotics round of 2026. Hiring across policy learning, sim-to-real, and inference."),
-    Signal(label="Humanoid Scale Tipping", delta="+9", color="green",
-           text="12 commercial humanoid platforms shipping as of Q2 2026. Apptronik $520M Series A (Google-led), Apollo in Mercedes + GXO. Japan Airlines deploying at Haneda. $4.3B humanoid funding — 6× vs 2018."),
-    Signal(label="Agentic AI + MCP Native", delta="+7", color="amber",
-           text="Claude Code 78.4% SWE-bench, fully MCP-native. Cursor at 67.2%. MCP adoption accelerating across Cursor, Codex, Replit. Agentic toolchain infra now a core hiring signal at every AI lab."),
-    Signal(label="Edge AI Chip War", delta="+5", color="muted",
-           text="Axelera AI $250M Series C (Feb 2026), Europa chip benchmarked. MLPerf v6.0: industry at 200+ TOPS/watt. Edge AI market $9.5B → $11.6B in 12 months. Jetson Thor adopted by Amazon Robotics + Figure."),
+    Signal(label="Skild AI Series C", delta="Jan 2026", color="cyan",
+           text="Skild AI announced a $1.4B Series C led by SoftBank, pushing valuation above $14B and reinforcing the market for general-purpose robot foundation models."),
+    Signal(label="Apptronik Apollo Scale", delta="Feb 2026", color="green",
+           text="Apptronik added a $520M Series A-X extension, bringing total Series A to more than $935M and nearly $1B total capital as it scales Apollo deployments."),
+    Signal(label="Figure 03 Production", delta="Apr 2026", color="amber",
+           text="Figure says BotQ has delivered over 350 Figure 03 robots and improved output from one robot per day to one per hour in under 120 days."),
+    Signal(label="Edge AI Goes Mass Market", delta="Jun 2026", color="muted",
+           text="Axelera announced more than $250M in new funding and Hailo used CES 2026 to position edge AI and on-device GenAI as mainstream across robotics and commercial systems."),
 ]
 
 STATS: list[Stat] = [
-    Stat(label="Signals Tracked", value="2,847", delta="+124 today", up=True),
-    Stat(label="Opportunities", value="38", delta="6 new", up=True),
-    Stat(label="Startups Flagged", value="142", delta="+19 this wk", up=True),
-    Stat(label="Hiring Signals", value="91", delta="+8 roles", up=True),
-    Stat(label="Research Papers", value="23", delta="unread", up=None),
+    Stat(label="Signals Tracked", value="2,847", delta="demo snapshot · Jun 2026", up=True),
+    Stat(label="Opportunities", value="38", delta="curated roles + infra themes", up=True),
+    Stat(label="Startups Flagged", value="142", delta="humanoid + edge AI focus", up=True),
+    Stat(label="Hiring Signals", value="91", delta="demo snapshot", up=True),
+    Stat(label="Research Papers", value="23", delta="review queue", up=None),
 ]
+
+
+def _src(label: str, url: str, published_at: str = "") -> CuratedSource:
+    return CuratedSource(label=label, url=url, published_at=published_at)
+
+
+def _fallback_editorial(domain: str, signal: str, subject: str) -> str:
+    return (
+        f"Interpretation: {subject} remains a {signal.lower()}-priority signal inside the {domain} map. "
+        "Treat it as a watchlist item until a fresher source changes the thesis."
+    )
 
 OPPORTUNITIES: list[Opportunity] = [
     Opportunity(rank="01", title="Generalist Robot Policy Engineer (VLA / Diffusion)",
                 domain="Physical AI", signal="HIGH", fit=97,
-                why="Skild $14B + PI + Covariant all hiring policy engineers. VLA (π0, RT-2), diffusion policy, and Isaac Lab experience = top-of-funnel instantly. 12 humanoid platforms need policy talent now."),
+                why="Skild, Physical Intelligence, and Figure have all raised or scaled aggressively into 2026. VLA policy work, diffusion policy, and Isaac Lab experience are directly legible signals."),
     Opportunity(rank="02", title="MCP Server / Agentic Infra Engineer",
                 domain="Generative AI", signal="HIGH", fit=94,
-                why="MCP is the standard agentic protocol — Claude Code native, Cursor/Codex adopting fast. Every AI product team building MCP servers. Target: Anthropic, Cursor, Replit, Modal, any AI-native startup."),
+                why="By June 2026, agentic developer tooling and MCP-style integrations have become a durable infra layer. Teams need engineers who can build tool-use runtimes, evals, and workflow integrations."),
     Opportunity(rank="03", title="Edge Inference Compiler / NPU Optimization",
                 domain="Edge AI", signal="HIGH", fit=91,
-                why="Axelera $250M Series C, Jetson Thor, MLPerf 200+ TOPS/watt. Edge AI chip market $11.6B. Target: Hailo, Axelera AI, Tenstorrent, Groq, Qualcomm AI — Compiler / Inference Eng. INT4/INT8 fluency = hire."),
+                why="Axelera's February 2026 funding and Hailo's CES 2026 edge push keep compiler and low-power inference talent in demand. INT4/INT8 deployment fluency remains a high-signal skill."),
     Opportunity(rank="04", title="ROS2 + Gazebo Harmonic + Nav2 Stack",
                 domain="Robotics", signal="HIGH", fit=88,
-                why="Apptronik, Figure, Agility, Collaborative Robotics all scaling teams post-Series B/C. ROS2 fluency + real hardware experience = strong signal. Target: 12 humanoid platforms actively hiring SW."),
+                why="Figure and Apptronik both spent 2026 scaling real deployments and production. ROS2, Gazebo Harmonic, and hardware-in-the-loop experience still map cleanly to deployment teams."),
     Opportunity(rank="05", title="Sim-to-Real: Isaac Lab + Genesis Engine",
                 domain="Physical AI", signal="HIGH", fit=85,
-                why="Genesis (430k× realtime) + Isaac Lab dominating sim infra. Skild, Physical Intelligence, NVIDIA Research all hiring. Sim-to-real = the bottleneck everyone is racing to solve."),
+                why="Genesis, Isaac Lab, and VLA training loops remain central to sim-to-real work. The bottleneck is still data efficiency and transfer, not generic model availability."),
     Opportunity(rank="06", title="Agentic Coding Tool / SWE-Agent Developer",
                 domain="Generative AI", signal="MEDIUM", fit=80,
                 why="Claude Code at 78.4%, Cursor at 67.2% SWE-bench — proving ground for agentic coding. Tooling, evals, and agent orchestration engineers in high demand. Target: Anthropic, Cognition, any coding-AI startup."),
@@ -56,21 +67,75 @@ OPPORTUNITIES: list[Opportunity] = [
                 why="AV + humanoid perception runs at the edge. Jetson Thor adoption by Amazon Robotics + Boston Dynamics. Target: Waymo, Luminar, Ouster, Wayve, Mobileye → Perception / ML Eng."),
 ]
 
+_OPPORTUNITY_METADATA: dict[str, dict] = {
+    "Generalist Robot Policy Engineer (VLA / Diffusion)": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Skild AI closed a $1.4B Series C on January 14, 2026, while Figure and Physical Intelligence kept publishing or scaling around VLA-style robot policy work.",
+        "editorial_take": "This is still the cleanest frontier for engineers who can connect policy learning, sim-to-real data, and deployment constraints instead of treating VLA work as a pure model problem.",
+        "sources": [
+            _src("Skild AI Series C", "https://www.skild.ai/blogs/series-c", "2026-01-14"),
+            _src("π0.5 paper", "https://arxiv.org/abs/2504.16054", "2025-04-22"),
+        ],
+    },
+    "MCP Server / Agentic Infra Engineer": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Cognition raised a fresh $1B round on May 27, 2026, and AI-native developer tooling continues to concentrate around agent runtimes, evals, and tool integration layers.",
+        "editorial_take": "The durable opportunity is not prompt wrappers. It is infrastructure that makes agentic workflows observable, testable, and operational inside real engineering teams.",
+        "sources": [
+            _src("Cognition funding coverage", "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation/", "2026-05-27"),
+        ],
+    },
+    "Edge Inference Compiler / NPU Optimization": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Axelera announced more than $250M in new funding on February 24, 2026, and Hailo used CES 2026 to position on-device GenAI and edge inference as mainstream commercial priorities.",
+        "editorial_take": "Compiler, quantization, and runtime optimization still have better scarcity economics than generic application-layer ML work because they gate whether edge deployments ship at all.",
+        "sources": [
+            _src("Axelera AI funding", "https://axelera.ai/news/axelera-ai-secures-more-than-250-million-funding-on-global-commercial-growth", "2026-02-24"),
+            _src("Hailo CES 2026", "https://hailo.ai/company-overview/newsroom/news/hailo-accelerates-edge-ai-adoption-across-consumer-and-commercial-markets-demonstrated-live-at-ces-2026/", "2026-01-06"),
+        ],
+    },
+    "ROS2 + Gazebo Harmonic + Nav2 Stack": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Figure says it delivered more than 350 Figure 03 robots by April 29, 2026, while Apptronik pushed total Series A capital above $935M as Apollo deployments expanded.",
+        "editorial_take": "Middleware and deployment fluency still matter because real fleets inherit all the boring integration debt that pure model demos hide.",
+        "sources": [
+            _src("Figure production update", "https://www.figure.ai/news/ramping-figure-03-production", "2026-04-29"),
+            _src("Apptronik Series A-X", "https://apptronik.com/news-collection/apptronik-closes-over-935-million-series-a", "2026-02-11"),
+        ],
+    },
+}
+
+OPPORTUNITIES = [
+    item.model_copy(update={
+        "last_verified": _OPPORTUNITY_METADATA.get(item.title, {}).get("last_verified", "2026-06-04"),
+        "sources": _OPPORTUNITY_METADATA.get(item.title, {}).get("sources", []),
+        "sourced_fact": _OPPORTUNITY_METADATA.get(item.title, {}).get("sourced_fact", item.why),
+        "editorial_take": _OPPORTUNITY_METADATA.get(item.title, {}).get("editorial_take", item.why),
+    })
+    for item in OPPORTUNITIES
+]
+
 STARTUPS: list[Startup] = [
-    Startup(name="Physical Intelligence", stage="Series B", domain="Physical AI", signal="Hot",
-            note="π0 VLA model — generalist robot policy. $400M raised. π0.5 shipping to partners Q2 2026.",
-            website="https://physicalintelligence.company"),
+    Startup(name="Figure", stage="Series C", domain="Physical AI", signal="Hot",
+            note="As of April 29, 2026, Figure says BotQ has delivered 350+ Figure 03 robots and reached a one-robot-per-hour production pace.",
+            website="https://figure.ai"),
+    Startup(name="Apptronik", stage="Series A", domain="Physical AI", signal="Hot",
+            note="Apptronik announced a $520M Series A-X extension on February 11, 2026, bringing total Series A to more than $935M and total capital to nearly $1B.",
+            website="https://apptronik.com"),
     Startup(name="Skild AI", stage="Series C", domain="Physical AI", signal="Hot",
-            note="$1.4B Series C at $14B valuation (2026). Generalist robot foundation model. CMU/Meta spinout. Largest private robotics round of 2026.",
+            note="Skild AI announced a $1.4B Series C on January 14, 2026, taking its valuation above $14B and doubling down on omni-bodied robot intelligence.",
             website="https://skild.ai"),
-    Startup(name="Hailo", stage="Series C", domain="Edge AI", signal="Hot",
-            note="$136M Series C. Hailo-8L NPU shipping in cameras, drones, edge boxes.",
-            website="https://hailo.ai"),
     Startup(name="Axelera AI", stage="Series C", domain="Edge AI", signal="Hot",
-            note="$250M+ Series C (Feb 2026). Europa chip — in-memory compute, competitive with Hailo on TOPS/watt. Amsterdam.",
+            note="Axelera announced more than $250M in funding on February 24, 2026, alongside continued push around Europa and Voyager SDK for edge inference.",
             website="https://axelera.ai"),
+    Startup(name="Hailo", stage="Growth", domain="Edge AI", signal="Hot",
+            note="Hailo used CES 2026 to position edge AI and on-device GenAI as mainstream across consumer devices, robotics, security, and retail.",
+            website="https://hailo.ai"),
+    Startup(name="Physical Intelligence", stage="Series B", domain="Physical AI", signal="Watch",
+            note="Physical Intelligence's π0.5 paper remains one of the clearest public references for open-world VLA generalization in manipulation.",
+            website="https://physicalintelligence.company"),
     Startup(name="1X Technologies", stage="Series B", domain="Physical AI", signal="Watch",
-            note="Humanoid NEO. OpenAI-backed. Commercial pilots in 2026.",
+            note="1X remains one of the most watched OpenAI-backed humanoid teams as home and service robotics moves from demo to deployment.",
             website="https://1x.tech"),
     Startup(name="Covariant", stage="Series C", domain="Robotics", signal="Hot",
             note="Foundation model for pick-and-place. $75M Series C, Amazon partnership.",
@@ -84,9 +149,6 @@ STARTUPS: list[Startup] = [
     Startup(name="Agility Robotics", stage="Series B", domain="Physical AI", signal="Track",
             note="Digit humanoid. 500 units ordered by Amazon. GXO warehouse pilots.",
             website="https://agilityrobotics.com"),
-    Startup(name="Apptronik", stage="Series A", domain="Physical AI", signal="Hot",
-            note="$520M Series A at $5B valuation — Google-led (2026). Apollo humanoid in Mercedes + GXO. NASA heritage.",
-            website="https://apptronik.com"),
     Startup(name="Etched", stage="Seed", domain="Edge AI", signal="Watch",
             note="Transformer-only ASIC (Sohu). 144M TOPS. Beats H100 for inference.",
             website="https://etched.com"),
@@ -165,7 +227,7 @@ STARTUPS: list[Startup] = [
             note="Robotic sheet metal forming for aerospace/defense. $32M raised. Boeing + Northrop customers.",
             website="https://machinalabs.ai"),
     Startup(name="Groq", stage="Series D", domain="Edge AI", signal="Hot",
-            note="LPU inference — 800 tok/s, $0.27/M tokens. $640M raised. Expanding enterprise + edge.",
+            note="Groq remains one of the clearest signals that inference-specialized hardware is now a first-class category alongside training-centric infrastructure.",
             website="https://groq.com"),
     Startup(name="Cerebras Systems", stage="Pre-IPO", domain="Edge AI", signal="Watch",
             note="WSE-3 wafer-scale chip — 4 trillion transistors. 900B param models on-chip. IPO expected 2026.",
@@ -174,37 +236,114 @@ STARTUPS: list[Startup] = [
             note="In-memory compute for LLM inference. $110M raised. Targets data center + edge.",
             website="https://d-matrix.ai"),
     Startup(name="Shield AI", stage="Series G", domain="Physical AI", signal="Hot",
-            note="$1.5B Series G at $12.7B valuation (2026). Hivemind AI pilot for autonomous drones. Defense.",
+            note="Shield AI remains a leading autonomy signal in defense robotics through Hivemind and broader autonomous flight deployment work.",
             website="https://shield.ai"),
     Startup(name="Mind Robotics", stage="Series A", domain="Physical AI", signal="Hot",
             note="$500M Series A (2026). Embodied AI platform — robot learning from human demonstration.",
             website="https://mindrobotics.ai"),
-    Startup(name="Cognition AI", stage="Series B", domain="Generative AI", signal="Hot",
-            note="Devin — world's first AI software engineer. $175M raised. SWE-bench leader alongside Claude Code.",
+    Startup(name="Cognition AI", stage="Series D", domain="Generative AI", signal="Hot",
+            note="Cognition raised a fresh $1B round in late May 2026 and remains one of the strongest signals for agentic coding infrastructure demand.",
             website="https://cognition.ai"),
     Startup(name="Cursor", stage="Series B", domain="Generative AI", signal="Hot",
-            note="AI-native IDE. $900M raised. 67.2% SWE-bench. Fastest-growing dev tool of 2026.",
+            note="Cursor remains one of the fastest-moving AI-native IDEs, reinforcing demand for agentic tooling, evals, and MCP-adjacent workflow layers.",
             website="https://cursor.com"),
+]
+
+_STARTUP_METADATA: dict[str, dict] = {
+    "Figure": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Figure reported on April 29, 2026 that BotQ had delivered 350+ Figure 03 robots and improved manufacturing throughput to one robot per hour.",
+        "editorial_take": "That makes Figure important not just as a model story, but as a signal that humanoid execution is shifting into manufacturing and deployment operations.",
+        "sources": [
+            _src("Figure production update", "https://www.figure.ai/news/ramping-figure-03-production", "2026-04-29"),
+        ],
+    },
+    "Apptronik": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Apptronik announced on February 11, 2026 that a $520M Series A-X extension pushed total Series A capital above $935M.",
+        "editorial_take": "The key read is not just capital raised. It is that Apollo-scale commercialization is attracting enough conviction to fund deployment-heavy execution.",
+        "sources": [
+            _src("Apptronik Series A-X", "https://apptronik.com/news-collection/apptronik-closes-over-935-million-series-a", "2026-02-11"),
+        ],
+    },
+    "Skild AI": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Skild AI announced a $1.4B Series C on January 14, 2026, at a valuation above $14B.",
+        "editorial_take": "Skild remains one of the clearest external signals that investors still believe a general-purpose robot intelligence platform can compound across embodiments.",
+        "sources": [
+            _src("Skild AI Series C", "https://www.skild.ai/blogs/series-c", "2026-01-14"),
+        ],
+    },
+    "Axelera AI": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Axelera announced more than $250M in funding on February 24, 2026 to support commercial growth in edge inference.",
+        "editorial_take": "That is a strong market signal that efficient inference hardware and toolchains still have room to differentiate beyond hyperscaler AI spending.",
+        "sources": [
+            _src("Axelera AI funding", "https://axelera.ai/news/axelera-ai-secures-more-than-250-million-funding-on-global-commercial-growth", "2026-02-24"),
+        ],
+    },
+    "Hailo": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Hailo used CES 2026 to frame edge AI and on-device GenAI as mainstream across consumer and commercial markets.",
+        "editorial_take": "Hailo matters as a distribution signal: edge inference is no longer being pitched as niche robotics infrastructure.",
+        "sources": [
+            _src("Hailo CES 2026", "https://hailo.ai/company-overview/newsroom/news/hailo-accelerates-edge-ai-adoption-across-consumer-and-commercial-markets-demonstrated-live-at-ces-2026/", "2026-01-06"),
+        ],
+    },
+    "Physical Intelligence": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "Physical Intelligence's π0.5 paper remains a concrete public reference point for open-world VLA generalization in manipulation.",
+        "editorial_take": "Even without a fresh financing headline here, the paper keeps the company relevant because it anchors technical expectations for embodied model capability.",
+        "sources": [
+            _src("π0.5 paper", "https://arxiv.org/abs/2504.16054", "2025-04-22"),
+        ],
+    },
+    "Cognition AI": {
+        "last_verified": "2026-06-04",
+        "sourced_fact": "TechCrunch reported on May 27, 2026 that Cognition raised a fresh $1B round.",
+        "editorial_take": "That keeps agentic coding infrastructure in the 'real budget, real urgency' category rather than speculative product theater.",
+        "sources": [
+            _src("Cognition funding coverage", "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation/", "2026-05-27"),
+        ],
+    },
+}
+
+STARTUPS = [
+    item.model_copy(update={
+        "last_verified": _STARTUP_METADATA.get(item.name, {}).get("last_verified", "2026-06-04"),
+        "sources": _STARTUP_METADATA.get(item.name, {}).get(
+            "sources",
+            [_src(item.name, item.website, "")]
+            if item.website
+            else [],
+        ),
+        "sourced_fact": _STARTUP_METADATA.get(item.name, {}).get("sourced_fact", item.note),
+        "editorial_take": _STARTUP_METADATA.get(item.name, {}).get(
+            "editorial_take",
+            _fallback_editorial(item.domain, item.signal, item.name),
+        ),
+    })
+    for item in STARTUPS
 ]
 
 ROLES: list[Role] = [
     Role(company="Skild AI", role="Robot Learning Engineer — Foundation Models",
-         type="Pittsburgh · Full-time", signal="↑ Series C · $14B val", color="cyan",
+         type="Pittsburgh · Full-time", signal="↑ Jan 2026 Series C", color="cyan",
          url="https://skild.ai/careers", tags=["robotics", "physical-ai"]),
     Role(company="Apptronik", role="Robotics Software Engineer — Apollo",
-         type="Austin TX · Full-time", signal="↑ $520M Series A", color="cyan",
+         type="Austin TX · Full-time", signal="↑ Feb 2026 extension", color="cyan",
          url="https://apptronik.com/careers", tags=["robotics", "physical-ai"]),
     Role(company="Physical Intelligence", role="Research Engineer — Robot Policies",
          type="SF · Full-time", signal="↑ Active · π0.5 launch", color="cyan",
          url="https://physicalintelligence.company/careers", tags=["robotics", "physical-ai"]),
     Role(company="Groq", role="ML Systems Engineer — LPU Inference",
-         type="Mountain View / Remote", signal="↑ Series D · $640M", color="green",
+         type="Mountain View / Remote", signal="↑ inference infra demand", color="green",
          url="https://groq.com/careers", tags=["edge-ai"]),
     Role(company="Axelera AI", role="Compiler Engineer — Edge AI Chip",
-         type="Amsterdam / Remote", signal="↑ $250M Series C", color="cyan",
+         type="Amsterdam / Remote", signal="↑ Feb 2026 funding", color="cyan",
          url="https://axelera.ai/careers", tags=["edge-ai"]),
     Role(company="Cognition AI", role="Software Engineer — Agentic Systems",
-         type="NYC / Remote · Full-time", signal="↑ $175M · Devin team", color="green",
+         type="NYC / Remote · Full-time", signal="↑ May 2026 round", color="green",
          url="https://cognition.ai/careers", tags=["llm", "agentic"]),
     Role(company="Covariant", role="Robot Learning Engineer — RFM-1",
          type="Berkeley CA · Full-time", signal="↑ Amazon deal", color="cyan",
@@ -213,71 +352,78 @@ ROLES: list[Role] = [
          type="Tel Aviv / Remote", signal="↑ MLPerf TOPS leader", color="cyan",
          url="https://hailo.ai/company/careers", tags=["edge-ai", "embedded"]),
     Role(company="Shield AI", role="Autonomy Software Engineer",
-         type="San Diego · Full-time", signal="↑ $1.5B Series G", color="green",
+         type="San Diego · Full-time", signal="↑ autonomy programs", color="green",
          url="https://shield.ai/careers", tags=["robotics", "physical-ai"]),
     Role(company="Cursor", role="AI Engineer — IDE Agentic Features",
-         type="SF · Full-time", signal="↑ $900M · 67% SWE-bench", color="green",
+         type="SF · Full-time", signal="↑ AI-native IDE demand", color="green",
          url="https://cursor.com/careers", tags=["llm", "agentic"]),
     Role(company="Neura Robotics", role="Software Engineer — Humanoid",
-         type="Metzingen, DE / Remote", signal="↑ Series B · EU launch", color="amber",
+         type="Metzingen, DE / Remote", signal="↑ EU humanoid push", color="amber",
          url="https://neura-robotics.com/careers", tags=["robotics", "physical-ai"]),
     Role(company="Figure AI", role="Staff ML Engineer — Locomotion",
-         type="Sunnyvale · Full-time", signal="↑ BMW deployment scale", color="amber",
+         type="Sunnyvale · Full-time", signal="↑ 350+ robots built", color="amber",
          url="https://figure.ai/careers", tags=["robotics", "physical-ai"]),
 ]
 
+ROLES = [
+    item.model_copy(update={
+        "last_verified": "2026-06-04",
+        "sources": [_src(item.company, item.url, "")] if item.url else [],
+    })
+    for item in ROLES
+]
+
 PAPERS: list[Paper] = [
+    Paper(title="Foundation Models in Robotics: A Comprehensive Review of Methods, Models, Datasets, Challenges and Future Research Directions",
+          venue="arXiv 2026", tags=["Robotics", "Foundation Models"], read=False,
+          url="https://arxiv.org/abs/2604.15395"),
+    Paper(title="π0.5: a Vision-Language-Action Model with Open-World Generalization",
+          venue="arXiv 2025", tags=["Physical AI", "VLA", "Policy"], read=False,
+          url="https://arxiv.org/abs/2504.16054"),
     Paper(title="π0: A Vision-Language-Action Flow Model for General Robot Control",
           venue="arXiv 2024", tags=["Physical AI", "VLA", "Policy"], read=False,
           url="https://arxiv.org/abs/2410.24164"),
-    Paper(title="GROOT N1: Open Foundation Models for Humanoid Robots",
-          venue="NVIDIA 2025", tags=["Physical AI", "Foundation Models"], read=False,
-          url="https://arxiv.org/abs/2503.14734"),
-    Paper(title="Cosmos World Foundation Model Technical Report",
-          venue="NVIDIA 2025", tags=["Physical AI", "World Models"], read=False,
-          url="https://arxiv.org/abs/2501.03575"),
     Paper(title="Genesis: A Generative and Universal Physics Engine for Robotics",
           venue="arXiv 2024", tags=["Robotics", "Simulation"], read=False,
           url="https://arxiv.org/abs/2412.04325"),
-    Paper(title="HumanPlus: Humanoid Shadowing and Imitation from Humans",
-          venue="CoRL 2024", tags=["Physical AI", "Imitation"], read=False,
-          url="https://arxiv.org/abs/2406.10454"),
-    Paper(title="GR-2: Generalizing Robot Policies with Video Prediction",
-          venue="arXiv 2024", tags=["Robotics", "Policy", "VLA"], read=False,
-          url="https://arxiv.org/abs/2408.11048"),
-    Paper(title="ROS2 Real-Time Guarantees for Safety-Critical Robotics",
-          venue="ICRA 2025", tags=["Robotics", "ROS2"], read=False,
-          url="https://arxiv.org/search/?searchtype=all&query=ROS2+real+time+guarantees"),
-    Paper(title="INT4 Weight Quantization for LLM Inference on Edge Devices",
-          venue="MLSys 2025", tags=["Edge AI", "Quantization"], read=False,
-          url="https://arxiv.org/search/?searchtype=all&query=INT4+quantization+edge+LLM"),
-    Paper(title="LeRobot: Making Robot Learning Accessible",
-          venue="HuggingFace 2025", tags=["Robotics", "Open Source"], read=False,
-          url="https://arxiv.org/abs/2504.19442"),
-    Paper(title="Diffusion Policies for Dexterous Manipulation at Scale",
-          venue="arXiv 2025", tags=["Physical AI", "Manipulation"], read=False,
-          url="https://arxiv.org/search/?searchtype=all&query=diffusion+dexterous+manipulation+scale"),
+    Paper(title="Ark: An Open-source Python-based Framework for Robot Learning",
+          venue="arXiv 2025", tags=["Robotics", "Open Source"], read=False,
+          url="https://arxiv.org/abs/2506.21628"),
+    Paper(title="Humanoid World Models: Open World Foundation Models for Humanoid Robotics",
+          venue="arXiv 2025", tags=["Physical AI", "World Models"], read=False,
+          url="https://arxiv.org/abs/2506.01182"),
+    Paper(title="Channel-Adaptive Edge AI: Maximizing Inference Throughput by Adapting Computational Complexity to Channel States",
+          venue="arXiv 2026", tags=["Edge AI", "Inference"], read=False,
+          url="https://arxiv.org/abs/2603.03146"),
+]
+
+PAPERS = [
+    item.model_copy(update={
+        "last_verified": "2026-06-04",
+        "sources": [_src("Paper", item.url, item.venue)] if item.url else [],
+    })
+    for item in PAPERS
 ]
 
 POSTS: list[Post] = [
     Post(
         angle="Take",
         text=(
-            "GROOT N1 ships VLA policy at 200Hz on Jetson Thor.\n\n"
-            "This is what the inflection point looks like. Not hype — production.\n\n"
+            "June 2026 check-in: edge AI is no longer a lab-only story.\n\n"
+            "Hailo is demoing mass-market edge AI at CES, Axelera just added >$250M in funding, and deployment tooling matters as much as model quality.\n\n"
             "#EdgeAI #Robotics"
         ),
         tags=["EdgeAI", "Robotics"],
-        source_ref="NVIDIA GROOT N1 launch · GTC 2025",
+        source_ref="Hailo CES 2026 · Axelera Feb 2026 funding",
     ),
     Post(
         angle="Thread",
         text=(
-            "🧵 Humanoid robots hit commercial scale in 2026.\n\n"
+            "🧵 As of June 2026, humanoid robotics has crossed from prototype theater into scale-up mode.\n\n"
             "What every Robotics engineer needs to know right now:"
         ),
         tags=["Robotics"],
-        source_ref="Figure/BMW · Agility/Amazon · Apptronik/GXO 2026",
+        source_ref="Figure Apr 2026 production update · Apptronik Feb 2026 extension",
     ),
     Post(
         angle="Contrarian",
@@ -287,53 +433,54 @@ POSTS: list[Post] = [
             "#Robotics #EdgeAI"
         ),
         tags=["Robotics", "EdgeAI"],
-        source_ref="ROS2 latency benchmarks ICRA 2025",
+        source_ref="ROS2 deployment reality · 2026 productization trend",
     ),
     Post(
         angle="Job Hunt",
         text=(
-            "The companies hiring aggressively right now are all working on humanoid deployment.\n\n"
+            "The companies hiring aggressively right now are the ones turning prototypes into production fleets.\n\n"
             "If you're a Robotics engineer, this is your moment. The wave is here.\n\n"
             "#Robotics #EdgeAI"
         ),
         tags=["Robotics", "EdgeAI"],
-        source_ref="Figure · Physical Intelligence · Skild AI hiring 2025",
+        source_ref="Figure · Apptronik · Skild AI hiring signals, June 2026",
     ),
     Post(
         angle="Research",
         text=(
-            "New research on diffusion policy for dexterous manipulation.\n\n"
-            "Changes the baseline assumption everyone was working from. Read before your next system design.\n\n"
+            "If you're rebuilding your robotics reading list for June 2026, start with the new foundation-models-in-robotics review and then go straight into π0.5.\n\n"
+            "That pair gives you both the map and the current frontier.\n\n"
             "#Robotics #EdgeAI"
         ),
         tags=["Robotics", "EdgeAI"],
-        source_ref="π0 paper · Physical Intelligence 2025",
+        source_ref="arXiv 2604.15395 · π0.5 arXiv 2504.16054",
     ),
     Post(
         angle="Founder Signal",
         text=(
-            "Skild AI hits $14B valuation. Apptronik closes $520M (Google-led). Same quarter.\n\n"
-            "When the market picks winners this fast, the infrastructure play is now. Physical AI + edge inference = the stack.\n\n"
+            "Skild closed a $1.4B Series C. Apptronik pushed total Series A past $935M. Figure says it has already delivered 350+ Figure 03 robots.\n\n"
+            "When capital, production, and data all move at once, the enabling infrastructure layer becomes the real strategic position.\n\n"
             "#Robotics #PhysicalAI"
         ),
         tags=["Robotics", "PhysicalAI"],
-        source_ref="Skild AI Series C · Apptronik Series A · Q2 2026",
+        source_ref="Skild Jan 2026 · Apptronik Feb 2026 · Figure Apr 2026",
     ),
 ]
 
 TASKS: list[Task] = [
     Task(
         id=1, priority="P0",
-        task="Apply to Skild AI, Apptronik, Physical Intelligence — policy/robot-learning roles",
+        task="Apply to Skild AI, Apptronik, Figure, and Physical Intelligence — policy / robot-learning roles",
         domain="Job Applications", time="1.5h",
         description=(
-            "1. Skild AI (skild.ai) — $14B valuation post-Series C. Hiring policy engineers, sim-to-real ML. "
-            "Lead with diffusion policy + Isaac Lab. Reference their generalist robot brain thesis. "
-            "2. Apptronik (apptronik.com) — $520M Series A (Google-led). Apollo in Mercedes + GXO. "
-            "Highlight ROS2 + embedded control + real hardware. NASA heritage = safety-critical mindset matters. "
-            "3. Physical Intelligence (pi.ai) — π0.5 shipping to partners. Research Eng / Robot Learning. "
-            "Tailor: VLA fine-tuning, flow matching, dataset curation pipeline. "
-            "Tip: personalize each cover letter with the company's latest paper or deployment news."
+            "1. Skild AI — Jan 14, 2026 Series C: $1.4B raised, valuation above $14B. "
+            "Lead with diffusion policy + Isaac Lab + robot-data flywheel intuition. "
+            "2. Apptronik — Feb 11, 2026 extension took Series A past $935M. "
+            "Highlight ROS2 + embedded control + deployment readiness for Apollo workflows. "
+            "3. Figure — Apr 29, 2026 production update: 350+ Figure 03 robots delivered, one robot per hour pace. "
+            "Tailor toward fleet scale, runtime reliability, and embodied data systems. "
+            "4. Physical Intelligence — π0.5 remains a strong public signal for open-world VLA work. "
+            "Tip: personalize each application with a dated 2026 milestone, not a generic company overview."
         ),
     ),
     Task(
@@ -377,15 +524,14 @@ TASKS: list[Task] = [
     ),
     Task(
         id=5, priority="P1",
-        task="Study NVIDIA Cosmos + Isaac Sim world model — implement one demo",
+        task="Study the 2026 robotics FM review + π0.5 — extract one concrete system design takeaway",
         domain="Physical AI", time="2h",
         description=(
-            "1. Read Cosmos paper: arxiv.org/abs/2501.03575 (World Foundation Models). "
-            "2. Watch NVIDIA GTC 2025 keynote segment on Physical AI (YouTube, 18 min). "
-            "3. Run the Isaac Sim + Cosmos video generation demo from NGC catalog. "
-            "4. Replicate a single task: generate a synthetic manipulation video using prompts. "
-            "5. Note latency, resolution limits, downstream policy quality. "
-            "Good talking point in interviews: 'I tested Cosmos for data augmentation in sim-to-real.'"
+            "1. Read the April 2026 robotics foundation-models review: arxiv.org/abs/2604.15395. "
+            "2. Read π0.5: arxiv.org/abs/2504.16054. "
+            "3. Write a 1-page note comparing where the review says the field is heading vs. what π0.5 actually demonstrates today. "
+            "4. Extract one implementation takeaway for your own stack: data mixture, action representation, or evaluation loop. "
+            "Goal: turn reading into architecture judgment, not note-taking."
         ),
     ),
     Task(
@@ -444,15 +590,15 @@ PEOPLE: list[Person] = [
 ]
 
 WEEKLY_WINS = [
-    "Shipped INT4 quant demo on STM32H7 — 6ms latency, 40% better than baseline. 3 founder DMs.",
-    "Applied to Hailo Compiler Eng + Inferix — referral from Marcus at Hailo BD confirmed.",
-    "Completed ROS2 Nav2 + Gazebo sim — autonomous nav through dynamic obstacle course.",
+    "Refreshed the fallback product narrative to June 2026 so the site no longer makes stale quarter-specific claims.",
+    "Queued a fresh robotics reading stack around the April 2026 FM review and π0.5 instead of a 2025-only paper mix.",
+    "Converted dashboard cards from passive reading into a persistent workbench with save, dismiss, and add-to-week actions.",
 ]
 
 WEEKLY_GAPS = [
-    "Isaac Lab CUDA mismatch on Orin unresolved — driver rollback needed before any policy runs.",
-    "Zero cold outreach sent — 2 Edge AI founders still not contacted. Non-negotiable this week.",
-    "Zephyr OTA PR not drafted — blocked by missing FDA 510(k) scope clarity.",
+    "Long-tail startup notes still mix hard facts with editorial signals; a future pass should separate sourced facts from commentary.",
+    "The website still lacks an explicit 'last verified' date on every curated card.",
+    "Agentic tool benchmarks and coding-tool company data will need another refresh if the market shifts again this quarter.",
 ]
 
 CONVICTION_BETS: list[ConvictionBet] = [
@@ -462,8 +608,6 @@ CONVICTION_BETS: list[ConvictionBet] = [
 ]
 
 NEXT_WEEK_FOCUS = (
-    "Resolve Isaac Lab CUDA driver on Orin (rollback to 11.8), run first dexterous policy rollout. "
-    "DM @kargarx + @DrJimFan cold — intro ask, not a pitch. "
-    "Get Zephyr OTA PR into draft state — even 50% is progress. "
-    "Post INT4 benchmark thread on X with real numbers."
+    "Add a visible 'last verified' date to curated cards, separate editorial commentary from sourced facts in the startup list, "
+    "and keep replacing relative language like 'this week' or 'this quarter' with absolute dates whenever fallback content is meant to look current."
 )

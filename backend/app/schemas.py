@@ -13,6 +13,15 @@ class BriefResponse(BaseModel):
     market_pulse: str
     signals: list[Signal]
     timestamp: str
+    source_mode: Literal["live", "fallback"]
+    source_detail: str
+
+
+class FeedMetaResponse(BaseModel):
+    last_refresh: Optional[str] = None
+    counts: dict[str, int] = {}
+    source_mode: Literal["live", "fallback"]
+    source_detail: str
 
 
 class Stat(BaseModel):
@@ -22,25 +31,40 @@ class Stat(BaseModel):
     up: Optional[bool]
 
 
-class Opportunity(BaseModel):
+class CuratedSource(BaseModel):
+    label: str
+    url: str
+    published_at: str = ""
+
+
+class CuratedCard(BaseModel):
+    last_verified: str = ""
+    sources: list[CuratedSource] = []
+
+
+class Opportunity(CuratedCard):
     rank: str
     title: str
     domain: str
     signal: Literal["HIGH", "MEDIUM", "LOW"]
     fit: int
     why: str
+    sourced_fact: str = ""
+    editorial_take: str = ""
 
 
-class Startup(BaseModel):
+class Startup(CuratedCard):
     name: str
     stage: str
     domain: str
     signal: Literal["Hot", "Watch", "Track"]
     note: str
     website: str = ""
+    sourced_fact: str = ""
+    editorial_take: str = ""
 
 
-class Role(BaseModel):
+class Role(CuratedCard):
     company: str
     role: str
     type: str
@@ -50,7 +74,7 @@ class Role(BaseModel):
     tags: list[str] = []
 
 
-class Paper(BaseModel):
+class Paper(CuratedCard):
     title: str
     venue: str
     tags: list[str]
@@ -74,6 +98,15 @@ class Task(BaseModel):
     description: Optional[str] = None  # expandable detail shown on click
 
 
+class WorkbenchTask(BaseModel):
+    id: int | str
+    priority: Literal["P0", "P1", "P2"]
+    task: str
+    domain: str
+    time: str
+    description: Optional[str] = None
+
+
 class Person(BaseModel):
     name: str
     handle: str
@@ -93,3 +126,8 @@ class WeeklyResponse(BaseModel):
     gaps: list[str]
     conviction_bets: list[ConvictionBet]
     next_week_focus: str
+
+
+class WorkbenchState(BaseModel):
+    dismissed: list[str] = []
+    custom_tasks: list[WorkbenchTask] = []

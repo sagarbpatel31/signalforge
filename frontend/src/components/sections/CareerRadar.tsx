@@ -1,10 +1,6 @@
-import Link from "next/link";
 import { fetchCareer } from "@/lib/api";
 import { readCacheFile } from "@/lib/server-cache";
-import { SfCard } from "@/components/ui/sf-card";
-import { SectionLabel } from "@/components/ui/section-label";
-import { SfTag } from "@/components/ui/sf-tag";
-import { BookmarkButton } from "@/components/ui/BookmarkButton";
+import { CareerRadarClient } from "./CareerRadarClient";
 import type { Role, TagColor } from "@/lib/types";
 
 const COLOR_MAP: Record<string, TagColor> = {
@@ -27,66 +23,11 @@ function jobsToRoles(jobs: Record<string, unknown>[]): Role[] {
   });
 }
 
-export async function CareerRadar() {
-  let roles = await fetchCareer();
+export async function CareerRadar({ userKey }: { userKey?: string }) {
+  let roles = await fetchCareer(userKey);
   if (!roles.length) {
     const cached = readCacheFile<Record<string, unknown>[]>("jobs");
     if (cached?.length) roles = jobsToRoles(cached);
   }
-  return (
-    <SfCard>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-        <SectionLabel icon="💼">Career Radar</SectionLabel>
-        <Link
-          href="/career"
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "var(--blue)",
-            textDecoration: "none",
-            letterSpacing: "0.04em",
-          }}
-        >
-          View all →
-        </Link>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {roles.map((r, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "10px 0",
-              borderBottom: i < roles.length - 1 ? "1px solid var(--hairline)" : "none",
-            }}
-          >
-            <div>
-              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 2 }}>
-                {r.url ? (
-                  <a
-                    href={r.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 600 }}
-                  >
-                    {r.company} ↗
-                  </a>
-                ) : r.company}{" "}
-                <span style={{ color: "var(--text-2)", fontWeight: 400 }}>· {r.role}</span>
-              </div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-4)" }}>
-                {r.type}
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <SfTag color={r.color}>{r.signal}</SfTag>
-              <BookmarkButton item={{ id: r.url ?? `${r.company}-${r.role}`, title: `${r.company} · ${r.role}`, sub: r.type ?? "", url: r.url, type: "role" }} />
-            </div>
-          </div>
-        ))}
-      </div>
-    </SfCard>
-  );
+  return <CareerRadarClient roles={roles} />;
 }

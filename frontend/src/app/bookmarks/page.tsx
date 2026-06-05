@@ -82,12 +82,17 @@ const SECTIONS: { key: keyof Bookmarks; icon: string; label: string }[] = [
   { key: "papers",   icon: "📄", label: "Research Papers" },
   { key: "startups", icon: "🚀", label: "Startups" },
   { key: "roles",    icon: "💼", label: "Career Roles" },
+  { key: "opportunities", icon: "🎯", label: "Opportunities" },
 ];
 
 export default function BookmarksPage() {
   const bookmarks = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  const total = bookmarks.papers.length + bookmarks.startups.length + bookmarks.roles.length;
+  const total =
+    bookmarks.papers.length +
+    bookmarks.startups.length +
+    bookmarks.roles.length +
+    bookmarks.opportunities.length;
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)", padding: "32px 28px" }}>

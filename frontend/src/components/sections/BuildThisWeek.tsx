@@ -5,6 +5,7 @@ import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
 import { generateTasks } from "@/lib/api";
+import { useWorkbench } from "@/lib/useWorkbench";
 import type { TagColor, Task } from "@/lib/types";
 
 function priorityColor(p: string): TagColor {
@@ -15,16 +16,20 @@ function priorityColor(p: string): TagColor {
 
 export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
-  const [done, setDone] = useState<Record<number, boolean>>({});
-  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+  const [done, setDone] = useState<Record<string, boolean>>({});
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [regen, setRegen] = useState(false);
+  const { state, removeTask } = useWorkbench();
 
-  function toggleDone(e: React.MouseEvent, id: number) {
+  const mergedTasks = [...state.customTasks, ...tasks];
+  const customIds = new Set(state.customTasks.map((task) => task.id));
+
+  function toggleDone(e: React.MouseEvent, id: string) {
     e.stopPropagation();
     setDone((prev) => ({ ...prev, [id]: !prev[id] }));
   }
 
-  function toggleExpand(id: number) {
+  function toggleExpand(id: string) {
     setExpanded((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -48,7 +53,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
   }
 
   const doneCount = Object.values(done).filter(Boolean).length;
-  const pct = tasks.length ? Math.round((doneCount / tasks.length) * 100) : 0;
+  const pct = mergedTasks.length ? Math.round((doneCount / mergedTasks.length) * 100) : 0;
 
   return (
     <SfCard>
@@ -69,7 +74,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
               color: pct === 100 ? "var(--green)" : "var(--text-3)",
             }}
           >
-            {doneCount}/{tasks.length}
+            {doneCount}/{mergedTasks.length}
           </span>
           <button
             onClick={handleRegen}
@@ -88,40 +93,42 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {tasks.map((t, i) => {
-          const isExpanded = expanded.has(t.id);
+        {mergedTasks.map((t, i) => {
+          const taskId = String(t.id);
+          const isExpanded = expanded.has(taskId);
           const hasDesc = Boolean(t.description);
+          const isCustom = customIds.has(t.id);
           return (
             <div
-              key={t.id}
+              key={taskId}
               style={{
                 borderBottom:
-                  i < tasks.length - 1 ? "1px solid var(--hairline)" : "none",
+                  i < mergedTasks.length - 1 ? "1px solid var(--hairline)" : "none",
               }}
             >
               {/* Row */}
               <div
-                onClick={() => hasDesc && toggleExpand(t.id)}
+                onClick={() => hasDesc && toggleExpand(taskId)}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "22px 40px 1fr 20px 44px",
+                  gridTemplateColumns: isCustom ? "22px 40px 1fr 58px 20px 44px" : "22px 40px 1fr 20px 44px",
                   gap: 8,
                   alignItems: "center",
                   padding: "10px 0",
                   cursor: hasDesc ? "pointer" : "default",
-                  opacity: done[t.id] ? 0.45 : 1,
+                  opacity: done[taskId] ? 0.45 : 1,
                   transition: "opacity 0.2s",
                 }}
               >
                 {/* Checkbox */}
                 <div
-                  onClick={(e) => toggleDone(e, t.id)}
+                  onClick={(e) => toggleDone(e, taskId)}
                   style={{
                     width: 16,
                     height: 16,
                     borderRadius: 6,
-                    border: `1.5px solid ${done[t.id] ? "var(--green)" : "var(--hairline-strong)"}`,
-                    background: done[t.id] ? "var(--green-soft)" : "transparent",
+                    border: `1.5px solid ${done[taskId] ? "var(--green)" : "var(--hairline-strong)"}`,
+                    background: done[taskId] ? "var(--green-soft)" : "transparent",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -130,7 +137,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
                     cursor: "pointer",
                   }}
                 >
-                  {done[t.id] && (
+                  {done[taskId] && (
                     <span style={{ color: "var(--green)", fontSize: 9, lineHeight: 1 }}>✓</span>
                   )}
                 </div>
@@ -141,13 +148,34 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
                   style={{
                     fontSize: 12,
                     fontWeight: 500,
-                    textDecoration: done[t.id] ? "line-through" : "none",
-                    color: done[t.id] ? "var(--text-4)" : "var(--text)",
+                    textDecoration: done[taskId] ? "line-through" : "none",
+                    color: done[taskId] ? "var(--text-4)" : "var(--text)",
                     lineHeight: 1.35,
                   }}
                 >
                   {t.task}
                 </span>
+
+                {isCustom && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeTask(t.id);
+                    }}
+                    style={{
+                      background: "transparent",
+                      border: "1px solid var(--hairline)",
+                      borderRadius: 6,
+                      color: "var(--text-4)",
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 9,
+                      padding: "3px 6px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    clear
+                  </button>
+                )}
 
                 {/* Expand chevron */}
                 {hasDesc ? (
@@ -183,8 +211,8 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
               {isExpanded && t.description && (
                 <div
                   style={{
-                    margin: "0 0 10px 30px",
-                    padding: "10px 14px",
+                margin: "0 0 10px 30px",
+                padding: "10px 14px",
                     background: "var(--surface-2, oklch(0.18 0.01 240 / 0.6))",
                     borderRadius: 8,
                     borderLeft: "2px solid var(--blue)",
