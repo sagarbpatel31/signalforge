@@ -78,7 +78,7 @@ export const fetchBrief = () =>
   apiFetch<BriefResponse>("/api/brief", {
     market_pulse: fallbackPulse,
     signals: fallbackSignals,
-    timestamp: "Curated fallback · Jun 4, 2026",
+    timestamp: "Curated fallback · Jul 1, 2026",
     source_mode: "fallback",
     source_detail: "API unavailable. Using built-in fallback brief.",
   });

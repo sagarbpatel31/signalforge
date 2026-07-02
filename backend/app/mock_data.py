@@ -4,10 +4,10 @@ from .schemas import (
 )
 
 MARKET_PULSE = (
-    "As of June 2026: Skild AI has raised $1.4B at a valuation above $14B, "
-    "Apptronik has extended its Series A to more than $935M, Figure says BotQ has delivered "
-    "350+ Figure 03 robots and reached a one-robot-per-hour production pace, and edge AI has "
-    "moved decisively into mass-market deployment across robotics, security, and on-device GenAI."
+    "As of July 1, 2026: Skild AI has raised $1.4B at a valuation above $14B, "
+    "Apptronik has pushed Series A capital past $935M and is now emphasizing data-flywheel training for Apollo, "
+    "Figure 03 has moved from BotQ manufacturing claims into active BMW Spartanburg deployment, "
+    "and edge AI remains a commercial runtime story across robotics, security, and on-device GenAI."
 )
 
 SIGNALS: list[Signal] = [
@@ -17,12 +17,14 @@ SIGNALS: list[Signal] = [
            text="Apptronik added a $520M Series A-X extension, bringing total Series A to more than $935M and nearly $1B total capital as it scales Apollo deployments."),
     Signal(label="Figure 03 Production", delta="Apr 2026", color="amber",
            text="Figure says BotQ has delivered over 350 Figure 03 robots and improved output from one robot per day to one per hour in under 120 days."),
-    Signal(label="Edge AI Goes Mass Market", delta="Jun 2026", color="muted",
+    Signal(label="Figure 03 In Deployment", delta="Jun 2026", color="amber",
+           text="By June 30, 2026, BMW had begun deploying Figure 03 at Spartanburg, extending the story from pilot manufacturing claims into a concrete factory-floor logistics use case."),
+    Signal(label="Edge AI Goes Mass Market", delta="Jul 2026", color="muted",
            text="Axelera announced more than $250M in new funding and Hailo used CES 2026 to position edge AI and on-device GenAI as mainstream across robotics and commercial systems."),
 ]
 
 STATS: list[Stat] = [
-    Stat(label="Signals Tracked", value="2,847", delta="demo snapshot · Jun 2026", up=True),
+    Stat(label="Signals Tracked", value="2,847", delta="demo snapshot · Jul 2026", up=True),
     Stat(label="Opportunities", value="38", delta="curated roles + infra themes", up=True),
     Stat(label="Startups Flagged", value="142", delta="humanoid + edge AI focus", up=True),
     Stat(label="Hiring Signals", value="91", delta="demo snapshot", up=True),
@@ -46,7 +48,7 @@ OPPORTUNITIES: list[Opportunity] = [
                 why="Skild, Physical Intelligence, and Figure have all raised or scaled aggressively into 2026. VLA policy work, diffusion policy, and Isaac Lab experience are directly legible signals."),
     Opportunity(rank="02", title="MCP Server / Agentic Infra Engineer",
                 domain="Generative AI", signal="HIGH", fit=94,
-                why="By June 2026, agentic developer tooling and MCP-style integrations have become a durable infra layer. Teams need engineers who can build tool-use runtimes, evals, and workflow integrations."),
+                why="By July 2026, agentic developer tooling and MCP-style integrations have become a durable infra layer. Teams need engineers who can build tool-use runtimes, evals, and workflow integrations."),
     Opportunity(rank="03", title="Edge Inference Compiler / NPU Optimization",
                 domain="Edge AI", signal="HIGH", fit=91,
                 why="Axelera's February 2026 funding and Hailo's CES 2026 edge push keep compiler and low-power inference talent in demand. INT4/INT8 deployment fluency remains a high-signal skill."),
@@ -69,7 +71,7 @@ OPPORTUNITIES: list[Opportunity] = [
 
 _OPPORTUNITY_METADATA: dict[str, dict] = {
     "Generalist Robot Policy Engineer (VLA / Diffusion)": {
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sourced_fact": "Skild AI closed a $1.4B Series C on January 14, 2026, while Figure and Physical Intelligence kept publishing or scaling around VLA-style robot policy work.",
         "editorial_take": "This is still the cleanest frontier for engineers who can connect policy learning, sim-to-real data, and deployment constraints instead of treating VLA work as a pure model problem.",
         "sources": [
@@ -78,7 +80,7 @@ _OPPORTUNITY_METADATA: dict[str, dict] = {
         ],
     },
     "MCP Server / Agentic Infra Engineer": {
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sourced_fact": "Cognition raised a fresh $1B round on May 27, 2026, and AI-native developer tooling continues to concentrate around agent runtimes, evals, and tool integration layers.",
         "editorial_take": "The durable opportunity is not prompt wrappers. It is infrastructure that makes agentic workflows observable, testable, and operational inside real engineering teams.",
         "sources": [
@@ -86,7 +88,7 @@ _OPPORTUNITY_METADATA: dict[str, dict] = {
         ],
     },
     "Edge Inference Compiler / NPU Optimization": {
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sourced_fact": "Axelera announced more than $250M in new funding on February 24, 2026, and Hailo used CES 2026 to position on-device GenAI and edge inference as mainstream commercial priorities.",
         "editorial_take": "Compiler, quantization, and runtime optimization still have better scarcity economics than generic application-layer ML work because they gate whether edge deployments ship at all.",
         "sources": [
@@ -95,11 +97,11 @@ _OPPORTUNITY_METADATA: dict[str, dict] = {
         ],
     },
     "ROS2 + Gazebo Harmonic + Nav2 Stack": {
-        "last_verified": "2026-06-04",
-        "sourced_fact": "Figure says it delivered more than 350 Figure 03 robots by April 29, 2026, while Apptronik pushed total Series A capital above $935M as Apollo deployments expanded.",
-        "editorial_take": "Middleware and deployment fluency still matter because real fleets inherit all the boring integration debt that pure model demos hide.",
+        "last_verified": "2026-07-01",
+        "sourced_fact": "Figure had moved Figure 03 into BMW Spartanburg deployment by June 30, 2026, while Apptronik had already pushed total Series A capital above $935M as Apollo commercialization expanded.",
+        "editorial_take": "Middleware and deployment fluency matter even more now because the market is shifting from polished demos into real fleet behavior, uptime, and plant integration.",
         "sources": [
-            _src("Figure production update", "https://www.figure.ai/news/ramping-figure-03-production", "2026-04-29"),
+            _src("BMW deploys Figure 03", "https://timesofindia.indiatimes.com/technology/tech-news/bmw-deploys-figure-03-humanoid-robot-at-us-factory-to-transform-automotive-manufacturing/articleshow/132092781.cms", "2026-06-30"),
             _src("Apptronik Series A-X", "https://apptronik.com/news-collection/apptronik-closes-over-935-million-series-a", "2026-02-11"),
         ],
     },
@@ -107,7 +109,7 @@ _OPPORTUNITY_METADATA: dict[str, dict] = {
 
 OPPORTUNITIES = [
     item.model_copy(update={
-        "last_verified": _OPPORTUNITY_METADATA.get(item.title, {}).get("last_verified", "2026-06-04"),
+        "last_verified": _OPPORTUNITY_METADATA.get(item.title, {}).get("last_verified", "2026-07-01"),
         "sources": _OPPORTUNITY_METADATA.get(item.title, {}).get("sources", []),
         "sourced_fact": _OPPORTUNITY_METADATA.get(item.title, {}).get("sourced_fact", item.why),
         "editorial_take": _OPPORTUNITY_METADATA.get(item.title, {}).get("editorial_take", item.why),
@@ -117,10 +119,10 @@ OPPORTUNITIES = [
 
 STARTUPS: list[Startup] = [
     Startup(name="Figure", stage="Series C", domain="Physical AI", signal="Hot",
-            note="As of April 29, 2026, Figure says BotQ has delivered 350+ Figure 03 robots and reached a one-robot-per-hour production pace.",
+            note="As of June 30, 2026, Figure 03 had moved into BMW Spartanburg deployment after earlier BotQ production scaling claims.",
             website="https://figure.ai"),
     Startup(name="Apptronik", stage="Series A", domain="Physical AI", signal="Hot",
-            note="Apptronik announced a $520M Series A-X extension on February 11, 2026, bringing total Series A to more than $935M and total capital to nearly $1B.",
+            note="Apptronik announced a $520M Series A-X extension on February 11, 2026 and, by late June, was highlighting 'Robot Park' training infrastructure for Apollo data collection.",
             website="https://apptronik.com"),
     Startup(name="Skild AI", stage="Series C", domain="Physical AI", signal="Hot",
             note="Skild AI announced a $1.4B Series C on January 14, 2026, taking its valuation above $14B and doubling down on omni-bodied robot intelligence.",
@@ -251,23 +253,25 @@ STARTUPS: list[Startup] = [
 
 _STARTUP_METADATA: dict[str, dict] = {
     "Figure": {
-        "last_verified": "2026-06-04",
-        "sourced_fact": "Figure reported on April 29, 2026 that BotQ had delivered 350+ Figure 03 robots and improved manufacturing throughput to one robot per hour.",
-        "editorial_take": "That makes Figure important not just as a model story, but as a signal that humanoid execution is shifting into manufacturing and deployment operations.",
+        "last_verified": "2026-07-01",
+        "sourced_fact": "By June 30, 2026, BMW had begun deploying Figure 03 at Spartanburg, following Figure's earlier April 29, 2026 BotQ production update.",
+        "editorial_take": "Figure now matters as an operations signal, not just a flashy humanoid narrative: the conversation is moving toward customer-site deployment and factory logistics.",
         "sources": [
+            _src("BMW deploys Figure 03", "https://timesofindia.indiatimes.com/technology/tech-news/bmw-deploys-figure-03-humanoid-robot-at-us-factory-to-transform-automotive-manufacturing/articleshow/132092781.cms", "2026-06-30"),
             _src("Figure production update", "https://www.figure.ai/news/ramping-figure-03-production", "2026-04-29"),
         ],
     },
     "Apptronik": {
-        "last_verified": "2026-06-04",
-        "sourced_fact": "Apptronik announced on February 11, 2026 that a $520M Series A-X extension pushed total Series A capital above $935M.",
-        "editorial_take": "The key read is not just capital raised. It is that Apollo-scale commercialization is attracting enough conviction to fund deployment-heavy execution.",
+        "last_verified": "2026-07-01",
+        "sourced_fact": "Apptronik announced on February 11, 2026 that a $520M Series A-X extension pushed total Series A capital above $935M, and by June 30, 2026 it was showcasing Robot Park as training infrastructure for Apollo.",
+        "editorial_take": "The read is now broader than fundraising: Apptronik is signaling that the real moat in humanoids is becoming data generation, customer pilots, and deployment learning loops.",
         "sources": [
             _src("Apptronik Series A-X", "https://apptronik.com/news-collection/apptronik-closes-over-935-million-series-a", "2026-02-11"),
+            _src("Apptronik Robot Park", "https://www.businessinsider.com/apptroniks-humanoid-robots-are-practicing-for-their-first-real-jobs-2026-6", "2026-06-30"),
         ],
     },
     "Skild AI": {
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sourced_fact": "Skild AI announced a $1.4B Series C on January 14, 2026, at a valuation above $14B.",
         "editorial_take": "Skild remains one of the clearest external signals that investors still believe a general-purpose robot intelligence platform can compound across embodiments.",
         "sources": [
@@ -275,7 +279,7 @@ _STARTUP_METADATA: dict[str, dict] = {
         ],
     },
     "Axelera AI": {
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sourced_fact": "Axelera announced more than $250M in funding on February 24, 2026 to support commercial growth in edge inference.",
         "editorial_take": "That is a strong market signal that efficient inference hardware and toolchains still have room to differentiate beyond hyperscaler AI spending.",
         "sources": [
@@ -283,7 +287,7 @@ _STARTUP_METADATA: dict[str, dict] = {
         ],
     },
     "Hailo": {
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sourced_fact": "Hailo used CES 2026 to frame edge AI and on-device GenAI as mainstream across consumer and commercial markets.",
         "editorial_take": "Hailo matters as a distribution signal: edge inference is no longer being pitched as niche robotics infrastructure.",
         "sources": [
@@ -291,7 +295,7 @@ _STARTUP_METADATA: dict[str, dict] = {
         ],
     },
     "Physical Intelligence": {
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sourced_fact": "Physical Intelligence's π0.5 paper remains a concrete public reference point for open-world VLA generalization in manipulation.",
         "editorial_take": "Even without a fresh financing headline here, the paper keeps the company relevant because it anchors technical expectations for embodied model capability.",
         "sources": [
@@ -299,7 +303,7 @@ _STARTUP_METADATA: dict[str, dict] = {
         ],
     },
     "Cognition AI": {
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sourced_fact": "TechCrunch reported on May 27, 2026 that Cognition raised a fresh $1B round.",
         "editorial_take": "That keeps agentic coding infrastructure in the 'real budget, real urgency' category rather than speculative product theater.",
         "sources": [
@@ -310,7 +314,7 @@ _STARTUP_METADATA: dict[str, dict] = {
 
 STARTUPS = [
     item.model_copy(update={
-        "last_verified": _STARTUP_METADATA.get(item.name, {}).get("last_verified", "2026-06-04"),
+        "last_verified": _STARTUP_METADATA.get(item.name, {}).get("last_verified", "2026-07-01"),
         "sources": _STARTUP_METADATA.get(item.name, {}).get(
             "sources",
             [_src(item.name, item.website, "")]
@@ -367,7 +371,7 @@ ROLES: list[Role] = [
 
 ROLES = [
     item.model_copy(update={
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sources": [_src(item.company, item.url, "")] if item.url else [],
     })
     for item in ROLES
@@ -399,7 +403,7 @@ PAPERS: list[Paper] = [
 
 PAPERS = [
     item.model_copy(update={
-        "last_verified": "2026-06-04",
+        "last_verified": "2026-07-01",
         "sources": [_src("Paper", item.url, item.venue)] if item.url else [],
     })
     for item in PAPERS
@@ -410,20 +414,21 @@ POSTS: list[Post] = [
         angle="Take",
         text=(
             "June 2026 check-in: edge AI is no longer a lab-only story.\n\n"
-            "Hailo is demoing mass-market edge AI at CES, Axelera just added >$250M in funding, and deployment tooling matters as much as model quality.\n\n"
+            "July 2026 check-in: edge AI is no longer a lab-only story.\n\n"
+            "Hailo's CES push, Axelera's funding, and the fact that deployment tooling still decides what actually ships all point the same direction.\n\n"
             "#EdgeAI #Robotics"
         ),
         tags=["EdgeAI", "Robotics"],
-        source_ref="Hailo CES 2026 · Axelera Feb 2026 funding",
+        source_ref="Hailo Jan 2026 CES signal · Axelera Feb 2026 funding",
     ),
     Post(
         angle="Thread",
         text=(
-            "🧵 As of June 2026, humanoid robotics has crossed from prototype theater into scale-up mode.\n\n"
+            "🧵 As of July 1, 2026, humanoid robotics has crossed from prototype theater into real deployment mode.\n\n"
             "What every Robotics engineer needs to know right now:"
         ),
         tags=["Robotics"],
-        source_ref="Figure Apr 2026 production update · Apptronik Feb 2026 extension",
+        source_ref="Figure Jun 30 2026 BMW deployment · Apptronik Feb 2026 extension",
     ),
     Post(
         angle="Contrarian",
@@ -438,17 +443,17 @@ POSTS: list[Post] = [
     Post(
         angle="Job Hunt",
         text=(
-            "The companies hiring aggressively right now are the ones turning prototypes into production fleets.\n\n"
+            "The companies hiring aggressively right now are the ones turning prototypes into production fleets and data loops.\n\n"
             "If you're a Robotics engineer, this is your moment. The wave is here.\n\n"
             "#Robotics #EdgeAI"
         ),
         tags=["Robotics", "EdgeAI"],
-        source_ref="Figure · Apptronik · Skild AI hiring signals, June 2026",
+        source_ref="Figure · Apptronik · Skild AI hiring signals, Jul 1 2026",
     ),
     Post(
         angle="Research",
         text=(
-            "If you're rebuilding your robotics reading list for June 2026, start with the new foundation-models-in-robotics review and then go straight into π0.5.\n\n"
+            "If you're rebuilding your robotics reading list for July 2026, start with the new foundation-models-in-robotics review and then go straight into π0.5.\n\n"
             "That pair gives you both the map and the current frontier.\n\n"
             "#Robotics #EdgeAI"
         ),
@@ -459,11 +464,11 @@ POSTS: list[Post] = [
         angle="Founder Signal",
         text=(
             "Skild closed a $1.4B Series C. Apptronik pushed total Series A past $935M. Figure says it has already delivered 350+ Figure 03 robots.\n\n"
-            "When capital, production, and data all move at once, the enabling infrastructure layer becomes the real strategic position.\n\n"
+            "When capital, deployment, and data all move at once, the enabling infrastructure layer becomes the real strategic position.\n\n"
             "#Robotics #PhysicalAI"
         ),
         tags=["Robotics", "PhysicalAI"],
-        source_ref="Skild Jan 2026 · Apptronik Feb 2026 · Figure Apr 2026",
+        source_ref="Skild Jan 2026 · Apptronik Feb 2026 · Figure Jun 30 2026",
     ),
 ]
 
@@ -590,15 +595,15 @@ PEOPLE: list[Person] = [
 ]
 
 WEEKLY_WINS = [
-    "Refreshed the fallback product narrative to June 2026 so the site no longer makes stale quarter-specific claims.",
-    "Queued a fresh robotics reading stack around the April 2026 FM review and π0.5 instead of a 2025-only paper mix.",
-    "Converted dashboard cards from passive reading into a persistent workbench with save, dismiss, and add-to-week actions.",
+    "Refreshed the fallback product narrative to July 1, 2026 so the site no longer reads like a June snapshot.",
+    "Updated the startup and opportunity stack with newer Figure deployment context and fresher Apptronik commercialization detail.",
+    "Kept the reading stack centered on the April 2026 FM review and π0.5 instead of drifting back to stale 2025-only references.",
 ]
 
 WEEKLY_GAPS = [
-    "Long-tail startup notes still mix hard facts with editorial signals; a future pass should separate sourced facts from commentary.",
-    "The website still lacks an explicit 'last verified' date on every curated card.",
-    "Agentic tool benchmarks and coding-tool company data will need another refresh if the market shifts again this quarter.",
+    "The startup long tail still contains several older watchlist notes that have not been re-verified against July 2026 sources.",
+    "Role and task counts are still curated demo numbers rather than live July 2026 aggregates.",
+    "Coding-tool and agentic-infra company data will need another refresh if July product or funding moves change the market map.",
 ]
 
 CONVICTION_BETS: list[ConvictionBet] = [
@@ -608,6 +613,5 @@ CONVICTION_BETS: list[ConvictionBet] = [
 ]
 
 NEXT_WEEK_FOCUS = (
-    "Add a visible 'last verified' date to curated cards, separate editorial commentary from sourced facts in the startup list, "
-    "and keep replacing relative language like 'this week' or 'this quarter' with absolute dates whenever fallback content is meant to look current."
+    "Re-verify the long-tail startup watchlist, tighten July 2026 company and role counts, and keep replacing soft relative language with explicit dates whenever curated fallback content is meant to look current."
 )

@@ -27,20 +27,26 @@ export const signals: Signal[] = [
     "text": "Figure says BotQ has delivered over 350 Figure 03 robots and improved output from one robot per day to one per hour in under 120 days."
   },
   {
-    "label": "Edge AI Goes Mass Market",
+    "label": "Figure 03 In Deployment",
     "delta": "Jun 2026",
+    "color": "amber",
+    "text": "By June 30, 2026, BMW had begun deploying Figure 03 at Spartanburg, extending the story from pilot manufacturing claims into a concrete factory-floor logistics use case."
+  },
+  {
+    "label": "Edge AI Goes Mass Market",
+    "delta": "Jul 2026",
     "color": "muted",
     "text": "Axelera announced more than $250M in new funding and Hailo used CES 2026 to position edge AI and on-device GenAI as mainstream across robotics and commercial systems."
   }
 ];
 
-export const marketPulse = "As of June 2026: Skild AI has raised $1.4B at a valuation above $14B, Apptronik has extended its Series A to more than $935M, Figure says BotQ has delivered 350+ Figure 03 robots and reached a one-robot-per-hour production pace, and edge AI has moved decisively into mass-market deployment across robotics, security, and on-device GenAI.";
+export const marketPulse = "As of July 1, 2026: Skild AI has raised $1.4B at a valuation above $14B, Apptronik has pushed Series A capital past $935M and is now emphasizing data-flywheel training for Apollo, Figure 03 has moved from BotQ manufacturing claims into active BMW Spartanburg deployment, and edge AI remains a commercial runtime story across robotics, security, and on-device GenAI.";
 
 export const stats: Stat[] = [
   {
     "label": "Signals Tracked",
     "value": "2,847",
-    "delta": "demo snapshot · Jun 2026",
+    "delta": "demo snapshot · Jul 2026",
     "up": true
   },
   {
@@ -71,7 +77,7 @@ export const stats: Stat[] = [
 
 export const opportunities: Opportunity[] = [
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Skild AI Series C",
@@ -94,7 +100,7 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "This is still the cleanest frontier for engineers who can connect policy learning, sim-to-real data, and deployment constraints instead of treating VLA work as a pure model problem."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Cognition funding coverage",
@@ -107,12 +113,12 @@ export const opportunities: Opportunity[] = [
     "domain": "Generative AI",
     "signal": "HIGH",
     "fit": 94,
-    "why": "By June 2026, agentic developer tooling and MCP-style integrations have become a durable infra layer. Teams need engineers who can build tool-use runtimes, evals, and workflow integrations.",
+    "why": "By July 2026, agentic developer tooling and MCP-style integrations have become a durable infra layer. Teams need engineers who can build tool-use runtimes, evals, and workflow integrations.",
     "sourced_fact": "Cognition raised a fresh $1B round on May 27, 2026, and AI-native developer tooling continues to concentrate around agent runtimes, evals, and tool integration layers.",
     "editorial_take": "The durable opportunity is not prompt wrappers. It is infrastructure that makes agentic workflows observable, testable, and operational inside real engineering teams."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Axelera AI funding",
@@ -135,12 +141,12 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "Compiler, quantization, and runtime optimization still have better scarcity economics than generic application-layer ML work because they gate whether edge deployments ship at all."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
-        "label": "Figure production update",
-        "url": "https://www.figure.ai/news/ramping-figure-03-production",
-        "published_at": "2026-04-29"
+        "label": "BMW deploys Figure 03",
+        "url": "https://timesofindia.indiatimes.com/technology/tech-news/bmw-deploys-figure-03-humanoid-robot-at-us-factory-to-transform-automotive-manufacturing/articleshow/132092781.cms",
+        "published_at": "2026-06-30"
       },
       {
         "label": "Apptronik Series A-X",
@@ -154,11 +160,11 @@ export const opportunities: Opportunity[] = [
     "signal": "HIGH",
     "fit": 88,
     "why": "Figure and Apptronik both spent 2026 scaling real deployments and production. ROS2, Gazebo Harmonic, and hardware-in-the-loop experience still map cleanly to deployment teams.",
-    "sourced_fact": "Figure says it delivered more than 350 Figure 03 robots by April 29, 2026, while Apptronik pushed total Series A capital above $935M as Apollo deployments expanded.",
-    "editorial_take": "Middleware and deployment fluency still matter because real fleets inherit all the boring integration debt that pure model demos hide."
+    "sourced_fact": "Figure had moved Figure 03 into BMW Spartanburg deployment by June 30, 2026, while Apptronik had already pushed total Series A capital above $935M as Apollo commercialization expanded.",
+    "editorial_take": "Middleware and deployment fluency matter even more now because the market is shifting from polished demos into real fleet behavior, uptime, and plant integration."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [],
     "rank": "05",
     "title": "Sim-to-Real: Isaac Lab + Genesis Engine",
@@ -170,7 +176,7 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "Genesis, Isaac Lab, and VLA training loops remain central to sim-to-real work. The bottleneck is still data efficiency and transfer, not generic model availability."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [],
     "rank": "06",
     "title": "Agentic Coding Tool / SWE-Agent Developer",
@@ -182,7 +188,7 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "Claude Code at 78.4%, Cursor at 67.2% SWE-bench — proving ground for agentic coding. Tooling, evals, and agent orchestration engineers in high demand. Target: Anthropic, Cognition, any coding-AI startup."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [],
     "rank": "07",
     "title": "Embedded Linux + Motor Control (Humanoid HW)",
@@ -194,7 +200,7 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "Every humanoid robot has firmware under the policy layer. FOC motor control, CAN bus, Zephyr/FreeRTOS for actuators. Target: Figure HW, Apptronik HW, Unitree, 1X Technologies → Embedded SW Eng."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [],
     "rank": "08",
     "title": "On-Device Multimodal Perception (Camera + LiDAR)",
@@ -209,8 +215,13 @@ export const opportunities: Opportunity[] = [
 
 export const startups: Startup[] = [
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
+      {
+        "label": "BMW deploys Figure 03",
+        "url": "https://timesofindia.indiatimes.com/technology/tech-news/bmw-deploys-figure-03-humanoid-robot-at-us-factory-to-transform-automotive-manufacturing/articleshow/132092781.cms",
+        "published_at": "2026-06-30"
+      },
       {
         "label": "Figure production update",
         "url": "https://www.figure.ai/news/ramping-figure-03-production",
@@ -221,31 +232,36 @@ export const startups: Startup[] = [
     "stage": "Series C",
     "domain": "Physical AI",
     "signal": "Hot",
-    "note": "As of April 29, 2026, Figure says BotQ has delivered 350+ Figure 03 robots and reached a one-robot-per-hour production pace.",
+    "note": "As of June 30, 2026, Figure 03 had moved into BMW Spartanburg deployment after earlier BotQ production scaling claims.",
     "website": "https://figure.ai",
-    "sourced_fact": "Figure reported on April 29, 2026 that BotQ had delivered 350+ Figure 03 robots and improved manufacturing throughput to one robot per hour.",
-    "editorial_take": "That makes Figure important not just as a model story, but as a signal that humanoid execution is shifting into manufacturing and deployment operations."
+    "sourced_fact": "By June 30, 2026, BMW had begun deploying Figure 03 at Spartanburg, following Figure's earlier April 29, 2026 BotQ production update.",
+    "editorial_take": "Figure now matters as an operations signal, not just a flashy humanoid narrative: the conversation is moving toward customer-site deployment and factory logistics."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Apptronik Series A-X",
         "url": "https://apptronik.com/news-collection/apptronik-closes-over-935-million-series-a",
         "published_at": "2026-02-11"
+      },
+      {
+        "label": "Apptronik Robot Park",
+        "url": "https://www.businessinsider.com/apptroniks-humanoid-robots-are-practicing-for-their-first-real-jobs-2026-6",
+        "published_at": "2026-06-30"
       }
     ],
     "name": "Apptronik",
     "stage": "Series A",
     "domain": "Physical AI",
     "signal": "Hot",
-    "note": "Apptronik announced a $520M Series A-X extension on February 11, 2026, bringing total Series A to more than $935M and total capital to nearly $1B.",
+    "note": "Apptronik announced a $520M Series A-X extension on February 11, 2026 and, by late June, was highlighting 'Robot Park' training infrastructure for Apollo data collection.",
     "website": "https://apptronik.com",
-    "sourced_fact": "Apptronik announced on February 11, 2026 that a $520M Series A-X extension pushed total Series A capital above $935M.",
-    "editorial_take": "The key read is not just capital raised. It is that Apollo-scale commercialization is attracting enough conviction to fund deployment-heavy execution."
+    "sourced_fact": "Apptronik announced on February 11, 2026 that a $520M Series A-X extension pushed total Series A capital above $935M, and by June 30, 2026 it was showcasing Robot Park as training infrastructure for Apollo.",
+    "editorial_take": "The read is now broader than fundraising: Apptronik is signaling that the real moat in humanoids is becoming data generation, customer pilots, and deployment learning loops."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Skild AI Series C",
@@ -263,7 +279,7 @@ export const startups: Startup[] = [
     "editorial_take": "Skild remains one of the clearest external signals that investors still believe a general-purpose robot intelligence platform can compound across embodiments."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Axelera AI funding",
@@ -281,7 +297,7 @@ export const startups: Startup[] = [
     "editorial_take": "That is a strong market signal that efficient inference hardware and toolchains still have room to differentiate beyond hyperscaler AI spending."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Hailo CES 2026",
@@ -299,7 +315,7 @@ export const startups: Startup[] = [
     "editorial_take": "Hailo matters as a distribution signal: edge inference is no longer being pitched as niche robotics infrastructure."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "π0.5 paper",
@@ -317,7 +333,7 @@ export const startups: Startup[] = [
     "editorial_take": "Even without a fresh financing headline here, the paper keeps the company relevant because it anchors technical expectations for embodied model capability."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "1X Technologies",
@@ -335,7 +351,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: 1X Technologies remains a watch-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Covariant",
@@ -353,7 +369,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Covariant remains a hot-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Memfault",
@@ -371,7 +387,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Memfault remains a watch-priority signal inside the Embedded map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Tenstorrent",
@@ -389,7 +405,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Tenstorrent remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Agility Robotics",
@@ -407,7 +423,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Agility Robotics remains a track-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Etched",
@@ -425,7 +441,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Etched remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [],
     "name": "Neuromesh AI",
     "stage": "Pre-Seed",
@@ -437,7 +453,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Neuromesh AI remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [],
     "name": "FirmWave",
     "stage": "Series A",
@@ -449,7 +465,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: FirmWave remains a track-priority signal inside the Embedded map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [],
     "name": "Inferix",
     "stage": "Pre-Seed",
@@ -461,7 +477,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Inferix remains a hot-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Collaborative Robotics",
@@ -479,7 +495,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Collaborative Robotics remains a hot-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Gecko Robotics",
@@ -497,7 +513,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Gecko Robotics remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Field AI",
@@ -515,7 +531,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Field AI remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Dexterity",
@@ -533,7 +549,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Dexterity remains a watch-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Dusty Robotics",
@@ -551,7 +567,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Dusty Robotics remains a track-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Scythe Robotics",
@@ -569,7 +585,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Scythe Robotics remains a track-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Built Robotics",
@@ -587,7 +603,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Built Robotics remains a track-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Carbon Robotics",
@@ -605,7 +621,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Carbon Robotics remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Robust.AI",
@@ -623,7 +639,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Robust.AI remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Applied Intuition",
@@ -641,7 +657,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Applied Intuition remains a hot-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Shield AI",
@@ -659,7 +675,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Shield AI remains a watch-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Skydio",
@@ -677,7 +693,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Skydio remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Wayve",
@@ -695,7 +711,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Wayve remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Gather AI",
@@ -713,7 +729,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Gather AI remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Formant",
@@ -731,7 +747,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Formant remains a track-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Polymath Robotics",
@@ -749,7 +765,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Polymath Robotics remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Neura Robotics",
@@ -767,7 +783,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Neura Robotics remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Fourier Intelligence",
@@ -785,7 +801,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Fourier Intelligence remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Unitree Robotics",
@@ -803,7 +819,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Unitree Robotics remains a watch-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Viam Robotics",
@@ -821,7 +837,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Viam Robotics remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Machina Labs",
@@ -839,7 +855,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Machina Labs remains a hot-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Groq",
@@ -857,7 +873,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Groq remains a hot-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Cerebras Systems",
@@ -875,7 +891,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Cerebras Systems remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "d-Matrix",
@@ -893,7 +909,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: d-Matrix remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Shield AI",
@@ -911,7 +927,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Shield AI remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Mind Robotics",
@@ -929,7 +945,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Mind Robotics remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Cognition funding coverage",
@@ -947,7 +963,7 @@ export const startups: Startup[] = [
     "editorial_take": "That keeps agentic coding infrastructure in the 'real budget, real urgency' category rather than speculative product theater."
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Cursor",
@@ -968,7 +984,7 @@ export const startups: Startup[] = [
 
 export const roles: Role[] = [
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Skild AI",
@@ -988,7 +1004,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Apptronik",
@@ -1008,7 +1024,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Physical Intelligence",
@@ -1028,7 +1044,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Groq",
@@ -1047,7 +1063,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Axelera AI",
@@ -1066,7 +1082,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Cognition AI",
@@ -1086,7 +1102,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Covariant",
@@ -1106,7 +1122,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Hailo",
@@ -1126,7 +1142,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Shield AI",
@@ -1146,7 +1162,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Cursor",
@@ -1166,7 +1182,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Neura Robotics",
@@ -1186,7 +1202,7 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Figure AI",
@@ -1209,7 +1225,7 @@ export const roles: Role[] = [
 
 export const papers: Paper[] = [
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Paper",
@@ -1227,7 +1243,7 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2604.15395"
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Paper",
@@ -1246,7 +1262,7 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2504.16054"
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Paper",
@@ -1265,7 +1281,7 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2410.24164"
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Paper",
@@ -1283,7 +1299,7 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2412.04325"
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Paper",
@@ -1301,7 +1317,7 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2506.21628"
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Paper",
@@ -1319,7 +1335,7 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2506.01182"
   },
   {
-    "last_verified": "2026-06-04",
+    "last_verified": "2026-07-01",
     "sources": [
       {
         "label": "Paper",
@@ -1341,20 +1357,20 @@ export const papers: Paper[] = [
 export const posts: Post[] = [
   {
     "angle": "Take",
-    "text": "June 2026 check-in: edge AI is no longer a lab-only story.\n\nHailo is demoing mass-market edge AI at CES, Axelera just added >$250M in funding, and deployment tooling matters as much as model quality.\n\n#EdgeAI #Robotics",
+    "text": "June 2026 check-in: edge AI is no longer a lab-only story.\n\nJuly 2026 check-in: edge AI is no longer a lab-only story.\n\nHailo's CES push, Axelera's funding, and the fact that deployment tooling still decides what actually ships all point the same direction.\n\n#EdgeAI #Robotics",
     "tags": [
       "EdgeAI",
       "Robotics"
     ],
-    "source_ref": "Hailo CES 2026 · Axelera Feb 2026 funding"
+    "source_ref": "Hailo Jan 2026 CES signal · Axelera Feb 2026 funding"
   },
   {
     "angle": "Thread",
-    "text": "🧵 As of June 2026, humanoid robotics has crossed from prototype theater into scale-up mode.\n\nWhat every Robotics engineer needs to know right now:",
+    "text": "🧵 As of July 1, 2026, humanoid robotics has crossed from prototype theater into real deployment mode.\n\nWhat every Robotics engineer needs to know right now:",
     "tags": [
       "Robotics"
     ],
-    "source_ref": "Figure Apr 2026 production update · Apptronik Feb 2026 extension"
+    "source_ref": "Figure Jun 30 2026 BMW deployment · Apptronik Feb 2026 extension"
   },
   {
     "angle": "Contrarian",
@@ -1367,16 +1383,16 @@ export const posts: Post[] = [
   },
   {
     "angle": "Job Hunt",
-    "text": "The companies hiring aggressively right now are the ones turning prototypes into production fleets.\n\nIf you're a Robotics engineer, this is your moment. The wave is here.\n\n#Robotics #EdgeAI",
+    "text": "The companies hiring aggressively right now are the ones turning prototypes into production fleets and data loops.\n\nIf you're a Robotics engineer, this is your moment. The wave is here.\n\n#Robotics #EdgeAI",
     "tags": [
       "Robotics",
       "EdgeAI"
     ],
-    "source_ref": "Figure · Apptronik · Skild AI hiring signals, June 2026"
+    "source_ref": "Figure · Apptronik · Skild AI hiring signals, Jul 1 2026"
   },
   {
     "angle": "Research",
-    "text": "If you're rebuilding your robotics reading list for June 2026, start with the new foundation-models-in-robotics review and then go straight into π0.5.\n\nThat pair gives you both the map and the current frontier.\n\n#Robotics #EdgeAI",
+    "text": "If you're rebuilding your robotics reading list for July 2026, start with the new foundation-models-in-robotics review and then go straight into π0.5.\n\nThat pair gives you both the map and the current frontier.\n\n#Robotics #EdgeAI",
     "tags": [
       "Robotics",
       "EdgeAI"
@@ -1385,12 +1401,12 @@ export const posts: Post[] = [
   },
   {
     "angle": "Founder Signal",
-    "text": "Skild closed a $1.4B Series C. Apptronik pushed total Series A past $935M. Figure says it has already delivered 350+ Figure 03 robots.\n\nWhen capital, production, and data all move at once, the enabling infrastructure layer becomes the real strategic position.\n\n#Robotics #PhysicalAI",
+    "text": "Skild closed a $1.4B Series C. Apptronik pushed total Series A past $935M. Figure says it has already delivered 350+ Figure 03 robots.\n\nWhen capital, deployment, and data all move at once, the enabling infrastructure layer becomes the real strategic position.\n\n#Robotics #PhysicalAI",
     "tags": [
       "Robotics",
       "PhysicalAI"
     ],
-    "source_ref": "Skild Jan 2026 · Apptronik Feb 2026 · Figure Apr 2026"
+    "source_ref": "Skild Jan 2026 · Apptronik Feb 2026 · Figure Jun 30 2026"
   }
 ];
 
@@ -1497,15 +1513,15 @@ export const people: Person[] = [
 ];
 
 export const weeklyWins = [
-  "Refreshed the fallback product narrative to June 2026 so the site no longer makes stale quarter-specific claims.",
-  "Queued a fresh robotics reading stack around the April 2026 FM review and π0.5 instead of a 2025-only paper mix.",
-  "Converted dashboard cards from passive reading into a persistent workbench with save, dismiss, and add-to-week actions."
+  "Refreshed the fallback product narrative to July 1, 2026 so the site no longer reads like a June snapshot.",
+  "Updated the startup and opportunity stack with newer Figure deployment context and fresher Apptronik commercialization detail.",
+  "Kept the reading stack centered on the April 2026 FM review and π0.5 instead of drifting back to stale 2025-only references."
 ];
 
 export const weeklyGaps = [
-  "Long-tail startup notes still mix hard facts with editorial signals; a future pass should separate sourced facts from commentary.",
-  "The website still lacks an explicit 'last verified' date on every curated card.",
-  "Agentic tool benchmarks and coding-tool company data will need another refresh if the market shifts again this quarter."
+  "The startup long tail still contains several older watchlist notes that have not been re-verified against July 2026 sources.",
+  "Role and task counts are still curated demo numbers rather than live July 2026 aggregates.",
+  "Coding-tool and agentic-infra company data will need another refresh if July product or funding moves change the market map."
 ];
 
 export const convictionBets: ConvictionBet[] = [
@@ -1523,4 +1539,5 @@ export const convictionBets: ConvictionBet[] = [
   }
 ];
 
-export const nextWeekFocus = "Add a visible 'last verified' date to curated cards, separate editorial commentary from sourced facts in the startup list, and keep replacing relative language like 'this week' or 'this quarter' with absolute dates whenever fallback content is meant to look current.";
+export const nextWeekFocus = "Re-verify the long-tail startup watchlist, tighten July 2026 company and role counts, and keep replacing soft relative language with explicit dates whenever curated fallback content is meant to look current.";
+
