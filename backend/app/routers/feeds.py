@@ -1,6 +1,6 @@
 import asyncio
 from fastapi import APIRouter, BackgroundTasks
-from ..ingestion.sources import read_cache, fetch_sheet_companies
+from ..ingestion.sources import read_cache
 from ..schemas import FeedMetaResponse
 
 router = APIRouter(prefix="/api/feeds", tags=["feeds"])
@@ -112,15 +112,6 @@ async def get_jobs(background_tasks: BackgroundTasks):
     return []
 
 
-@router.get("/papers")
-async def get_papers(background_tasks: BackgroundTasks):
-    cached = read_cache("papers")
-    if cached and isinstance(cached, list) and len(cached) > 0:
-        return cached
-    background_tasks.add_task(_bg_fetch_papers)
-    return []
-
-
 @router.get("/digest")
 async def get_digest():
     return read_cache("digest") or {"headline": None, "sections": [], "action_item": None, "generated_at": None}
@@ -147,8 +138,3 @@ async def get_meta() -> FeedMetaResponse:
         source_detail="Feed cache is cold. Endpoints may fall back to built-in mock data until refresh completes.",
     )
 
-
-@router.get("/sheet-companies")
-async def get_sheet_companies():
-    """Returns all company names from the Google Sheet watchlist."""
-    return await fetch_sheet_companies()

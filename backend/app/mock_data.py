@@ -1,6 +1,6 @@
 from .schemas import (
     CuratedSource, Signal, Stat, Opportunity, Startup, Role,
-    Paper, Post, Task, Person, ConvictionBet,
+    Paper, Post, Task, ConvictionBet,
 )
 
 MARKET_PULSE = (
@@ -577,21 +577,6 @@ TASKS: list[Task] = [
             "This is a strong portfolio signal for any AI-native company: Anthropic, Cursor, Cognition, Modal."
         ),
     ),
-]
-
-PEOPLE: list[Person] = [
-    Person(name="Jim Fan", handle="@drjimfan", url="https://x.com/drjimfan",
-           context="NVIDIA AI Research. Creator of Isaac Lab + Voyager. Core follow for Physical AI + sim-to-real.",
-           urgency="This week", days=0),
-    Person(name="Song Han", handle="@songhan_song", url="https://x.com/songhan_song",
-           context="MIT professor. TinyML + EfficientML pioneer. Follow for edge inference + quantization research.",
-           urgency="This week", days=0),
-    Person(name="Pete Warden", handle="@petewarden", url="https://x.com/petewarden",
-           context="TinyML creator, ex-Google. Follow for on-device ML, MCU deployment, edge AI trends.",
-           urgency="This week", days=0),
-    Person(name="Andrej Karpathy", handle="@karpathy", url="https://x.com/karpathy",
-           context="Ex-Tesla/OpenAI. Best educator in AI. Follow for LLM internals + edge model intuition.",
-           urgency="This week", days=0),
 ]
 
 WEEKLY_WINS = [

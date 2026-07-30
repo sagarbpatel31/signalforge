@@ -89,17 +89,6 @@ RSS_SOURCES_EXTRA = [
     ("Physical AI Subreddit","https://www.reddit.com/r/artificial/.rss"),
 ]
 
-# Google Sheet — company watchlist (public CSV export)
-GSHEET_CSV_URL = (
-    "https://docs.google.com/spreadsheets/d/"
-    "1AS7C8_upNOad-PS2aTu7rVIxyIy1V23NdUj0yIdOtvs/export?format=csv"
-)
-# Second sheet tab (gid from URL)
-GSHEET_CSV_URL_2 = (
-    "https://docs.google.com/spreadsheets/d/"
-    "1AS7C8_upNOad-PS2aTu7rVIxyIy1V23NdUj0yIdOtvs/export?format=csv&gid=0"
-)
-
 # Role keywords to match (user-specified)
 ROLE_KEYWORDS = [
     "software engineer", "embedded software", "embedded systems", "firmware engineer",
@@ -507,27 +496,6 @@ async def fetch_jobs(limit: int = 100) -> list:
             seen.add(key)
             unique.append(job)
     return unique[:limit]
-
-
-async def fetch_sheet_companies() -> list:
-    """Parse company names from the Google Sheet watchlist CSV."""
-    try:
-        async with httpx.AsyncClient(timeout=7, follow_redirects=True) as client:
-            resp = await client.get(GSHEET_CSV_URL, headers=_HEADERS)
-            if resp.status_code != 200:
-                return []
-        companies = []
-        for row in resp.text.splitlines():
-            for cell in row.split(","):
-                name = cell.strip().strip('"').strip()
-                # Strip embedded URLs ("Company - https://...")
-                if " - http" in name:
-                    name = name.split(" - http")[0].strip()
-                if name and len(name) > 1 and not name.startswith("http"):
-                    companies.append(name)
-        return sorted(set(companies))
-    except Exception:
-        return []
 
 
 def _role_matches_keywords(title: str) -> bool:

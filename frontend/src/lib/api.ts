@@ -1,7 +1,7 @@
 import type {
   Signal, Stat, Opportunity, Startup, Role,
-  Paper, Post, Task, Person, ConvictionBet, UserProfile,
-  JobListing, NewsItem, FlaggedCompany,
+  Paper, Post, Task, ConvictionBet, UserProfile,
+  NewsItem, FlaggedCompany,
 } from "./types";
 import type { FeedMeta } from "./intelligence";
 import type { WorkbenchState } from "./useWorkbench";
@@ -48,7 +48,6 @@ import {
   papers as fallbackPapers,
   posts as fallbackPosts,
   tasks as fallbackTasks,
-  people as fallbackPeople,
   weeklyWins,
   weeklyGaps,
   convictionBets as fallbackBets,
@@ -109,9 +108,6 @@ export const fetchPosts = () =>
 
 export const fetchTasks = () =>
   apiFetch<Task[]>("/api/tasks", fallbackTasks);
-
-export const fetchPeople = () =>
-  apiFetch<Person[]>("/api/people", fallbackPeople);
 
 export const fetchWeekly = () =>
   apiFetch<WeeklyResponse>("/api/weekly", {
@@ -182,9 +178,6 @@ export async function saveWorkbench(state: WorkbenchState): Promise<WorkbenchSta
 
 export const fetchFlaggedStartups = () =>
   apiFetchLive<FlaggedCompany[]>("/api/startups/flagged", []);
-
-export const fetchJobsFull = () =>
-  apiFetchLive<JobListing[]>("/api/feeds/jobs", []);
 
 export const fetchNewsItems = () =>
   apiFetchLive<NewsItem[]>("/api/feeds/news", []);

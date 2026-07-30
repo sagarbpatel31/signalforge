@@ -107,15 +107,6 @@ class WorkbenchTask(BaseModel):
     description: Optional[str] = None
 
 
-class Person(BaseModel):
-    name: str
-    handle: str
-    url: str = ""
-    context: str
-    urgency: Literal["Overdue", "This week", "Waiting"]
-    days: int
-
-
 class ConvictionBet(BaseModel):
     label: str
     conviction: int
