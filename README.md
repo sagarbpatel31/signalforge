@@ -79,7 +79,8 @@ pull requests (see `.github/workflows/ci.yml`).
 | `ANTHROPIC_MODEL` | backend | Optional — pin a Claude model (default `claude-opus-4-7`) |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | backend | Redis KV cache |
 | `RESEND_API_KEY` / `RESEND_FROM` / `DIGEST_EMAIL` | backend | Daily digest email |
-| `CRON_SECRET` | backend | When set, `/api/ingest` requires `Authorization: Bearer <secret>` |
+| `SESSION_SECRET` | backend | **Required in production.** Signs session tokens; rotating it logs everyone out |
+| `CRON_SECRET` | backend | `/api/ingest` requires `Authorization: Bearer <secret>`. Required in production |
 | `FRONTEND_URL` | backend | CORS allow-list (also scopes Vercel preview origins) |
 | `CORS_ALLOW_ORIGIN_REGEX` | backend | Optional CORS regex override |
 | `NEXT_PUBLIC_API_URL` | frontend | Backend base URL |
@@ -90,10 +91,28 @@ See `backend/.env.example` for the full list.
 
 - **Backend** deploys from the repo root: `vercel.json` routes all traffic to
   `api/index.py` (which mounts the FastAPI app) and defines the ingest cron.
-  `backend/` also ships a `Procfile`, `railway.json`, and `nixpacks.toml` for
-  hosting the API on Railway instead.
+  `backend/` also ships `railway.json` and `nixpacks.toml` for hosting the API
+  on Railway instead.
 - **Frontend** deploys from `frontend/` as a standard Next.js project; set
   `NEXT_PUBLIC_API_URL` to the deployed backend URL.
 
-Set the same `CRON_SECRET` in the backend's Vercel project so the scheduled
-ingest is authenticated.
+Set `SESSION_SECRET` and `CRON_SECRET` in the backend's project before going
+live. Both fail closed in production: without `SESSION_SECRET` the API cannot
+issue or verify sessions, and without `CRON_SECRET` the ingest endpoint (which
+also sends the digest email) returns 503 instead of running unauthenticated.
+
+## Sessions
+
+Per-user data — profile, workbench, bookmarks — is keyed by an opaque session
+id the backend mints and signs with `SESSION_SECRET`. The browser stores the
+`<user_id>.<signature>` token and replays it in `X-SignalForge-Token`; the
+backend only honours ids whose signature verifies, so keys are neither
+guessable nor forgeable. Onboarding mints the session before the first profile
+save.
+
+`scripts/mint_session.py` mints a token from the command line and can copy an
+older key's data onto it:
+
+```bash
+backend/.venv/bin/python scripts/mint_session.py --adopt sagar-patel
+```
