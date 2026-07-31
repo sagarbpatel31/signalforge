@@ -23,8 +23,8 @@ function jobsToRoles(jobs: Record<string, unknown>[]): Role[] {
   });
 }
 
-export async function CareerRadar({ userKey }: { userKey?: string }) {
-  let roles = await fetchCareer(userKey);
+export async function CareerRadar({ sessionToken }: { sessionToken?: string }) {
+  let roles = await fetchCareer(sessionToken);
   if (!roles.length) {
     const cached = readCacheFile<Record<string, unknown>[]>("jobs");
     if (cached?.length) roles = jobsToRoles(cached);

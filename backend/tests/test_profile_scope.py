@@ -1,11 +1,14 @@
 from fastapi.testclient import TestClient
 
 import main
+from app import auth
 
 
-def test_profile_is_scoped_by_user_header(monkeypatch):
+def test_profile_is_scoped_by_session_token(monkeypatch):
     store: dict[str, object] = {}
 
+    monkeypatch.setenv("SESSION_SECRET", "test-secret")
+    monkeypatch.setattr(auth, "_cached_secret", None)
     monkeypatch.setattr("app.routers.profile.kv_get", lambda key: store.get(key))
     monkeypatch.setattr(
         "app.routers.profile.kv_set",
@@ -13,6 +16,9 @@ def test_profile_is_scoped_by_user_header(monkeypatch):
     )
 
     client = TestClient(main.app)
+    alpha_token = client.post("/api/auth/session").json()["token"]
+    beta_token = client.post("/api/auth/session").json()["token"]
+
     alpha = {
         "name": "Alpha User",
         "handle": "@alpha",
@@ -30,8 +36,11 @@ def test_profile_is_scoped_by_user_header(monkeypatch):
         "current_projects": "ROS2 stack",
     }
 
-    client.post("/api/profile", json=alpha, headers={"X-SignalForge-User": "alpha"})
-    client.post("/api/profile", json=beta, headers={"X-SignalForge-User": "beta"})
+    client.post("/api/profile", json=alpha, headers={"X-SignalForge-Token": alpha_token})
+    client.post("/api/profile", json=beta, headers={"X-SignalForge-Token": beta_token})
 
-    assert client.get("/api/profile", headers={"X-SignalForge-User": "alpha"}).json()["name"] == "Alpha User"
-    assert client.get("/api/profile", headers={"X-SignalForge-User": "beta"}).json()["name"] == "Beta User"
+    assert client.get("/api/profile", headers={"X-SignalForge-Token": alpha_token}).json()["name"] == "Alpha User"
+    assert client.get("/api/profile", headers={"X-SignalForge-Token": beta_token}).json()["name"] == "Beta User"
+
+    # Knowing a handle no longer grants access to that handle's profile.
+    assert client.get("/api/profile", headers={"X-SignalForge-User": "@alpha"}).status_code == 401

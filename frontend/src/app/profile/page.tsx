@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { fetchProfile, saveProfile } from "@/lib/api";
-import { deriveUserKey, setActiveUserKey } from "@/lib/identity";
+import { ensureSession } from "@/lib/identity";
 import { DOMAINS, EXPERIENCE_LEVELS, GOALS } from "@/lib/types";
 import type { UserProfile } from "@/lib/types";
 
@@ -164,9 +164,8 @@ export default function ProfilePage() {
     if (!form.name.trim() || form.domains.length === 0) return;
     setSaving(true);
     try {
-      const userKey = deriveUserKey(form);
-      await saveProfile(form, userKey);
-      setActiveUserKey(userKey);
+      const token = await ensureSession();
+      await saveProfile(form, token);
       setSaved(true);
     } finally {
       setSaving(false);
@@ -177,9 +176,8 @@ export default function ProfilePage() {
     if (!form.name.trim() || form.domains.length === 0) return;
     setSaving(true);
     try {
-      const userKey = deriveUserKey(form);
-      await saveProfile(form, userKey);
-      setActiveUserKey(userKey);
+      const token = await ensureSession();
+      await saveProfile(form, token);
       router.push("/");
     } catch {
       setSaving(false);

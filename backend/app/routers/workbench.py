@@ -1,17 +1,17 @@
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Depends
 
+from ..auth import current_user
 from ..kv import kv_get, kv_set
 from ..schemas import WorkbenchState
-from ..user_scope import DEFAULT_USER_KEY, normalize_user_key
+from ..user_scope import DEFAULT_USER_KEY
 
 router = APIRouter(prefix="/api", tags=["workbench"])
 
 
 def _kv_key(user_key: str | None = None) -> str:
-    normalized = normalize_user_key(user_key)
-    if normalized == DEFAULT_USER_KEY:
+    if not user_key or user_key == DEFAULT_USER_KEY:
         return "workbench"
-    return f"workbench:{normalized}"
+    return f"workbench:{user_key}"
 
 
 def _load(user_key: str | None = None) -> WorkbenchState:
@@ -24,11 +24,13 @@ def _save(state: WorkbenchState, user_key: str | None = None) -> None:
 
 
 @router.get("/workbench", response_model=WorkbenchState)
-async def get_workbench(x_signalforge_user: str | None = Header(default=None)) -> WorkbenchState:
-    return _load(x_signalforge_user)
+async def get_workbench(user_id: str = Depends(current_user)) -> WorkbenchState:
+    return _load(user_id)
 
 
 @router.post("/workbench", response_model=WorkbenchState)
-async def save_workbench(state: WorkbenchState, x_signalforge_user: str | None = Header(default=None)) -> WorkbenchState:
-    _save(state, x_signalforge_user)
+async def save_workbench(
+    state: WorkbenchState, user_id: str = Depends(current_user)
+) -> WorkbenchState:
+    _save(state, user_id)
     return state

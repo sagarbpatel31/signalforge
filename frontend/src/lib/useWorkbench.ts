@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { fetchWorkbench, saveWorkbench } from "./api";
-import { getBrowserUserKey } from "./identity";
+import { getBrowserSessionToken, userIdFromToken } from "./identity";
 import type { Task } from "./types";
 
 export interface WorkbenchState {
@@ -16,16 +16,20 @@ const listeners = new Set<() => void>();
 let snapshot: WorkbenchState | null = null;
 let hydratePromise: Promise<void> | null = null;
 let lastSavedJson = "";
-let activeUserKey = "default";
+let activeUserKey = "anon";
+
+function currentUserId(): string {
+  return userIdFromToken(getBrowserSessionToken()) || "anon";
+}
 
 function storageKey(userKey = activeUserKey): string {
-  return `sf-workbench:${userKey || "default"}`;
+  return `sf-workbench:${userKey || "anon"}`;
 }
 
 function load(): WorkbenchState {
   if (typeof window === "undefined") return EMPTY;
   try {
-    activeUserKey = getBrowserUserKey() || "default";
+    activeUserKey = currentUserId();
     const raw = window.localStorage.getItem(storageKey());
     if (!raw) return EMPTY;
     const parsed = JSON.parse(raw) as Partial<WorkbenchState>;
@@ -41,7 +45,7 @@ function load(): WorkbenchState {
 function persist(next: WorkbenchState) {
   snapshot = next;
   try {
-    activeUserKey = getBrowserUserKey() || "default";
+    activeUserKey = currentUserId();
     window.localStorage.setItem(storageKey(), JSON.stringify(next));
   } catch {}
   listeners.forEach((listener) => listener());
@@ -76,10 +80,10 @@ async function hydrateRemote() {
   if (hydratePromise) return hydratePromise;
 
   hydratePromise = (async () => {
-    activeUserKey = getBrowserUserKey() || "default";
+    activeUserKey = currentUserId();
     const local = getSnapshot();
     try {
-      const remote = await fetchWorkbench(activeUserKey);
+      const remote = await fetchWorkbench();
       const merged = mergeState(local, remote);
       persist(merged);
       await pushRemote(merged);
@@ -97,7 +101,7 @@ export function subscribe(cb: () => void) {
 }
 
 export function getSnapshot(): WorkbenchState {
-  const nextUserKey = typeof window === "undefined" ? activeUserKey : (getBrowserUserKey() || "default");
+  const nextUserKey = typeof window === "undefined" ? activeUserKey : currentUserId();
   if (snapshot === null || nextUserKey !== activeUserKey) {
     activeUserKey = nextUserKey;
     snapshot = load();

@@ -7,6 +7,10 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/*.pyc
 backend/.env
+backend/data/.session_secret
+backend/data/profiles/
+backend/data/workbench/
+backend/data/bookmarks/
 *.egg-info/
 dist/
 build/

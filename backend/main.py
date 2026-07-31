@@ -12,7 +12,7 @@ load_dotenv(Path(__file__).parent / ".env")
 import os
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import brief, opportunities, startups, career, research, twitter, tasks, weekly, profile, generate, feeds, email, workbench
+from app.routers import auth, brief, opportunities, startups, career, research, twitter, tasks, weekly, profile, generate, feeds, email, workbench
 from app.ingestion.scheduler import create_scheduler, run_ingestion
 
 logging.basicConfig(level=logging.INFO)
@@ -59,6 +59,7 @@ app.add_middleware(
 )
 
 for router in [
+    auth.router,
     brief.router,
     opportunities.router,
     startups.router,
@@ -91,9 +92,16 @@ async def health() -> dict:
 
 def _verify_cron(authorization: str | None) -> None:
     """Guard the cron ingest endpoint. Vercel cron sends the secret as a Bearer token.
-    When CRON_SECRET is unset (local dev / unconfigured), the endpoint stays open."""
+
+    /api/ingest also fires the daily digest email, so leaving it open in
+    production would let anyone trigger sends. Unset CRON_SECRET is tolerated
+    only for local dev; in production it fails closed."""
     secret = os.environ.get("CRON_SECRET", "")
     if not secret:
+        from app.auth import _is_production
+
+        if _is_production():
+            raise HTTPException(status_code=503, detail="CRON_SECRET not configured")
         return
     expected = f"Bearer {secret}"
     if not authorization or not hmac.compare_digest(authorization, expected):

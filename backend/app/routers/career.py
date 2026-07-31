@@ -1,6 +1,7 @@
 import re
 from typing import Optional
-from fastapi import APIRouter, BackgroundTasks, Header
+from fastapi import APIRouter, BackgroundTasks, Depends
+from ..auth import optional_user
 from ..schemas import Role
 from ..mock_data import ROLES
 from ..ingestion.sources import read_cache
@@ -200,14 +201,14 @@ def _get_filtered_roles(limit: Optional[int] = None, user_key: str | None = None
 
 
 @router.get("/career", response_model=list[Role])
-async def get_career(background_tasks: BackgroundTasks, x_signalforge_user: str | None = Header(default=None)) -> list[Role]:
+async def get_career(background_tasks: BackgroundTasks, user_id: str | None = Depends(optional_user)) -> list[Role]:
     if not read_cache("jobs"):
         background_tasks.add_task(_bg_fetch_jobs)
-    return _get_filtered_roles(limit=4, user_key=x_signalforge_user)
+    return _get_filtered_roles(limit=4, user_key=user_id)
 
 
 @router.get("/career/all", response_model=list[Role])
-async def get_career_all(background_tasks: BackgroundTasks, x_signalforge_user: str | None = Header(default=None)) -> list[Role]:
+async def get_career_all(background_tasks: BackgroundTasks, user_id: str | None = Depends(optional_user)) -> list[Role]:
     if not read_cache("jobs"):
         background_tasks.add_task(_bg_fetch_jobs)
-    return _get_filtered_roles(limit=None, user_key=x_signalforge_user)
+    return _get_filtered_roles(limit=None, user_key=user_id)

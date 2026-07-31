@@ -10,11 +10,11 @@ import { getUserHeaders } from "./identity";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 /** Standard fetch — 60s ISR cache at Next.js layer (for structured data that rarely changes). */
-async function apiFetch<T>(path: string, fallback: T, userKey?: string): Promise<T> {
+async function apiFetch<T>(path: string, fallback: T, token?: string): Promise<T> {
   try {
     const res = await fetch(`${API_BASE}${path}`, {
       next: { revalidate: 60 },
-      headers: await getUserHeaders(userKey),
+      headers: await getUserHeaders(token),
     });
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json() as Promise<T>;
@@ -24,11 +24,11 @@ async function apiFetch<T>(path: string, fallback: T, userKey?: string): Promise
 }
 
 /** Live fetch — no Next.js cache. For feeds data backed by Redis (backend manages 12h TTL). */
-async function apiFetchLive<T>(path: string, fallback: T, userKey?: string): Promise<T> {
+async function apiFetchLive<T>(path: string, fallback: T, token?: string): Promise<T> {
   try {
     const res = await fetch(`${API_BASE}${path}`, {
       cache: "no-store",
-      headers: await getUserHeaders(userKey),
+      headers: await getUserHeaders(token),
     });
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json() as Promise<T>;
@@ -91,11 +91,11 @@ export const fetchOpportunities = () =>
 export const fetchStartups = () =>
   apiFetch<Startup[]>("/api/startups", fallbackStartups);
 
-export const fetchCareer = (userKey?: string) =>
-  apiFetchLive<Role[]>("/api/career", fallbackRoles, userKey);
+export const fetchCareer = (token?: string) =>
+  apiFetchLive<Role[]>("/api/career", fallbackRoles, token);
 
-export const fetchAllCareer = (userKey?: string) =>
-  apiFetchLive<Role[]>("/api/career/all", fallbackRoles, userKey);
+export const fetchAllCareer = (token?: string) =>
+  apiFetchLive<Role[]>("/api/career/all", fallbackRoles, token);
 
 export const fetchResearch = () =>
   apiFetchLive<Paper[]>("/api/research", fallbackPapers);
@@ -117,13 +117,13 @@ export const fetchWeekly = () =>
     next_week_focus: nextWeekFocus,
   });
 
-export async function fetchProfile(userKey?: string): Promise<UserProfile | null> {
+export async function fetchProfile(token?: string): Promise<UserProfile | null> {
   try {
     const res = await fetch(`${API_BASE}/api/profile`, {
       cache: "no-store",
-      headers: await getUserHeaders(userKey),
+      headers: await getUserHeaders(token),
     });
-    if (res.status === 404) return null;
+    if (res.status === 404 || res.status === 401) return null;
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json() as Promise<UserProfile>;
   } catch {
@@ -131,12 +131,12 @@ export async function fetchProfile(userKey?: string): Promise<UserProfile | null
   }
 }
 
-export async function saveProfile(profile: UserProfile, userKey?: string): Promise<UserProfile> {
+export async function saveProfile(profile: UserProfile, token?: string): Promise<UserProfile> {
   const res = await fetch(`${API_BASE}/api/profile`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...(await getUserHeaders(userKey)),
+      ...(await getUserHeaders(token)),
     },
     body: JSON.stringify(profile),
   });
@@ -144,11 +144,11 @@ export async function saveProfile(profile: UserProfile, userKey?: string): Promi
   return res.json() as Promise<UserProfile>;
 }
 
-export async function fetchWorkbench(userKey?: string): Promise<WorkbenchState> {
+export async function fetchWorkbench(token?: string): Promise<WorkbenchState> {
   const res = await apiFetchLive<{ dismissed?: string[]; custom_tasks?: Task[] }>(
     "/api/workbench",
     { dismissed: [], custom_tasks: [] },
-    userKey
+    token
   );
   return {
     dismissed: Array.isArray(res.dismissed) ? res.dismissed : [],

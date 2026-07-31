@@ -1,8 +1,11 @@
 from typing import Optional
-from fastapi import APIRouter, Header, HTTPException
+
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+
+from ..auth import current_user
 from ..kv import kv_get, kv_set
-from ..user_scope import DEFAULT_USER_KEY, normalize_user_key
+from ..user_scope import DEFAULT_USER_KEY
 
 router = APIRouter(prefix="/api", tags=["profile"])
 
@@ -17,10 +20,11 @@ class UserProfile(BaseModel):
 
 
 def _kv_key(user_key: str | None = None) -> str:
-    normalized = normalize_user_key(user_key)
-    if normalized == DEFAULT_USER_KEY:
+    """Profiles are keyed by verified session id. The unscoped "profile" key is
+    the local-dev seed under backend/data and is never reachable from a token."""
+    if not user_key or user_key == DEFAULT_USER_KEY:
         return "profile"
-    return f"profile:{normalized}"
+    return f"profile:{user_key}"
 
 
 def _load(user_key: str | None = None) -> Optional[UserProfile]:
@@ -33,14 +37,16 @@ def _save(profile: UserProfile, user_key: str | None = None) -> None:
 
 
 @router.get("/profile", response_model=UserProfile)
-async def get_profile(x_signalforge_user: str | None = Header(default=None)) -> UserProfile:
-    profile = _load(x_signalforge_user)
+async def get_profile(user_id: str = Depends(current_user)) -> UserProfile:
+    profile = _load(user_id)
     if profile is None:
         raise HTTPException(status_code=404, detail="No profile found")
     return profile
 
 
 @router.post("/profile", response_model=UserProfile)
-async def save_profile(profile: UserProfile, x_signalforge_user: str | None = Header(default=None)) -> UserProfile:
-    _save(profile, x_signalforge_user)
+async def save_profile(
+    profile: UserProfile, user_id: str = Depends(current_user)
+) -> UserProfile:
+    _save(profile, user_id)
     return profile

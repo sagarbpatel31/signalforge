@@ -1,16 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { deriveUserKey, normalizeUserKey } from "./identity";
+import { userIdFromToken } from "./identity";
 
 describe("identity helpers", () => {
-  it("normalizes user keys into a stable storage-safe slug", () => {
-    expect(normalizeUserKey("@Sagar Patel")).toBe("sagar-patel");
+  it("extracts the user id from a signed session token", () => {
+    expect(userIdFromToken("u_abc123.deadbeef")).toBe("u_abc123");
   });
 
-  it("prefers handle over name when deriving user keys", () => {
-    expect(deriveUserKey({
-      name: "Sagar Patel",
-      handle: "@signalforge",
-    })).toBe("signalforge");
+  it("rejects values that are not session ids", () => {
+    expect(userIdFromToken("sagar-patel.deadbeef")).toBe("");
+    expect(userIdFromToken("")).toBe("");
   });
 });

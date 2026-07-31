@@ -1,8 +1,9 @@
 import { cookies } from "next/headers";
 
-import { USER_COOKIE_NAME, normalizeUserKey } from "./identity";
+import { SESSION_COOKIE_NAME } from "./identity";
 
-export async function getServerUserKey(): Promise<string> {
+/** Session token for the current request, or "" when the visitor is anonymous. */
+export async function getServerSessionToken(): Promise<string> {
   const store = await cookies();
-  return normalizeUserKey(store.get(USER_COOKIE_NAME)?.value ?? "");
+  return store.get(SESSION_COOKIE_NAME)?.value ?? "";
 }

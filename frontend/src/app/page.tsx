@@ -15,7 +15,7 @@ import { Footer } from "@/components/sections/Footer";
 import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchWeekly } from "@/lib/api";
 import type { WeeklyResponse } from "@/lib/api";
 import { readCacheFile, readProfileFile } from "@/lib/server-cache";
-import { getServerUserKey } from "@/lib/server-identity";
+import { getServerSessionToken } from "@/lib/server-identity";
 import { summarizeFeedStatus } from "@/lib/intelligence";
 import { redirect } from "next/navigation";
 import type { UserProfile } from "@/lib/types";
@@ -55,17 +55,17 @@ export default async function DashboardPage() {
   const hour = getPSTHour();
   const greeting = getGreeting(hour);
   const navDate = formatNavDate();
-  const activeUserKey = await getServerUserKey();
+  const sessionToken = await getServerSessionToken();
 
   const [profile, posts, tasks, brief, weekly] = await Promise.all([
-    fetchProfile(activeUserKey),
+    fetchProfile(sessionToken),
     fetchPosts(),
     fetchTasks(),
     fetchBrief(),
     fetchWeekly(),
   ]);
 
-  const resolvedProfile: UserProfile | null = profile ?? readProfileFile<UserProfile>(activeUserKey);
+  const resolvedProfile: UserProfile | null = profile ?? readProfileFile<UserProfile>(sessionToken);
   if (!resolvedProfile) redirect("/onboarding");
   const feedStatus = summarizeFeedStatus(readCacheFile("meta"));
 
@@ -131,7 +131,7 @@ export default async function DashboardPage() {
             }}
           >
             <StartupRadar />
-            <CareerRadar userKey={activeUserKey} />
+            <CareerRadar sessionToken={sessionToken} />
             <ResearchCorner />
           </div>
           )}
