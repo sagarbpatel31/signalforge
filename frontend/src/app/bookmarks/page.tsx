@@ -1,13 +1,10 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import {
-  subscribe,
-  getSnapshot,
-  getServerSnapshot,
+  useBookmarks,
   removeBookmark,
   type BookmarkItem,
   type Bookmarks,
@@ -86,7 +83,7 @@ const SECTIONS: { key: keyof Bookmarks; icon: string; label: string }[] = [
 ];
 
 export default function BookmarksPage() {
-  const bookmarks = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const { bookmarks } = useBookmarks();
 
   const total =
     bookmarks.papers.length +

@@ -116,6 +116,27 @@ def _fmt_delta(current: int, baseline: int, unit: str = "") -> tuple[str, bool |
     return ("→ flat this wk", None)
 
 
+def _load_history() -> list[dict]:
+    """Daily snapshots written by ingestion, oldest first."""
+    from ..kv import kv_get
+
+    history = kv_get("cache:history")
+    if not isinstance(history, list):
+        return []
+    clean = [h for h in history if isinstance(h, dict) and h.get("date")]
+    clean.sort(key=lambda h: h["date"])
+    return clean[-14:]
+
+
+def _series(history: list[dict], field: str, transform=None) -> list[int]:
+    """Extract one metric's daily series. Returns [] below two points so the UI
+    can hide the sparkline instead of drawing a flat or invented line."""
+    values = [int(h.get(field, 0) or 0) for h in history]
+    if transform:
+        values = [transform(v) for v in values]
+    return values if len(values) >= 2 else []
+
+
 def _build_stats_from_cache() -> list[Stat]:
     """Return live counts from cache:meta with real weekly deltas."""
     from ..ingestion.sources import read_cache
@@ -170,27 +191,42 @@ def _build_stats_from_cache() -> list[Stat]:
     job_delta,  job_up  = _fmt_delta(jobs_n,    base_jobs,  "roles")
     pap_delta,  pap_up  = _fmt_delta(paper_n,   base_papers,"papers")
 
+    # Sparkline series come from the daily snapshots. The two derived stats use
+    # the same formulas as their values above, so the line matches the number.
+    history      = _load_history()
+    total_series = _series(history, "news")
+    if total_series:
+        total_series = [
+            n + int(h.get("jobs", 0) or 0) + int(h.get("papers", 0) or 0)
+            for n, h in zip(total_series, history)
+        ]
+
     return [
         Stat(label="Signals Tracked",
              value=f"{total:,}",
              delta=f"↑ refreshed {refresh_label}" if sig_up else sig_delta,
-             up=True),
+             up=True,
+             series=total_series),
         Stat(label="Opportunities",
              value=str(opp_n),
              delta=opp_delta,
-             up=opp_up),
+             up=opp_up,
+             series=_series(history, "jobs", lambda v: max(8, round(v * 0.38)))),
         Stat(label="Startups Flagged",
              value=str(startup_n),
              delta=strt_delta,
-             up=strt_up),
+             up=strt_up,
+             series=_series(history, "jobs", lambda v: max(15, round(v * 1.15)))),
         Stat(label="Hiring Signals",
              value=str(jobs_n),
              delta=job_delta,
-             up=job_up),
+             up=job_up,
+             series=_series(history, "jobs")),
         Stat(label="Research Papers",
              value=str(paper_n),
              delta=pap_delta,
-             up=pap_up),
+             up=pap_up,
+             series=_series(history, "papers")),
     ]
 
 

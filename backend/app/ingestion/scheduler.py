@@ -41,6 +41,39 @@ def _update_weekly_baseline(counts: dict) -> None:
     logger.info("Weekly baseline saved: %s", snapshot)
 
 
+HISTORY_DAYS = 30
+
+
+def _record_daily_snapshot(counts: dict) -> None:
+    """
+    Append today's counts to cache:history, keeping one entry per UTC date and
+    the last HISTORY_DAYS days. Ingestion runs twice a day, so the same-date
+    entry is overwritten rather than duplicated. This is what turns the stat
+    bar's sparklines into real series instead of decoration.
+    """
+    from ..kv import kv_get, kv_set
+
+    today = datetime.now(timezone.utc).date().isoformat()
+    entry = {
+        "date": today,
+        "news": counts.get("news", 0),
+        "papers": counts.get("papers", 0),
+        "jobs": counts.get("jobs", 0),
+    }
+
+    history = kv_get("cache:history")
+    if not isinstance(history, list):
+        history = []
+
+    history = [h for h in history if isinstance(h, dict) and h.get("date") != today]
+    history.append(entry)
+    history.sort(key=lambda h: h.get("date", ""))
+    history = history[-HISTORY_DAYS:]
+
+    kv_set("cache:history", history, ttl=60 * 60 * 24 * (HISTORY_DAYS + 7))
+    logger.info("Daily snapshot recorded: %s (%d days retained)", entry, len(history))
+
+
 async def run_ingestion() -> dict:
     logger.info("Ingestion started")
 
@@ -70,6 +103,7 @@ async def run_ingestion() -> dict:
 
     # Roll weekly baseline if needed
     _update_weekly_baseline(counts)
+    _record_daily_snapshot(counts)
 
     logger.info("Ingestion complete: %s", counts)
 

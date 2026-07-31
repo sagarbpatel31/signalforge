@@ -29,6 +29,9 @@ class Stat(BaseModel):
     value: str
     delta: str
     up: Optional[bool]
+    # Daily counts, oldest first, from cache:history. Empty until at least two
+    # ingest days exist — the UI hides the sparkline rather than inventing one.
+    series: list[int] = []
 
 
 class CuratedSource(BaseModel):
@@ -122,3 +125,18 @@ class WeeklyResponse(BaseModel):
 class WorkbenchState(BaseModel):
     dismissed: list[str] = []
     custom_tasks: list[WorkbenchTask] = []
+
+
+class BookmarkItem(BaseModel):
+    id: str
+    title: str
+    sub: str = ""
+    url: str = ""
+    type: Literal["paper", "startup", "role", "opportunity"]
+
+
+class BookmarksState(BaseModel):
+    papers: list[BookmarkItem] = []
+    startups: list[BookmarkItem] = []
+    roles: list[BookmarkItem] = []
+    opportunities: list[BookmarkItem] = []

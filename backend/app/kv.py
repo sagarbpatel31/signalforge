@@ -16,6 +16,7 @@ _DATA_DIR = Path(__file__).parent.parent / "data"
 _CACHE_DIR = _DATA_DIR / "cache"
 _PROFILES_DIR = _DATA_DIR / "profiles"
 _WORKBENCH_DIR = _DATA_DIR / "workbench"
+_BOOKMARKS_DIR = _DATA_DIR / "bookmarks"
 
 
 def _redis():
@@ -51,11 +52,17 @@ def kv_get(key: str):
         if key.startswith("workbench:"):
             p = _WORKBENCH_DIR / f"{key[10:]}.json"
             return json.loads(p.read_text()) if p.exists() else None
+        if key.startswith("bookmarks:"):
+            p = _BOOKMARKS_DIR / f"{key[10:]}.json"
+            return json.loads(p.read_text()) if p.exists() else None
         if key == "profile":
             p = _DATA_DIR / "profile.json"
             return json.loads(p.read_text()) if p.exists() else None
         if key == "workbench":
             p = _DATA_DIR / "workbench.json"
+            return json.loads(p.read_text()) if p.exists() else None
+        if key == "bookmarks":
+            p = _DATA_DIR / "bookmarks.json"
             return json.loads(p.read_text()) if p.exists() else None
     except Exception:
         pass
@@ -82,11 +89,17 @@ def kv_set(key: str, value, ttl: int = 86_400) -> None:  # 24h default; cron ove
         elif key.startswith("workbench:"):
             _WORKBENCH_DIR.mkdir(parents=True, exist_ok=True)
             (_WORKBENCH_DIR / f"{key[10:]}.json").write_text(json.dumps(value))
+        elif key.startswith("bookmarks:"):
+            _BOOKMARKS_DIR.mkdir(parents=True, exist_ok=True)
+            (_BOOKMARKS_DIR / f"{key[10:]}.json").write_text(json.dumps(value))
         elif key == "profile":
             _DATA_DIR.mkdir(parents=True, exist_ok=True)
             (_DATA_DIR / "profile.json").write_text(json.dumps(value))
         elif key == "workbench":
             _DATA_DIR.mkdir(parents=True, exist_ok=True)
             (_DATA_DIR / "workbench.json").write_text(json.dumps(value))
+        elif key == "bookmarks":
+            _DATA_DIR.mkdir(parents=True, exist_ok=True)
+            (_DATA_DIR / "bookmarks.json").write_text(json.dumps(value))
     except Exception as exc:
         logger.warning("File fallback SET %s failed: %s", key, exc)

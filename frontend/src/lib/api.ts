@@ -5,6 +5,7 @@ import type {
 } from "./types";
 import type { FeedMeta } from "./intelligence";
 import type { WorkbenchState } from "./useWorkbench";
+import type { Bookmarks } from "./useBookmarks";
 import { getUserHeaders } from "./identity";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -174,6 +175,33 @@ export async function saveWorkbench(state: WorkbenchState): Promise<WorkbenchSta
     dismissed: Array.isArray(data.dismissed) ? data.dismissed : [],
     customTasks: Array.isArray(data.custom_tasks) ? data.custom_tasks : [],
   };
+}
+
+export async function fetchBookmarks(token?: string): Promise<Bookmarks> {
+  const res = await apiFetchLive<Partial<Bookmarks>>(
+    "/api/bookmarks",
+    {},
+    token
+  );
+  return {
+    papers: Array.isArray(res.papers) ? res.papers : [],
+    startups: Array.isArray(res.startups) ? res.startups : [],
+    roles: Array.isArray(res.roles) ? res.roles : [],
+    opportunities: Array.isArray(res.opportunities) ? res.opportunities : [],
+  };
+}
+
+export async function saveBookmarks(state: Bookmarks): Promise<Bookmarks> {
+  const res = await fetch(`${API_BASE}/api/bookmarks`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(await getUserHeaders()),
+    },
+    body: JSON.stringify(state),
+  });
+  if (!res.ok) throw new Error("Failed to save bookmarks");
+  return res.json() as Promise<Bookmarks>;
 }
 
 export const fetchFlaggedStartups = () =>

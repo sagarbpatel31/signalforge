@@ -20,6 +20,9 @@ export interface Stat {
   value: string;
   delta: string;
   up: boolean | null;
+  /** Real daily counts from the ingest history, oldest first. Empty until two
+   *  days of snapshots exist — render nothing rather than a fake line. */
+  series?: number[];
 }
 
 export interface Opportunity {

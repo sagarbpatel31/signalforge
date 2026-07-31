@@ -5,15 +5,6 @@ import Link from "next/link";
 import { fetchStats } from "@/lib/api";
 import type { Stat } from "@/lib/types";
 
-// Deterministic pseudo-sparkline points (visual decoration)
-const SPARKLINES = [
-  [2, 5, 3, 7, 4, 8, 6, 9, 7, 10],
-  [8, 6, 7, 5, 8, 9, 7, 10, 8, 9],
-  [3, 5, 4, 6, 5, 8, 7, 9, 8, 10],
-  [6, 4, 7, 5, 8, 6, 9, 7, 10, 8],
-  [5, 7, 6, 8, 5, 9, 7, 8, 9, 7],
-];
-
 // Route mapping for each stat label
 const STAT_ROUTES: Record<string, string> = {
   "Signals Tracked": "/news",
@@ -94,8 +85,7 @@ export function StatBar() {
             : s.up === false
             ? "var(--red)"
             : "var(--blue)";
-        const sparkData = SPARKLINES[i % SPARKLINES.length];
-        const isLoading = !loaded;
+              const isLoading = !loaded;
         const href = STAT_ROUTES[s.label] ?? "/";
 
         return (
@@ -186,7 +176,13 @@ export function StatBar() {
                     {s.delta}
                   </div>
                 </div>
-                <Sparkline data={sparkData} color={sparkColor} />
+                {(s.series?.length ?? 0) >= 2 ? (
+                  <Sparkline data={s.series!} color={sparkColor} />
+                ) : (
+                  // No history yet (needs two ingest days) — show nothing
+                  // rather than a decorative line that implies a trend.
+                  <div style={{ width: 52, height: 22 }} />
+                )}
               </div>
             </div>
           </Link>

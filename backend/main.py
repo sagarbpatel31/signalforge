@@ -12,7 +12,7 @@ load_dotenv(Path(__file__).parent / ".env")
 import os
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import auth, brief, opportunities, startups, career, research, twitter, tasks, weekly, profile, generate, feeds, email, workbench
+from app.routers import auth, bookmarks, brief, opportunities, startups, career, research, twitter, tasks, weekly, profile, generate, feeds, email, workbench
 from app.ingestion.scheduler import create_scheduler, run_ingestion
 
 logging.basicConfig(level=logging.INFO)
@@ -60,6 +60,7 @@ app.add_middleware(
 
 for router in [
     auth.router,
+    bookmarks.router,
     brief.router,
     opportunities.router,
     startups.router,
