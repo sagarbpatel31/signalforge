@@ -7,6 +7,8 @@ import type {
 // Edit the backend source of truth, then rerun:
 //   backend/.venv/bin/python scripts/sync_mock_data.py
 
+export const curatedSnapshotDate = "2026-08-11";
+
 export const signals: Signal[] = [
   {
     "label": "Skild AI Series C",
@@ -40,44 +42,49 @@ export const signals: Signal[] = [
   }
 ];
 
-export const marketPulse = "As of July 1, 2026: Skild AI has raised $1.4B at a valuation above $14B, Apptronik has pushed Series A capital past $935M and is now emphasizing data-flywheel training for Apollo, Figure 03 has moved from BotQ manufacturing claims into active BMW Spartanburg deployment, and edge AI remains a commercial runtime story across robotics, security, and on-device GenAI.";
+export const marketPulse = "Verified August 11, 2026: Skild AI has raised $1.4B at a valuation above $14B, Apptronik has pushed Series A capital past $935M and is now emphasizing data-flywheel training for Apollo, Figure 03 has moved from BotQ manufacturing claims into active BMW Spartanburg deployment, and edge AI remains a commercial runtime story across robotics, security, and on-device GenAI.";
 
 export const stats: Stat[] = [
   {
     "label": "Signals Tracked",
     "value": "2,847",
     "delta": "demo snapshot · Jul 2026",
-    "up": true
+    "up": true,
+    "series": []
   },
   {
     "label": "Opportunities",
     "value": "38",
     "delta": "curated roles + infra themes",
-    "up": true
+    "up": true,
+    "series": []
   },
   {
     "label": "Startups Flagged",
     "value": "142",
     "delta": "humanoid + edge AI focus",
-    "up": true
+    "up": true,
+    "series": []
   },
   {
     "label": "Hiring Signals",
     "value": "91",
     "delta": "demo snapshot",
-    "up": true
+    "up": true,
+    "series": []
   },
   {
     "label": "Research Papers",
     "value": "23",
     "delta": "review queue",
-    "up": null
+    "up": null,
+    "series": []
   }
 ];
 
 export const opportunities: Opportunity[] = [
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "Skild AI Series C",
@@ -100,7 +107,7 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "This is still the cleanest frontier for engineers who can connect policy learning, sim-to-real data, and deployment constraints instead of treating VLA work as a pure model problem."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "Cognition funding coverage",
@@ -118,7 +125,7 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "The durable opportunity is not prompt wrappers. It is infrastructure that makes agentic workflows observable, testable, and operational inside real engineering teams."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "Axelera AI funding",
@@ -141,7 +148,7 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "Compiler, quantization, and runtime optimization still have better scarcity economics than generic application-layer ML work because they gate whether edge deployments ship at all."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "BMW deploys Figure 03",
@@ -164,58 +171,102 @@ export const opportunities: Opportunity[] = [
     "editorial_take": "Middleware and deployment fluency matter even more now because the market is shifting from polished demos into real fleet behavior, uptime, and plant integration."
   },
   {
-    "last_verified": "2026-07-01",
-    "sources": [],
+    "last_verified": "2026-08-11",
+    "sources": [
+      {
+        "label": "NVIDIA Isaac Lab",
+        "url": "https://developer.nvidia.com/isaac/lab",
+        "published_at": ""
+      },
+      {
+        "label": "Genesis documentation",
+        "url": "https://genesis-world.readthedocs.io/en/latest/",
+        "published_at": ""
+      }
+    ],
     "rank": "05",
     "title": "Sim-to-Real: Isaac Lab + Genesis Engine",
     "domain": "Physical AI",
     "signal": "HIGH",
     "fit": 85,
     "why": "Genesis, Isaac Lab, and VLA training loops remain central to sim-to-real work. The bottleneck is still data efficiency and transfer, not generic model availability.",
-    "sourced_fact": "Genesis, Isaac Lab, and VLA training loops remain central to sim-to-real work. The bottleneck is still data efficiency and transfer, not generic model availability.",
-    "editorial_take": "Genesis, Isaac Lab, and VLA training loops remain central to sim-to-real work. The bottleneck is still data efficiency and transfer, not generic model availability."
+    "sourced_fact": "NVIDIA maintains Isaac Lab as an open-source framework for robot learning, while Genesis publishes a generative physics platform aimed at robotics simulation workflows.",
+    "editorial_take": "Engineers who can connect simulation, policy training, and hardware validation remain more differentiated than practitioners who only tune models in an offline benchmark."
   },
   {
-    "last_verified": "2026-07-01",
-    "sources": [],
+    "last_verified": "2026-08-11",
+    "sources": [
+      {
+        "label": "Cognition funding coverage",
+        "url": "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation/",
+        "published_at": "2026-05-27"
+      },
+      {
+        "label": "Model Context Protocol",
+        "url": "https://modelcontextprotocol.io/docs/getting-started/intro",
+        "published_at": ""
+      }
+    ],
     "rank": "06",
     "title": "Agentic Coding Tool / SWE-Agent Developer",
     "domain": "Generative AI",
     "signal": "MEDIUM",
     "fit": 80,
     "why": "Claude Code at 78.4%, Cursor at 67.2% SWE-bench — proving ground for agentic coding. Tooling, evals, and agent orchestration engineers in high demand. Target: Anthropic, Cognition, any coding-AI startup.",
-    "sourced_fact": "Claude Code at 78.4%, Cursor at 67.2% SWE-bench — proving ground for agentic coding. Tooling, evals, and agent orchestration engineers in high demand. Target: Anthropic, Cognition, any coding-AI startup.",
-    "editorial_take": "Claude Code at 78.4%, Cursor at 67.2% SWE-bench — proving ground for agentic coding. Tooling, evals, and agent orchestration engineers in high demand. Target: Anthropic, Cognition, any coding-AI startup."
+    "sourced_fact": "Cognition raised $1B in May 2026, while the Model Context Protocol documents a shared interface for connecting AI applications to tools and data sources.",
+    "editorial_take": "The defensible engineering work is moving toward evals, tool reliability, permissions, and orchestration rather than another thin coding-chat interface."
   },
   {
-    "last_verified": "2026-07-01",
-    "sources": [],
+    "last_verified": "2026-08-11",
+    "sources": [
+      {
+        "label": "Figure production update",
+        "url": "https://www.figure.ai/news/ramping-figure-03-production",
+        "published_at": "2026-04-29"
+      },
+      {
+        "label": "Apptronik Robot Park",
+        "url": "https://www.businessinsider.com/apptroniks-humanoid-robots-are-practicing-for-their-first-real-jobs-2026-6",
+        "published_at": "2026-06-30"
+      }
+    ],
     "rank": "07",
     "title": "Embedded Linux + Motor Control (Humanoid HW)",
     "domain": "Embedded",
     "signal": "MEDIUM",
     "fit": 76,
     "why": "Every humanoid robot has firmware under the policy layer. FOC motor control, CAN bus, Zephyr/FreeRTOS for actuators. Target: Figure HW, Apptronik HW, Unitree, 1X Technologies → Embedded SW Eng.",
-    "sourced_fact": "Every humanoid robot has firmware under the policy layer. FOC motor control, CAN bus, Zephyr/FreeRTOS for actuators. Target: Figure HW, Apptronik HW, Unitree, 1X Technologies → Embedded SW Eng.",
-    "editorial_take": "Every humanoid robot has firmware under the policy layer. FOC motor control, CAN bus, Zephyr/FreeRTOS for actuators. Target: Figure HW, Apptronik HW, Unitree, 1X Technologies → Embedded SW Eng."
+    "sourced_fact": "Figure reported rapid Figure 03 production scaling, and Apptronik described Robot Park as infrastructure for training and deploying Apollo systems.",
+    "editorial_take": "That production push raises the value of engineers who can make actuator firmware, embedded control, field diagnostics, and safety behavior reliable at fleet scale."
   },
   {
-    "last_verified": "2026-07-01",
-    "sources": [],
+    "last_verified": "2026-08-11",
+    "sources": [
+      {
+        "label": "Hailo CES 2026",
+        "url": "https://hailo.ai/company-overview/newsroom/news/hailo-accelerates-edge-ai-adoption-across-consumer-and-commercial-markets-demonstrated-live-at-ces-2026/",
+        "published_at": "2026-01-06"
+      },
+      {
+        "label": "Axelera AI funding",
+        "url": "https://axelera.ai/news/axelera-ai-secures-more-than-250-million-funding-on-global-commercial-growth",
+        "published_at": "2026-02-24"
+      }
+    ],
     "rank": "08",
     "title": "On-Device Multimodal Perception (Camera + LiDAR)",
     "domain": "Edge AI",
     "signal": "MEDIUM",
     "fit": 71,
     "why": "AV + humanoid perception runs at the edge. Jetson Thor adoption by Amazon Robotics + Boston Dynamics. Target: Waymo, Luminar, Ouster, Wayve, Mobileye → Perception / ML Eng.",
-    "sourced_fact": "AV + humanoid perception runs at the edge. Jetson Thor adoption by Amazon Robotics + Boston Dynamics. Target: Waymo, Luminar, Ouster, Wayve, Mobileye → Perception / ML Eng.",
-    "editorial_take": "AV + humanoid perception runs at the edge. Jetson Thor adoption by Amazon Robotics + Boston Dynamics. Target: Waymo, Luminar, Ouster, Wayve, Mobileye → Perception / ML Eng."
+    "sourced_fact": "Hailo demonstrated on-device generative AI across commercial edge systems at CES 2026, and Axelera raised more than $250M to expand edge-inference products and software.",
+    "editorial_take": "The strongest opportunity is in the runtime path between sensor input and deployable multimodal inference: quantization, scheduling, memory movement, and hardware-aware evaluation."
   }
 ];
 
 export const startups: Startup[] = [
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "BMW deploys Figure 03",
@@ -238,7 +289,7 @@ export const startups: Startup[] = [
     "editorial_take": "Figure now matters as an operations signal, not just a flashy humanoid narrative: the conversation is moving toward customer-site deployment and factory logistics."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "Apptronik Series A-X",
@@ -261,7 +312,7 @@ export const startups: Startup[] = [
     "editorial_take": "The read is now broader than fundraising: Apptronik is signaling that the real moat in humanoids is becoming data generation, customer pilots, and deployment learning loops."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "Skild AI Series C",
@@ -279,7 +330,7 @@ export const startups: Startup[] = [
     "editorial_take": "Skild remains one of the clearest external signals that investors still believe a general-purpose robot intelligence platform can compound across embodiments."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "Axelera AI funding",
@@ -297,7 +348,7 @@ export const startups: Startup[] = [
     "editorial_take": "That is a strong market signal that efficient inference hardware and toolchains still have room to differentiate beyond hyperscaler AI spending."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "Hailo CES 2026",
@@ -315,7 +366,7 @@ export const startups: Startup[] = [
     "editorial_take": "Hailo matters as a distribution signal: edge inference is no longer being pitched as niche robotics infrastructure."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "π0.5 paper",
@@ -439,42 +490,6 @@ export const startups: Startup[] = [
     "website": "https://etched.com",
     "sourced_fact": "Transformer-only ASIC (Sohu). 144M TOPS. Beats H100 for inference.",
     "editorial_take": "Interpretation: Etched remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [],
-    "name": "Neuromesh AI",
-    "stage": "Pre-Seed",
-    "domain": "Edge AI",
-    "signal": "Watch",
-    "note": "Ex-Qualcomm team. NPU compiler for MCUs. 2 pilots live.",
-    "website": "",
-    "sourced_fact": "Ex-Qualcomm team. NPU compiler for MCUs. 2 pilots live.",
-    "editorial_take": "Interpretation: Neuromesh AI remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [],
-    "name": "FirmWave",
-    "stage": "Series A",
-    "domain": "Embedded",
-    "signal": "Track",
-    "note": "$8M raised. OTA update infra for medical devices.",
-    "website": "",
-    "sourced_fact": "$8M raised. OTA update infra for medical devices.",
-    "editorial_take": "Interpretation: FirmWave remains a track-priority signal inside the Embedded map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [],
-    "name": "Inferix",
-    "stage": "Pre-Seed",
-    "domain": "Edge AI",
-    "signal": "Hot",
-    "note": "Vision LLM on RISC-V with <5ms latency. Open beta.",
-    "website": "",
-    "sourced_fact": "Vision LLM on RISC-V with <5ms latency. Open beta.",
-    "editorial_take": "Interpretation: Inferix remains a hot-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
     "last_verified": "2026-07-01",
@@ -655,24 +670,6 @@ export const startups: Startup[] = [
     "website": "https://appliedintuition.com",
     "sourced_fact": "Simulation + toolchain for AV/robotics validation. $1.5B valuation.",
     "editorial_take": "Interpretation: Applied Intuition remains a hot-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Shield AI",
-        "url": "https://shield.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "Shield AI",
-    "stage": "Series F",
-    "domain": "Physical AI",
-    "signal": "Watch",
-    "note": "AI pilot for defense drones (Hivemind). $2.8B valuation.",
-    "website": "https://shield.ai",
-    "sourced_fact": "AI pilot for defense drones (Hivemind). $2.8B valuation.",
-    "editorial_take": "Interpretation: Shield AI remains a watch-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
     "last_verified": "2026-07-01",
@@ -945,7 +942,7 @@ export const startups: Startup[] = [
     "editorial_take": "Interpretation: Mind Robotics remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-11",
     "sources": [
       {
         "label": "Cognition funding coverage",
@@ -1357,7 +1354,7 @@ export const papers: Paper[] = [
 export const posts: Post[] = [
   {
     "angle": "Take",
-    "text": "June 2026 check-in: edge AI is no longer a lab-only story.\n\nJuly 2026 check-in: edge AI is no longer a lab-only story.\n\nHailo's CES push, Axelera's funding, and the fact that deployment tooling still decides what actually ships all point the same direction.\n\n#EdgeAI #Robotics",
+    "text": "July 2026 check-in: edge AI is no longer a lab-only story.\n\nHailo's CES push, Axelera's funding, and the fact that deployment tooling still decides what actually ships all point the same direction.\n\n#EdgeAI #Robotics",
     "tags": [
       "EdgeAI",
       "Robotics"

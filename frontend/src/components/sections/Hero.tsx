@@ -10,6 +10,7 @@ interface HeroProps {
 export function Hero({ userName, brief, greeting = "Good morning," }: HeroProps) {
   const first = userName?.split(" ")[0] ?? "Engineer";
   const signals = brief?.signals?.slice(0, 3) ?? [];
+  const isLive = brief?.source_mode === "live";
 
   return (
     <div
@@ -37,8 +38,16 @@ export function Hero({ userName, brief, greeting = "Good morning," }: HeroProps)
             gap: 8,
           }}
         >
-          <span className="pulse-dot" style={{ width: 6, height: 6 }} />
-          Live Intelligence Feed
+          <span
+            className={isLive ? "pulse-dot" : ""}
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              background: isLive ? "var(--green)" : "var(--orange)",
+            }}
+          />
+          {isLive ? "Live Intelligence Feed" : "Curated Intelligence Snapshot"}
         </div>
         <h1
           style={{

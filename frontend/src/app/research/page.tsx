@@ -7,6 +7,7 @@ import { FilterTabs, matchesFilter } from "@/components/ui/FilterTabs";
 import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import { fetchAllResearch } from "@/lib/api";
+import { sortCuratedItems } from "@/lib/curated";
 import type { Paper } from "@/lib/types";
 import type { FilterTab } from "@/components/ui/FilterTabs";
 
@@ -25,7 +26,7 @@ export default function ResearchPage() {
 
   useEffect(() => {
     fetchAllResearch().then((data) => {
-      setPapers(data);
+      setPapers(sortCuratedItems(data, "paper"));
       setLoading(false);
     });
   }, []);
@@ -134,7 +135,7 @@ export default function ResearchPage() {
                       <SfTag key={t} color="muted">{t}</SfTag>
                     ))}
                   </div>
-                  <CuratedMeta lastVerified={p.last_verified} sources={p.sources} />
+                  <CuratedMeta kind="paper" lastVerified={p.last_verified} sources={p.sources} />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <BookmarkButton

@@ -8,6 +8,7 @@ import { SfTag } from "@/components/ui/sf-tag";
 import { WorkbenchActions } from "@/components/ui/WorkbenchActions";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import { useWorkbench } from "@/lib/useWorkbench";
+import { currentCuratedItems } from "@/lib/curated";
 import type { Startup, TagColor } from "@/lib/types";
 
 function signalColor(s: string): TagColor {
@@ -43,7 +44,9 @@ function HeatMeter({ level, color }: { level: number; color: string }) {
 
 export function StartupRadarClient({ startups }: { startups: Startup[] }) {
   const { isDismissed } = useWorkbench();
-  const visible = startups.filter((startup) => !isDismissed(`startup:${startup.website ?? startup.name}`)).slice(0, 4);
+  const visible = currentCuratedItems(startups, "startup")
+    .filter((startup) => !isDismissed(`startup:${startup.website ?? startup.name}`))
+    .slice(0, 4);
 
   return (
     <SfCard>
@@ -93,7 +96,7 @@ export function StartupRadarClient({ startups }: { startups: Startup[] }) {
                     {s.editorial_take ?? s.note}
                   </div>
                 </div>
-                <CuratedMeta lastVerified={s.last_verified} sources={s.sources} />
+                <CuratedMeta kind="startup" lastVerified={s.last_verified} sources={s.sources} />
               </div>
               <WorkbenchActions
                 dismissId={itemId}
@@ -109,6 +112,11 @@ export function StartupRadarClient({ startups }: { startups: Startup[] }) {
             </div>
           );
         })}
+        {visible.length === 0 && (
+          <div style={{ padding: "16px 0", fontSize: 12, color: "var(--text-3)", lineHeight: 1.5 }}>
+            No startups are inside the current verification window. View the archive for older watchlist entries.
+          </div>
+        )}
       </div>
     </SfCard>
   );

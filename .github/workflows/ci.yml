@@ -25,6 +25,8 @@ jobs:
           pip install -r requirements-dev.txt
       - name: Run tests
         run: pytest -q
+      - name: Validate curated content
+        run: python ../scripts/sync_mock_data.py --check
 
   frontend:
     name: Frontend (lint, test, build)

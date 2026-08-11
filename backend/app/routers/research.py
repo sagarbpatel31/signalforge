@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, BackgroundTasks
 from ..schemas import CuratedSource, Paper
 from ..mock_data import PAPERS
@@ -22,6 +24,7 @@ def _fix_arxiv_url(url: str) -> str:
 
 def _cache_to_papers(items: list, limit: int | None = None) -> list[Paper]:
     subset = items[:limit] if limit else items
+    verified_today = datetime.now(timezone.utc).date().isoformat()
     return [
         Paper(
             title=p["title"][:120],
@@ -29,7 +32,7 @@ def _cache_to_papers(items: list, limit: int | None = None) -> list[Paper]:
             tags=p.get("tags", [])[:3],
             read=p.get("read", False),
             url=_fix_arxiv_url(p.get("url", "")),
-            last_verified=p.get("last_verified", ""),
+            last_verified=p.get("last_verified") or verified_today,
             sources=(
                 [CuratedSource(label="Paper", url=_fix_arxiv_url(p.get("url", "")), published_at=p.get("venue", ""))]
                 if p.get("url")

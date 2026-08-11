@@ -1,8 +1,9 @@
 import re
+from datetime import datetime, timezone
 from typing import Optional
 from fastapi import APIRouter, BackgroundTasks, Depends
 from ..auth import optional_user
-from ..schemas import Role
+from ..schemas import CuratedSource, Role
 from ..mock_data import ROLES
 from ..ingestion.sources import read_cache
 from ..routers.profile import _load as _load_profile
@@ -147,14 +148,18 @@ def _job_to_role(job: dict) -> Role:
     tags = job.get("tags", [])
     color = next((_COLOR_MAP[t] for t in tags if t in _COLOR_MAP), "muted")
     location = job.get("location", "Remote")[:28]
+    url = job.get("url", "")
+    source = job.get("source", "")
     return Role(
         company=job.get("company", ""),
         role=job.get("title", ""),
         type=f"{job.get('job_type', 'Full-time')} · {location}",
-        signal=f"LIVE · {job.get('source', '')}",
+        signal=f"LIVE · {source}",
         color=color,
-        url=job.get("url", ""),
+        url=url,
         tags=tags,
+        last_verified=datetime.now(timezone.utc).date().isoformat(),
+        sources=[CuratedSource(label=source or "Job listing", url=url)] if url else [],
     )
 
 

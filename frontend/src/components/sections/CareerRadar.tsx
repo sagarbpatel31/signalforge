@@ -9,16 +9,22 @@ const COLOR_MAP: Record<string, TagColor> = {
 };
 
 function jobsToRoles(jobs: Record<string, unknown>[]): Role[] {
+  const verifiedToday = new Date().toISOString().slice(0, 10);
   return jobs.slice(0, 12).map((j) => {
     const tags = (j.tags as string[]) ?? [];
     const color: TagColor = tags.map((t) => COLOR_MAP[t]).find(Boolean) ?? "muted";
     const loc = ((j.location as string) ?? "Remote").slice(0, 28);
+    const url = (j.url as string) ?? "";
+    const source = (j.source as string) ?? "Cached job feed";
     return {
       company: (j.company as string) ?? "",
       role: (j.title as string) ?? "",
       type: `${(j.job_type as string) ?? "Full-time"} · ${loc}`,
-      signal: `LIVE · ${(j.source as string) ?? ""}`,
+      signal: `LIVE · ${source}`,
       color,
+      url,
+      last_verified: verifiedToday,
+      sources: url ? [{ label: source, url }] : [],
     };
   });
 }

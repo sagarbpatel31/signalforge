@@ -8,11 +8,13 @@ import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import { WorkbenchActions } from "@/components/ui/WorkbenchActions";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import { useWorkbench } from "@/lib/useWorkbench";
+import { currentCuratedItems } from "@/lib/curated";
 import type { Paper } from "@/lib/types";
 
 export function ResearchCornerClient({ papers }: { papers: Paper[] }) {
   const { isDismissed } = useWorkbench();
-  const visible = papers.filter((paper) => !isDismissed(`paper:${paper.url ?? paper.title}`));
+  const visible = currentCuratedItems(papers, "paper")
+    .filter((paper) => !isDismissed(`paper:${paper.url ?? paper.title}`));
 
   return (
     <SfCard>
@@ -44,7 +46,7 @@ export function ResearchCornerClient({ papers }: { papers: Paper[] }) {
                       <SfTag key={t} color="muted">{t}</SfTag>
                     ))}
                   </div>
-                  <CuratedMeta lastVerified={p.last_verified} sources={p.sources} />
+                  <CuratedMeta kind="paper" lastVerified={p.last_verified} sources={p.sources} />
                   <WorkbenchActions
                     dismissId={itemId}
                     task={{
@@ -65,6 +67,11 @@ export function ResearchCornerClient({ papers }: { papers: Paper[] }) {
             </div>
           );
         })}
+        {visible.length === 0 && (
+          <div style={{ padding: "16px 0", fontSize: 12, color: "var(--text-3)", lineHeight: 1.5 }}>
+            No papers are inside the current review window. Browse the research archive for older references.
+          </div>
+        )}
       </div>
     </SfCard>
   );

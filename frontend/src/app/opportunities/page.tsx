@@ -5,6 +5,7 @@ import { SubNav } from "@/components/nav/SubNav";
 import { fetchOpportunities } from "@/lib/api";
 import { SfTag } from "@/components/ui/sf-tag";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
+import { sortCuratedItems } from "@/lib/curated";
 import type { Opportunity } from "@/lib/types";
 
 function signalTagColor(signal: Opportunity["signal"]) {
@@ -26,7 +27,10 @@ export default function OpportunitiesPage() {
   useEffect(() => {
     fetchOpportunities().then((data) => {
       // Sort by fit descending (they may already be sorted, but enforce it)
-      const sorted = [...data].sort((a, b) => b.fit - a.fit);
+      const sorted = sortCuratedItems(
+        [...data].sort((a, b) => b.fit - a.fit),
+        "opportunity",
+      );
       setOpportunities(sorted);
       setLoaded(true);
     });
@@ -184,7 +188,7 @@ export default function OpportunitiesPage() {
                       {opp.editorial_take ?? opp.why}
                     </p>
                   </div>
-                  <CuratedMeta lastVerified={opp.last_verified} sources={opp.sources} />
+                  <CuratedMeta kind="opportunity" lastVerified={opp.last_verified} sources={opp.sources} />
                 </div>
               </div>
 

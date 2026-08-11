@@ -7,6 +7,7 @@ import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import { FilterTabs, matchesFilter } from "@/components/ui/FilterTabs";
 import { fetchAllCareer } from "@/lib/api";
+import { sortCuratedItems } from "@/lib/curated";
 import type { Role } from "@/lib/types";
 import type { FilterTab } from "@/components/ui/FilterTabs";
 
@@ -25,7 +26,7 @@ export default function CareerPage() {
 
   useEffect(() => {
     fetchAllCareer().then((data) => {
-      setRoles(data);
+      setRoles(sortCuratedItems(data, "role"));
       setLoading(false);
     });
   }, []);
@@ -45,6 +46,7 @@ export default function CareerPage() {
     }
     return result;
   }, [roles]);
+  const hasLiveRoles = roles.some((role) => role.signal.startsWith("LIVE"));
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -61,10 +63,12 @@ export default function CareerPage() {
             <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-3)", letterSpacing: "0.06em" }}>
               {loading
                 ? "LOADING…"
-                : `${filtered.length}${filtered.length !== roles.length ? ` / ${roles.length}` : ""} ROLES · LIVE · FILTERED FOR YOUR DOMAINS`}
+                : `${filtered.length}${filtered.length !== roles.length ? ` / ${roles.length}` : ""} ROLES · ${hasLiveRoles ? "LIVE" : "CURATED ARCHIVE"} · FILTERED FOR YOUR DOMAINS`}
             </p>
           </div>
-          <SfTag color="cyan" dot>LIVE</SfTag>
+          <SfTag color={hasLiveRoles ? "cyan" : "amber"} dot={hasLiveRoles}>
+            {hasLiveRoles ? "LIVE" : "FALLBACK"}
+          </SfTag>
         </div>
 
         {/* Filter tabs */}
@@ -137,7 +141,7 @@ export default function CareerPage() {
                     </span>
                     <SfTag color={role.color}>{role.signal}</SfTag>
                   </div>
-                  <CuratedMeta lastVerified={role.last_verified} sources={role.sources} />
+                  <CuratedMeta kind="role" lastVerified={role.last_verified} sources={role.sources} />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <BookmarkButton

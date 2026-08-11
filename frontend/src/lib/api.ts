@@ -7,14 +7,15 @@ import type { FeedMeta } from "./intelligence";
 import type { WorkbenchState } from "./useWorkbench";
 import type { Bookmarks } from "./useBookmarks";
 import { getUserHeaders } from "./identity";
+import { formatVerifiedDate } from "./curated";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
-/** Standard fetch — 60s ISR cache at Next.js layer (for structured data that rarely changes). */
+/** Structured fetch with deterministic bundled fallback when the API is unavailable. */
 async function apiFetch<T>(path: string, fallback: T, token?: string): Promise<T> {
   try {
     const res = await fetch(`${API_BASE}${path}`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
       headers: await getUserHeaders(token),
     });
     if (!res.ok) throw new Error(`${res.status}`);
@@ -40,6 +41,7 @@ async function apiFetchLive<T>(path: string, fallback: T, token?: string): Promi
 
 // ── Imported fallbacks (static mock data) ──────────────────────────────────
 import {
+  curatedSnapshotDate,
   signals as fallbackSignals,
   marketPulse as fallbackPulse,
   stats as fallbackStats,
@@ -78,7 +80,7 @@ export const fetchBrief = () =>
   apiFetch<BriefResponse>("/api/brief", {
     market_pulse: fallbackPulse,
     signals: fallbackSignals,
-    timestamp: "Curated fallback · Jul 1, 2026",
+    timestamp: `Curated fallback · ${formatVerifiedDate(curatedSnapshotDate)}`,
     source_mode: "fallback",
     source_detail: "API unavailable. Using built-in fallback brief.",
   });

@@ -6,6 +6,7 @@ import { SubNav } from "@/components/nav/SubNav";
 import { fetchStartups, fetchFlaggedStartups, triggerIngest } from "@/lib/api";
 import { SfTag } from "@/components/ui/sf-tag";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
+import { sortCuratedItems } from "@/lib/curated";
 import type { Startup, FlaggedCompany, TagColor } from "@/lib/types";
 
 function signalColor(s: string): TagColor {
@@ -24,7 +25,7 @@ export default function StartupsPage() {
   useEffect(() => {
     Promise.all([fetchStartups(), fetchFlaggedStartups()]).then(
       ([curatedData, flaggedData]) => {
-        setStartups(curatedData);
+        setStartups(sortCuratedItems(curatedData, "startup"));
         // Filter out fallback-shaped items (job_count 0 from fallback means cache empty)
         const liveItems = flaggedData.filter((f) => f.job_count > 0);
         setFlagged(liveItems);
@@ -332,7 +333,7 @@ export default function StartupsPage() {
                         {s.editorial_take ?? s.note}
                       </div>
                     </div>
-                    <CuratedMeta lastVerified={s.last_verified} sources={s.sources} />
+                    <CuratedMeta kind="startup" lastVerified={s.last_verified} sources={s.sources} />
                   </div>
                 </div>
                 <SfTag color={signalColor(s.signal)} dot={s.signal === "Hot"}>

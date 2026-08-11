@@ -8,11 +8,13 @@ import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import { WorkbenchActions } from "@/components/ui/WorkbenchActions";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import { useWorkbench } from "@/lib/useWorkbench";
+import { currentCuratedItems } from "@/lib/curated";
 import type { Role } from "@/lib/types";
 
 export function CareerRadarClient({ roles }: { roles: Role[] }) {
   const { isDismissed } = useWorkbench();
-  const visible = roles.filter((role) => !isDismissed(`role:${role.url ?? `${role.company}-${role.role}`}`));
+  const visible = currentCuratedItems(roles, "role")
+    .filter((role) => !isDismissed(`role:${role.url ?? `${role.company}-${role.role}`}`));
 
   return (
     <SfCard>
@@ -40,7 +42,7 @@ export function CareerRadarClient({ roles }: { roles: Role[] }) {
                   <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-4)", marginBottom: 8 }}>
                     {r.type}
                   </div>
-                  <CuratedMeta lastVerified={r.last_verified} sources={r.sources} />
+                  <CuratedMeta kind="role" lastVerified={r.last_verified} sources={r.sources} />
                   <WorkbenchActions
                     dismissId={itemId}
                     task={{
@@ -61,6 +63,11 @@ export function CareerRadarClient({ roles }: { roles: Role[] }) {
             </div>
           );
         })}
+        {visible.length === 0 && (
+          <div style={{ padding: "16px 0", fontSize: 12, color: "var(--text-3)", lineHeight: 1.5 }}>
+            No roles are currently verified. Live ingestion will repopulate this preview; older listings remain in the career archive.
+          </div>
+        )}
       </div>
     </SfCard>
   );

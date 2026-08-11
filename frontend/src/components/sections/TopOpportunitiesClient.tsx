@@ -8,6 +8,7 @@ import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import { WorkbenchActions } from "@/components/ui/WorkbenchActions";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
 import { useWorkbench } from "@/lib/useWorkbench";
+import { currentCuratedItems } from "@/lib/curated";
 import type { RankedOpportunity } from "@/lib/intelligence";
 import type { TagColor, UserProfile } from "@/lib/types";
 
@@ -34,7 +35,8 @@ export function TopOpportunitiesClient({
   skillSlug: Record<string, string>;
 }) {
   const { isDismissed } = useWorkbench();
-  const visible = opportunities.filter((item) => !isDismissed(`opportunity:${item.title}`));
+  const visible = currentCuratedItems(opportunities, "opportunity")
+    .filter((item) => !isDismissed(`opportunity:${item.title}`));
 
   return (
     <SfCard>
@@ -102,7 +104,7 @@ export function TopOpportunitiesClient({
                     </div>
                   </div>
                 </div>
-                <CuratedMeta lastVerified={op.last_verified} sources={op.sources} />
+                <CuratedMeta kind="opportunity" lastVerified={op.last_verified} sources={op.sources} />
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 8 }}>
                   {op.matchReasons.map((reason) => (
                     <span
@@ -166,7 +168,7 @@ export function TopOpportunitiesClient({
         })}
         {visible.length === 0 && (
           <div style={{ padding: "12px 0", fontSize: 12, color: "var(--text-3)" }}>
-            All opportunities dismissed. Refresh the page later or restore from local storage by clearing browser state.
+            No current opportunities remain in this view. Open the full opportunity archive to review stale or dismissed signals.
           </div>
         )}
       </div>
