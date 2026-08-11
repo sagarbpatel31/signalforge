@@ -5,6 +5,7 @@ import Link from "next/link";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { InlineNotice } from "@/components/ui/InlineNotice";
 import { generateBriefStream } from "@/lib/api";
 import type { BriefResponse } from "@/lib/api";
 
@@ -12,17 +13,19 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
   const [brief, setBrief] = useState(initialBrief);
   const [loading, setLoading] = useState(false);
   const [streamText, setStreamText] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   async function handleRegenerate() {
     setLoading(true);
     setStreamText("");
+    setError(null);
     try {
       const result = await generateBriefStream((chunk) => {
         setStreamText((prev) => prev + chunk);
       });
       setBrief(result);
     } catch {
-      // keep existing brief on error
+      setError("AI brief generation is unavailable. The current verified brief is still shown.");
     } finally {
       setLoading(false);
       setStreamText("");
@@ -35,15 +38,18 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
   return (
     <SfCard glow>
       <div
+        className="section-toolbar"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          gap: 12,
+          flexWrap: "wrap",
           marginBottom: 16,
         }}
       >
         <SectionLabel icon="📡">Today&apos;s Brief</SectionLabel>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div className="section-toolbar-actions" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <Link
             href="/news"
             style={{
@@ -80,6 +86,8 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
           </button>
         </div>
       </div>
+
+      {error && <InlineNotice message={error} onRetry={handleRegenerate} />}
 
       {/* Streaming indicator */}
       {loading && streamText && (
@@ -141,6 +149,7 @@ export function TodaysBrief({ initialBrief }: { initialBrief: BriefResponse }) {
           {signals.map((s, i) => (
             <div
               key={i}
+              className="brief-signal-row"
               style={{
                 display: "grid",
                 gridTemplateColumns: "120px 36px 1fr",

@@ -88,6 +88,7 @@ export default async function DashboardPage() {
       />
 
       <main
+        className="dashboard-main"
         style={{
           position: "relative",
           zIndex: 1,

@@ -36,7 +36,8 @@ export function TopOpportunitiesClient({
 }) {
   const { isDismissed } = useWorkbench();
   const visible = currentCuratedItems(opportunities, "opportunity")
-    .filter((item) => !isDismissed(`opportunity:${item.title}`));
+    .filter((item) => !isDismissed(`opportunity:${item.title}`))
+    .slice(0, 3);
 
   return (
     <SfCard>
@@ -49,6 +50,7 @@ export function TopOpportunitiesClient({
           return (
             <div
               key={op.title}
+              className="opportunity-row"
               style={{
                 display: "grid",
                 gridTemplateColumns: "28px 1fr 132px 52px",
@@ -125,7 +127,7 @@ export function TopOpportunitiesClient({
                   ))}
                 </div>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start" }}>
+              <div className="opportunity-meta" style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start" }}>
                 <SfTag color={domainColor(op.domain)}>{op.domain}</SfTag>
                 <SfTag color={signalColor(op.signal)}>{op.signal}</SfTag>
                 <WorkbenchActions
@@ -140,7 +142,7 @@ export function TopOpportunitiesClient({
                   }}
                 />
               </div>
-              <div style={{ textAlign: "right" }}>
+              <div className="opportunity-fit" style={{ textAlign: "right" }}>
                 <div
                   style={{
                     fontFamily: "var(--font-mono)",

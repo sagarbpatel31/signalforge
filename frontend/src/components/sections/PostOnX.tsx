@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { InlineNotice } from "@/components/ui/InlineNotice";
 import { refreshPosts } from "@/lib/api";
 import type { Post } from "@/lib/types";
 
@@ -44,6 +45,7 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
   const [drafts, setDrafts] = useState(initialPosts.map((post) => post.text));
   const [loading, setLoading] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied">("idle");
+  const [error, setError] = useState<string | null>(null);
 
   const post = posts[selected];
   const draft = drafts[selected] ?? post.text;
@@ -62,21 +64,29 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
 
   async function handleRegenerate() {
     setLoading(true);
+    setError(null);
     try {
       const fresh = await refreshPosts();
       setPosts(fresh);
       setDrafts(fresh.map((item) => item.text));
       setSelected(0);
       setCopyState("idle");
+    } catch {
+      setError("Fresh post ideas could not be generated. Your current draft is unchanged.");
     } finally {
       setLoading(false);
     }
   }
 
   async function handleCopy() {
-    await navigator.clipboard.writeText(draft);
-    setCopyState("copied");
-    window.setTimeout(() => setCopyState("idle"), 1400);
+    setError(null);
+    try {
+      await navigator.clipboard.writeText(draft);
+      setCopyState("copied");
+      window.setTimeout(() => setCopyState("idle"), 1400);
+    } catch {
+      setError("Clipboard access was blocked. Select the draft text and copy it manually.");
+    }
   }
 
   return (
@@ -114,6 +124,13 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
           ))}
         </div>
       </div>
+
+      {error && (
+        <InlineNotice
+          message={error}
+          onRetry={error.startsWith("Clipboard") ? handleCopy : handleRegenerate}
+        />
+      )}
 
       <div style={{ marginBottom: 10 }}>
         <div

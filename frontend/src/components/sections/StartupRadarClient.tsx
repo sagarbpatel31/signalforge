@@ -46,11 +46,11 @@ export function StartupRadarClient({ startups }: { startups: Startup[] }) {
   const { isDismissed } = useWorkbench();
   const visible = currentCuratedItems(startups, "startup")
     .filter((startup) => !isDismissed(`startup:${startup.website ?? startup.name}`))
-    .slice(0, 4);
+    .slice(0, 3);
 
   return (
     <SfCard>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+      <div className="section-toolbar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
         <SectionLabel icon="🚀">Startup Radar</SectionLabel>
         <Link href="/startups" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--blue)", textDecoration: "none", letterSpacing: "0.04em" }}>
           View all →
@@ -63,8 +63,8 @@ export function StartupRadarClient({ startups }: { startups: Startup[] }) {
           const itemId = `startup:${s.website ?? s.name}`;
           return (
             <div key={itemId} style={{ padding: "12px 0", borderBottom: i < visible.length - 1 ? "1px solid var(--hairline)" : "none" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div className="radar-item-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                   {s.website ? (
                     <a href={s.website} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600, fontSize: 13, color: "var(--text)", textDecoration: "none" }}>
                       {s.name} ↗

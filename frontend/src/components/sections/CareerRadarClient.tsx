@@ -14,11 +14,12 @@ import type { Role } from "@/lib/types";
 export function CareerRadarClient({ roles }: { roles: Role[] }) {
   const { isDismissed } = useWorkbench();
   const visible = currentCuratedItems(roles, "role")
-    .filter((role) => !isDismissed(`role:${role.url ?? `${role.company}-${role.role}`}`));
+    .filter((role) => !isDismissed(`role:${role.url ?? `${role.company}-${role.role}`}`))
+    .slice(0, 4);
 
   return (
     <SfCard>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+      <div className="section-toolbar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
         <SectionLabel icon="💼">Career Radar</SectionLabel>
         <Link href="/career" style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--blue)", textDecoration: "none", letterSpacing: "0.04em" }}>
           View all →
@@ -29,8 +30,8 @@ export function CareerRadarClient({ roles }: { roles: Role[] }) {
           const itemId = `role:${r.url ?? `${r.company}-${r.role}`}`;
           return (
             <div key={itemId} style={{ padding: "10px 0", borderBottom: i < visible.length - 1 ? "1px solid var(--hairline)" : "none" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                <div>
+              <div className="radar-item-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 2 }}>
                     {r.url ? (
                       <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 600 }}>

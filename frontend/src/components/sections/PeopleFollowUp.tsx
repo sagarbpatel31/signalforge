@@ -7,7 +7,7 @@ import { SfTag } from "@/components/ui/sf-tag";
 import type { Person, TagColor } from "@/lib/types";
 import { PEOPLE_POOL } from "@/lib/people-pool";
 
-const BATCH_SIZE = 6; // show 6 people at a time
+const BATCH_SIZE = 3;
 const ROTATION_DAYS = 2; // rotate every 2 days
 const LS_KEY = "sf-followed-people"; // localStorage key
 
@@ -94,6 +94,7 @@ export function PeopleFollowUp() {
   return (
     <SfCard>
       <div
+        className="section-toolbar"
         style={{
           display: "flex",
           alignItems: "center",
@@ -147,6 +148,7 @@ export function PeopleFollowUp() {
               }}
             >
               <div
+                className="people-row"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -154,7 +156,7 @@ export function PeopleFollowUp() {
                   marginBottom: 3,
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
                   {/* Gradient avatar */}
                   <div
                     style={{
@@ -210,7 +212,7 @@ export function PeopleFollowUp() {
                   </div>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div className="people-actions" style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   {!isFollowed && (
                     <SfTag color={urgencyColor(p.urgency)}>{p.urgency}</SfTag>
                   )}
@@ -238,6 +240,7 @@ export function PeopleFollowUp() {
               </div>
 
               <div
+                className="people-context"
                 style={{
                   fontSize: 12,
                   color: "var(--text-2)",

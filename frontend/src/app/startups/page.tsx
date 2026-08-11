@@ -6,6 +6,7 @@ import { SubNav } from "@/components/nav/SubNav";
 import { fetchStartups, fetchFlaggedStartups, triggerIngest } from "@/lib/api";
 import { SfTag } from "@/components/ui/sf-tag";
 import { CuratedMeta } from "@/components/ui/CuratedMeta";
+import { InlineNotice } from "@/components/ui/InlineNotice";
 import { sortCuratedItems } from "@/lib/curated";
 import type { Startup, FlaggedCompany, TagColor } from "@/lib/types";
 
@@ -21,27 +22,40 @@ export default function StartupsPage() {
   const [loaded, setLoaded] = useState(false);
   const [ingesting, setIngesting] = useState(false);
   const [ingestDone, setIngestDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([fetchStartups(), fetchFlaggedStartups()]).then(
-      ([curatedData, flaggedData]) => {
+    let cancelled = false;
+    Promise.all([fetchStartups(), fetchFlaggedStartups()])
+      .then(([curatedData, flaggedData]) => {
+        if (cancelled) return;
         setStartups(sortCuratedItems(curatedData, "startup"));
         // Filter out fallback-shaped items (job_count 0 from fallback means cache empty)
         const liveItems = flaggedData.filter((f) => f.job_count > 0);
         setFlagged(liveItems);
         setLoaded(true);
-      }
-    );
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setError("Startup data could not be loaded. Check the API connection and retry.");
+        setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function handleIngest() {
     setIngesting(true);
+    setError(null);
     try {
       await triggerIngest();
       const flaggedData = await fetchFlaggedStartups();
       const liveItems = flaggedData.filter((f) => f.job_count > 0);
       setFlagged(liveItems);
       setIngestDone(true);
+    } catch {
+      setError("Live startup ingestion failed. The curated radar remains available below.");
     } finally {
       setIngesting(false);
     }
@@ -52,6 +66,8 @@ export default function StartupsPage() {
       <SubNav backLabel="Dashboard" />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px 60px" }}>
+        {error && <InlineNotice message={error} onRetry={handleIngest} retryLabel="Retry ingestion" />}
+
         {/* ── Actively Hiring Section ─────────────────────────────── */}
         <div style={{ marginBottom: 36 }}>
           <div

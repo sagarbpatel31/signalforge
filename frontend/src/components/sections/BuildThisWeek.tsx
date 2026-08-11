@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SfTag } from "@/components/ui/sf-tag";
+import { InlineNotice } from "@/components/ui/InlineNotice";
 import { generateTasks } from "@/lib/api";
 import { useWorkbench } from "@/lib/useWorkbench";
 import type { TagColor, Task } from "@/lib/types";
@@ -19,6 +20,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [regen, setRegen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { state, removeTask } = useWorkbench();
 
   const mergedTasks = [...state.customTasks, ...tasks];
@@ -40,13 +42,14 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
 
   async function handleRegen() {
     setRegen(true);
+    setError(null);
     try {
       const fresh = await generateTasks();
       setTasks(fresh);
       setDone({});
       setExpanded(new Set());
     } catch {
-      // keep existing
+      setError("AI task generation is unavailable. Existing tasks remain available.");
     } finally {
       setRegen(false);
     }
@@ -58,10 +61,13 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
   return (
     <SfCard>
       <div
+        className="section-toolbar"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          gap: 10,
+          flexWrap: "wrap",
           marginBottom: 4,
         }}
       >
@@ -87,6 +93,8 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
         </div>
       </div>
 
+      {error && <InlineNotice message={error} onRetry={handleRegen} />}
+
       {/* Progress bar */}
       <div className="progress-bar" style={{ marginBottom: 14 }}>
         <div className="progress-fill" style={{ width: `${pct}%` }} />
@@ -108,6 +116,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
             >
               {/* Row */}
               <div
+                className="task-row"
                 onClick={() => hasDesc && toggleExpand(taskId)}
                 style={{
                   display: "grid",
@@ -145,6 +154,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
                 <SfTag color={priorityColor(t.priority)}>{t.priority}</SfTag>
 
                 <span
+                  className="task-title"
                   style={{
                     fontSize: 12,
                     fontWeight: 500,
@@ -158,6 +168,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
 
                 {isCustom && (
                   <button
+                    className="task-clear"
                     onClick={(e) => {
                       e.stopPropagation();
                       removeTask(t.id);
@@ -180,6 +191,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
                 {/* Expand chevron */}
                 {hasDesc ? (
                   <span
+                    className="task-chevron"
                     style={{
                       color: "var(--text-4)",
                       fontSize: 10,
@@ -192,10 +204,11 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
                     ▶
                   </span>
                 ) : (
-                  <span />
+                  <span className="task-chevron" />
                 )}
 
                 <span
+                  className="task-time"
                   style={{
                     fontFamily: "var(--font-mono)",
                     fontSize: 10,

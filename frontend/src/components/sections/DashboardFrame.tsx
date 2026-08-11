@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 interface DashboardFrameProps {
   feedLabel: string;
@@ -87,14 +87,14 @@ export function DashboardFrame({
         </button>
       </div>
 
-      {hero}
-      {!focusMode && statBar}
-      {brief}
-      {opportunities}
-      {!focusMode && radarRow}
-      {actionRow}
-      {!focusMode && weekly}
-      {footer}
+      <Fragment key="hero">{hero}</Fragment>
+      {!focusMode && <Fragment key="stats">{statBar}</Fragment>}
+      <Fragment key="brief">{brief}</Fragment>
+      <Fragment key="opportunities">{opportunities}</Fragment>
+      {!focusMode && <Fragment key="radar">{radarRow}</Fragment>}
+      <Fragment key="actions">{actionRow}</Fragment>
+      {!focusMode && <Fragment key="weekly">{weekly}</Fragment>}
+      <Fragment key="footer">{footer}</Fragment>
     </>
   );
 }

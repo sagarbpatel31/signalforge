@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchStats } from "@/lib/api";
+import { stats as fallbackStats } from "@/lib/mock-data";
 import type { Stat } from "@/lib/types";
 
 // Route mapping for each stat label
@@ -13,15 +14,6 @@ const STAT_ROUTES: Record<string, string> = {
   "Hiring Signals": "/career",
   "Research Papers": "/research",
 };
-
-// Placeholder stats shown while loading — match shape of real data
-const SKELETON: Stat[] = [
-  { label: "Signals Tracked",  value: "—",  delta: "loading…", up: null },
-  { label: "Opportunities",    value: "—",  delta: "loading…", up: null },
-  { label: "Startups Flagged", value: "—",  delta: "loading…", up: null },
-  { label: "Hiring Signals",   value: "—",  delta: "loading…", up: null },
-  { label: "Research Papers",  value: "—",  delta: "loading…", up: null },
-];
 
 function Sparkline({ data, color }: { data: number[]; color: string }) {
   const W = 52, H = 22;
@@ -57,25 +49,24 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 }
 
 export function StatBar() {
-  const [stats, setStats] = useState<Stat[]>(SKELETON);
-  const [loaded, setLoaded] = useState(false);
+  const [stats, setStats] = useState<Stat[]>(fallbackStats);
 
   useEffect(() => {
-    fetchStats().then((data) => {
-      if (data && data.length > 0) setStats(data);
-      setLoaded(true);
+    let cancelled = false;
+    void fetchStats().then((data) => {
+      if (!cancelled && data.length > 0) setStats(data);
     });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
     <div
-      className="card"
+      className="card stat-bar"
       style={{
         padding: 0,
         marginBottom: 24,
-        display: "grid",
-        gridTemplateColumns: `repeat(${stats.length}, 1fr)`,
-        overflow: "hidden",
       }}
     >
       {stats.map((s, i) => {
@@ -85,7 +76,6 @@ export function StatBar() {
             : s.up === false
             ? "var(--red)"
             : "var(--blue)";
-              const isLoading = !loaded;
         const href = STAT_ROUTES[s.label] ?? "/";
 
         return (
@@ -98,8 +88,7 @@ export function StatBar() {
               display: "block",
               borderRight:
                 i < stats.length - 1 ? "1px solid var(--hairline)" : "none",
-              transition: "background 0.15s, opacity 0.3s",
-              opacity: isLoading ? 0.5 : 1,
+              transition: "background 0.15s",
             }}
             className="stat-bar-cell"
           >

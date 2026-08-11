@@ -3,20 +3,23 @@
 import { useState } from "react";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
+import { InlineNotice } from "@/components/ui/InlineNotice";
 import { generateWeekly } from "@/lib/api";
 import type { WeeklyResponse } from "@/lib/api";
 
 export function WeeklyStrategicReview({ initialWeekly }: { initialWeekly: WeeklyResponse }) {
   const [data, setData] = useState<WeeklyResponse>(initialWeekly);
   const [regen, setRegen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleRegen() {
     setRegen(true);
+    setError(null);
     try {
       const fresh = await generateWeekly();
       setData(fresh);
     } catch {
-      // keep existing
+      setError("AI review generation is unavailable. The previous review remains visible.");
     } finally {
       setRegen(false);
     }
@@ -26,7 +29,7 @@ export function WeeklyStrategicReview({ initialWeekly }: { initialWeekly: Weekly
 
   return (
     <SfCard>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+      <div className="section-toolbar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
         <SectionLabel icon="📊">Weekly Strategic Review</SectionLabel>
         <button
           onClick={handleRegen}
@@ -38,7 +41,9 @@ export function WeeklyStrategicReview({ initialWeekly }: { initialWeekly: Weekly
         </button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24 }}>
+      {error && <InlineNotice message={error} onRetry={handleRegen} />}
+
+      <div className="weekly-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24 }}>
         {/* Wins */}
         <div>
           <div

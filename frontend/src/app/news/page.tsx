@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { SubNav } from "@/components/nav/SubNav";
 import { SfTag } from "@/components/ui/sf-tag";
 import { FilterTabs, matchesFilter } from "@/components/ui/FilterTabs";
+import { InlineNotice } from "@/components/ui/InlineNotice";
 import { fetchFeedMeta, fetchNewsItems, triggerIngest } from "@/lib/api";
 import { summarizeFeedStatus } from "@/lib/intelligence";
 import type { NewsItem, TagColor } from "@/lib/types";
@@ -53,6 +54,7 @@ export default function NewsPage() {
   const [lastRefresh, setLastRefresh] = useState<string>("");
   const [feedDetail, setFeedDetail] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [error, setError] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     const tab = NEWS_FILTERS.find((f) => f.key === activeFilter);
@@ -72,11 +74,16 @@ export default function NewsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const [data, meta] = await Promise.all([fetchNewsItems(), fetchFeedMeta()]);
       setItems(data);
       setFeedDetail(summarizeFeedStatus(meta).detail);
       if (data.length > 0) setLastRefresh(new Date().toLocaleTimeString());
+      return data;
+    } catch {
+      setError("The feed could not be loaded. Check the API connection and try again.");
+      return [];
     } finally {
       setLoading(false);
     }
@@ -86,17 +93,19 @@ export default function NewsPage() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      await load();
+      const data = await load();
       // If still empty after load, trigger refresh + reload after delay
-      const data = await fetchNewsItems();
       if (cancelled || data.length > 0) return;
       setIngesting(true);
+      setError(null);
       try {
         await triggerIngest();
         // Wait for the background fetch to write to Redis, then reload
         await new Promise(r => setTimeout(r, 3000));
         if (!cancelled) await load();
-      } catch { /* silent */ } finally {
+      } catch {
+        if (!cancelled) setError("Automatic feed ingestion failed. You can retry it manually.");
+      } finally {
         if (!cancelled) setIngesting(false);
       }
     })();
@@ -105,11 +114,14 @@ export default function NewsPage() {
 
   async function handleRefresh() {
     setIngesting(true);
+    setError(null);
     try {
       await triggerIngest();
       await new Promise(r => setTimeout(r, 2000));
       await load();
-    } catch { /* silent */ } finally {
+    } catch {
+      setError("Feed refresh failed. Existing cached signals are unchanged.");
+    } finally {
       setIngesting(false);
     }
   }
@@ -186,6 +198,8 @@ export default function NewsPage() {
             {ingesting ? "Fetching…" : "⟳ Refresh Feed"}
           </button>
         </div>
+
+        {error && <InlineNotice message={error} onRetry={handleRefresh} retryLabel="Retry refresh" />}
 
         {/* Filter tabs */}
         {!loading && items.length > 0 && (
