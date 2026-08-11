@@ -52,6 +52,10 @@ describe("rankOpportunitiesForProfile", () => {
       signal: "MEDIUM",
       fit: 76,
       why: "Bridge for robotics teams building agent workflows.",
+      sourced_fact: "Robotics teams are adopting agent workflows.",
+      editorial_take: "A middleware bridge is a strong fit for this profile.",
+      last_verified: "2026-08-11",
+      sources: [{ label: "Example", url: "https://example.com", published_at: "2026-08-11" }],
     },
     {
       rank: "02",
@@ -60,6 +64,10 @@ describe("rankOpportunitiesForProfile", () => {
       signal: "HIGH",
       fit: 88,
       why: "Medical compliance tooling opportunity.",
+      sourced_fact: "Medical firmware requires compliance tooling.",
+      editorial_take: "This is less aligned with the active profile.",
+      last_verified: "2026-08-11",
+      sources: [{ label: "Example", url: "https://example.com", published_at: "2026-08-11" }],
     },
   ];
 

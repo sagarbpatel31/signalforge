@@ -10,12 +10,22 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export const SESSION_COOKIE_NAME = "sf_session";
+export const IDENTITY_CHANGE_EVENT = "sf-identity-changed";
 const SESSION_STORAGE_KEY = "sf-session";
+
+type AccountTokenProvider = () => Promise<string | null>;
+
+let accountUserId = "";
+let accountTokenProvider: AccountTokenProvider | null = null;
 
 /** The id half of `<user_id>.<signature>` — safe to use for local namespacing. */
 export function userIdFromToken(token: string): string {
   const id = token.split(".")[0] ?? "";
   return id.startsWith("u_") ? id : "";
+}
+
+export function isLegacySessionToken(token: string): boolean {
+  return Boolean(userIdFromToken(token));
 }
 
 function readBrowserCookie(name: string): string {
@@ -50,10 +60,65 @@ export function clearSession() {
   document.cookie = `${SESSION_COOKIE_NAME}=; Path=/; Max-Age=0; SameSite=Lax`;
 }
 
-/** Return the current session token, minting one if the browser has none. */
+export function configureAccountIdentity(
+  userId: string,
+  tokenProvider: AccountTokenProvider
+) {
+  accountUserId = userId;
+  accountTokenProvider = tokenProvider;
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(IDENTITY_CHANGE_EVENT));
+  }
+}
+
+export function clearAccountIdentity() {
+  accountUserId = "";
+  accountTokenProvider = null;
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(IDENTITY_CHANGE_EVENT));
+  }
+}
+
+export function getIdentityKey(): string {
+  if (accountUserId) return `clerk:${accountUserId}`;
+  return userIdFromToken(getBrowserSessionToken()) || "anon";
+}
+
+async function getAccountToken(): Promise<string> {
+  if (!accountTokenProvider) return "";
+  try {
+    return (await accountTokenProvider()) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+async function legacySessionIsValid(token: string): Promise<boolean | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/session`, {
+      cache: "no-store",
+      headers: { "X-SignalForge-Token": token },
+    });
+    if (!res.ok) return null;
+    const status = (await res.json()) as { authenticated?: boolean };
+    return status.authenticated === true;
+  } catch {
+    // Do not rotate a token merely because the local API is temporarily down.
+    return null;
+  }
+}
+
+/** Return the current identity token, replacing explicitly invalid local sessions. */
 export async function ensureSession(): Promise<string> {
+  const accountToken = await getAccountToken();
+  if (accountToken) return accountToken;
+
   const existing = getBrowserSessionToken();
-  if (existing) return existing;
+  if (existing && isLegacySessionToken(existing)) {
+    const valid = await legacySessionIsValid(existing);
+    if (valid !== false) return existing;
+  }
+  if (existing) clearSession();
 
   const res = await fetch(`${API_BASE}/api/auth/session`, { method: "POST" });
   if (!res.ok) throw new Error(`Could not start a session (${res.status})`);
@@ -67,9 +132,14 @@ export async function getUserHeaders(
 ): Promise<Record<string, string>> {
   // On the server the token has to be passed down explicitly — there is no
   // localStorage, and cookies() is only reachable from Server Components.
-  const token =
-    overrideToken ??
-    (typeof window !== "undefined" ? getBrowserSessionToken() : "");
+  const token = overrideToken ?? (
+    typeof window !== "undefined"
+      ? (await getAccountToken()) || getBrowserSessionToken()
+      : ""
+  );
 
-  return token ? { "X-SignalForge-Token": token } : {};
+  if (!token) return {};
+  return isLegacySessionToken(token)
+    ? { "X-SignalForge-Token": token }
+    : { Authorization: `Bearer ${token}` };
 }

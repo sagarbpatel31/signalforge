@@ -4,61 +4,33 @@ import { useState, useEffect } from "react";
 import { SubNav } from "@/components/nav/SubNav";
 import { SfCard } from "@/components/ui/sf-card";
 import { SectionLabel } from "@/components/ui/section-label";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
-interface DigestSection {
-  title: string;
-  items: string[];
-}
-
-interface Digest {
-  headline: string;
-  sections: DigestSection[];
-  action_item: string;
-  generated_at?: string;
-}
-
-async function fetchDigest(): Promise<Digest | null> {
-  try {
-    // Try cached digest first (from KV), fall back to generating
-    const res = await fetch(`${API_BASE}/api/generate/digest`, {
-      method: "POST",
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    return res.json() as Promise<Digest>;
-  } catch {
-    return null;
-  }
-}
+import { fetchGeneratedDigest, generateDigest } from "@/lib/api";
+import type { DigestResponse } from "@/lib/api";
 
 export default function DigestPage() {
-  const [digest, setDigest] = useState<Digest | null>(null);
+  const [digest, setDigest] = useState<DigestResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [regen, setRegen] = useState(false);
 
   useEffect(() => {
-    // Try to get cached digest from API
-    fetch(`${API_BASE}/api/feeds/digest`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => {
-        if (d?.headline) {
-          setDigest(d as Digest);
-          setLoading(false);
-        } else {
-          // No cache — generate now
-          fetchDigest().then((d) => { setDigest(d); setLoading(false); });
-        }
-      })
-      .catch(() => {
-        fetchDigest().then((d) => { setDigest(d); setLoading(false); });
-      });
+    let cancelled = false;
+    async function loadDigest() {
+      const cached = await fetchGeneratedDigest();
+      const data = cached?.headline ? cached : await generateDigest();
+      if (!cancelled) {
+        setDigest(data);
+        setLoading(false);
+      }
+    }
+    void loadDigest();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function handleRegen() {
     setRegen(true);
-    const d = await fetchDigest();
+    const d = await generateDigest();
     if (d) setDigest(d);
     setRegen(false);
   }

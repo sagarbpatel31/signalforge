@@ -74,6 +74,20 @@ export interface WeeklyResponse {
   next_week_focus: string;
 }
 
+export interface DigestResponse {
+  headline: string | null;
+  sections: Array<{ title: string; items: string[] }>;
+  action_item: string | null;
+  generated_at?: string | null;
+}
+
+export interface MigrationResponse {
+  migrated: boolean;
+  profile_migrated: boolean;
+  workbench_items: number;
+  bookmarks: number;
+}
+
 // ── Typed fetchers ─────────────────────────────────────────────────────────
 
 export const fetchBrief = () =>
@@ -106,8 +120,8 @@ export const fetchResearch = () =>
 export const fetchAllResearch = () =>
   apiFetchLive<Paper[]>("/api/research/all", fallbackPapers);
 
-export const fetchPosts = () =>
-  apiFetch<Post[]>("/api/posts", fallbackPosts);
+export const fetchPosts = (token?: string) =>
+  apiFetch<Post[]>("/api/posts", fallbackPosts, token);
 
 export const fetchTasks = () =>
   apiFetch<Task[]>("/api/tasks", fallbackTasks);
@@ -229,32 +243,47 @@ export async function triggerIngest(): Promise<{ status: string }> {
 }
 
 export async function generateBrief(): Promise<BriefResponse> {
-  const res = await fetch(`${API_BASE}/api/generate/brief`, { method: "POST" });
+  const res = await fetch(`${API_BASE}/api/generate/brief`, {
+    method: "POST",
+    headers: await getUserHeaders(),
+  });
   if (!res.ok) throw new Error(`generate/brief failed: ${res.status}`);
   return res.json() as Promise<BriefResponse>;
 }
 
 export async function generatePosts(): Promise<Post[]> {
-  const res = await fetch(`${API_BASE}/api/generate/posts`, { method: "POST" });
+  const res = await fetch(`${API_BASE}/api/generate/posts`, {
+    method: "POST",
+    headers: await getUserHeaders(),
+  });
   if (!res.ok) throw new Error(`generate/posts failed: ${res.status}`);
   return res.json() as Promise<Post[]>;
 }
 
 /** Refresh post drafts from live news cache — no Claude needed. */
 export async function refreshPosts(): Promise<Post[]> {
-  const res = await fetch(`${API_BASE}/api/posts/refresh`, { method: "POST" });
+  const res = await fetch(`${API_BASE}/api/posts/refresh`, {
+    method: "POST",
+    headers: await getUserHeaders(),
+  });
   if (!res.ok) throw new Error(`posts/refresh failed: ${res.status}`);
   return res.json() as Promise<Post[]>;
 }
 
 export async function generateTasks(): Promise<Task[]> {
-  const res = await fetch(`${API_BASE}/api/generate/tasks`, { method: "POST" });
+  const res = await fetch(`${API_BASE}/api/generate/tasks`, {
+    method: "POST",
+    headers: await getUserHeaders(),
+  });
   if (!res.ok) throw new Error(`generate/tasks failed: ${res.status}`);
   return res.json() as Promise<Task[]>;
 }
 
 export async function generateWeekly(): Promise<WeeklyResponse> {
-  const res = await fetch(`${API_BASE}/api/generate/weekly`, { method: "POST" });
+  const res = await fetch(`${API_BASE}/api/generate/weekly`, {
+    method: "POST",
+    headers: await getUserHeaders(),
+  });
   if (!res.ok) throw new Error(`generate/weekly failed: ${res.status}`);
   return res.json() as Promise<WeeklyResponse>;
 }
@@ -266,7 +295,10 @@ export async function generateWeekly(): Promise<WeeklyResponse> {
 export async function generateBriefStream(
   onChunk: (text: string) => void
 ): Promise<BriefResponse> {
-  const res = await fetch(`${API_BASE}/api/generate/brief`, { method: "POST" });
+  const res = await fetch(`${API_BASE}/api/generate/brief`, {
+    method: "POST",
+    headers: await getUserHeaders(),
+  });
   if (!res.ok) throw new Error(`generate/brief failed: ${res.status}`);
   const body = res.body;
   if (!body) throw new Error("No response body");
@@ -306,4 +338,46 @@ export async function generateBriefStream(
     }
     pump();
   });
+}
+
+export async function fetchGeneratedDigest(): Promise<DigestResponse | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/generate/digest`, {
+      cache: "no-store",
+      headers: await getUserHeaders(),
+    });
+    if (!res.ok) return null;
+    return res.json() as Promise<DigestResponse>;
+  } catch {
+    return null;
+  }
+}
+
+export async function generateDigest(): Promise<DigestResponse | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/generate/digest`, {
+      method: "POST",
+      cache: "no-store",
+      headers: await getUserHeaders(),
+    });
+    if (!res.ok) return null;
+    return res.json() as Promise<DigestResponse>;
+  } catch {
+    return null;
+  }
+}
+
+export async function migrateLegacySession(
+  accountToken: string,
+  legacyToken: string
+): Promise<MigrationResponse> {
+  const res = await fetch(`${API_BASE}/api/auth/migrate`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accountToken}`,
+      "X-SignalForge-Legacy-Token": legacyToken,
+    },
+  });
+  if (!res.ok) throw new Error(`session migration failed: ${res.status}`);
+  return res.json() as Promise<MigrationResponse>;
 }

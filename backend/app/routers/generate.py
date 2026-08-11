@@ -3,9 +3,11 @@ import os
 from datetime import datetime, timezone
 from typing import Optional, AsyncGenerator
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 
+from ..auth import current_user
+from ..kv import kv_get, kv_set
 from ..routers.profile import _load as _load_profile
 
 router = APIRouter(prefix="/api/generate", tags=["generate"])
@@ -166,11 +168,11 @@ def _news_context(limit: int = 15) -> str:
 
 # ── Streaming brief ───────────────────────────────────────────────────────
 
-async def _stream_brief_generator() -> AsyncGenerator[str, None]:
+async def _stream_brief_generator(user_key: str) -> AsyncGenerator[str, None]:
     from ..ingestion.sources import read_cache
     import anthropic
 
-    profile = _load_profile()
+    profile = _load_profile(user_key)
     client = _get_client()
     news_context = _news_context()
 
@@ -206,10 +208,10 @@ async def _stream_brief_generator() -> AsyncGenerator[str, None]:
 
 
 @router.post("/brief")
-async def generate_brief():
+async def generate_brief(user_id: str = Depends(current_user)):
     _validate_key()
     return StreamingResponse(
-        _stream_brief_generator(),
+        _stream_brief_generator(user_id),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
@@ -218,8 +220,8 @@ async def generate_brief():
 # ── Posts ─────────────────────────────────────────────────────────────────
 
 @router.post("/posts")
-async def generate_posts():
-    profile = _load_profile()
+async def generate_posts(user_id: str = Depends(current_user)):
+    profile = _load_profile(user_id)
     client = _get_client()
     news_context = _news_context(8)
 
@@ -245,9 +247,9 @@ async def generate_posts():
 # ── Tasks ─────────────────────────────────────────────────────────────────
 
 @router.post("/tasks")
-async def generate_tasks():
+async def generate_tasks(user_id: str = Depends(current_user)):
     from ..ingestion.sources import read_cache
-    profile = _load_profile()
+    profile = _load_profile(user_id)
     client = _get_client()
 
     news = read_cache("news") or []
@@ -278,9 +280,9 @@ async def generate_tasks():
 # ── Weekly review ─────────────────────────────────────────────────────────
 
 @router.post("/weekly")
-async def generate_weekly():
+async def generate_weekly(user_id: str = Depends(current_user)):
     from ..ingestion.sources import read_cache
-    profile = _load_profile()
+    profile = _load_profile(user_id)
     client = _get_client()
 
     news = read_cache("news") or []
@@ -307,17 +309,26 @@ async def generate_weekly():
 
 # ── Digest ────────────────────────────────────────────────────────────────
 
+@router.get("/digest")
+async def get_generated_digest(user_id: str = Depends(current_user)):
+    return kv_get(f"digest:{user_id}") or {
+        "headline": None,
+        "sections": [],
+        "action_item": None,
+        "generated_at": None,
+    }
+
+
 @router.post("/digest")
-async def generate_digest_endpoint():
-    from ..ingestion.sources import write_cache
-    data = await _generate_digest_content()
-    write_cache("digest", data)
+async def generate_digest_endpoint(user_id: str = Depends(current_user)):
+    data = await _generate_digest_content(user_id)
+    kv_set(f"digest:{user_id}", data, ttl=24 * 60 * 60)
     return data
 
 
-async def _generate_digest_content() -> dict:
+async def _generate_digest_content(user_key: Optional[str] = None) -> dict:
     from ..ingestion.sources import read_cache
-    profile = _load_profile()
+    profile = _load_profile(user_key)
     client = _get_client()
 
     news = read_cache("news") or []

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { fetchWorkbench, saveWorkbench } from "./api";
-import { getBrowserSessionToken, userIdFromToken } from "./identity";
+import { getIdentityKey, IDENTITY_CHANGE_EVENT } from "./identity";
 import type { Task } from "./types";
 
 export interface WorkbenchState {
@@ -17,9 +17,10 @@ let snapshot: WorkbenchState | null = null;
 let hydratePromise: Promise<void> | null = null;
 let lastSavedJson = "";
 let activeUserKey = "anon";
+let identityListenerAttached = false;
 
 function currentUserId(): string {
-  return userIdFromToken(getBrowserSessionToken()) || "anon";
+  return getIdentityKey();
 }
 
 function storageKey(userKey = activeUserKey): string {
@@ -96,6 +97,15 @@ async function hydrateRemote() {
 }
 
 export function subscribe(cb: () => void) {
+  if (typeof window !== "undefined" && !identityListenerAttached) {
+    window.addEventListener(IDENTITY_CHANGE_EVENT, () => {
+      snapshot = null;
+      hydratePromise = null;
+      lastSavedJson = "";
+      listeners.forEach((listener) => listener());
+    });
+    identityListenerAttached = true;
+  }
   listeners.add(cb);
   return () => listeners.delete(cb);
 }

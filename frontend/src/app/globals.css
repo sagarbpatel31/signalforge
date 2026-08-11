@@ -480,3 +480,73 @@ body {
 .search-row-sub   { font-size: 11px; color: var(--text-3); }
 
 .nav-avatar:hover { opacity: 0.75; }
+
+.account-fallback {
+  width: 32px;
+  height: 32px;
+  border: 1px solid oklch(0.72 0.16 245 / 0.3);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-soft), var(--purple-soft));
+  color: var(--blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  transition: opacity 0.15s;
+}
+
+.auth-loading,
+.auth-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 15%, var(--blue-soft), transparent 32%),
+    radial-gradient(circle at 82% 78%, var(--green-soft), transparent 28%),
+    var(--bg);
+}
+
+.auth-loading {
+  display: grid;
+  place-items: center;
+  color: var(--text-3);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 64px;
+  padding: 40px 24px;
+}
+
+.auth-brand {
+  display: grid;
+  gap: 8px;
+}
+
+.auth-brand span {
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+
+.auth-brand small {
+  color: var(--blue);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+@media (max-width: 760px) {
+  .auth-page {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 28px;
+  }
+}

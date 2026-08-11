@@ -13,6 +13,7 @@ frontend/  Next.js 16 (App Router, React 19, Tailwind v4)  →  Vercel
 backend/   FastAPI (Python 3.11)                            →  Vercel function or Railway
            ├─ ingestion: RSS + arXiv + job boards + watchlist (every 12h)
            ├─ storage:   Upstash Redis KV (file fallback for local dev)
+           ├─ auth:      Clerk accounts (signed guest sessions in keyless local dev)
            ├─ AI:        Anthropic Claude (brief / posts / tasks / weekly / digest)
            └─ email:     Resend (daily digest)
 api/index.py  thin shim that mounts backend/main.py for Vercel
@@ -46,7 +47,8 @@ uvicorn main:app --reload --port 8000
 
 Without Upstash credentials the KV layer falls back to JSON files under
 `backend/data/`. Without `ANTHROPIC_API_KEY` the AI endpoints return `503`, but
-the feed/ingestion endpoints still work.
+the feed/ingestion endpoints still work. Clerk is optional locally; configure
+both frontend and backend Clerk variables to test account mode.
 
 ### Frontend
 
@@ -79,11 +81,14 @@ pull requests (see `.github/workflows/ci.yml`).
 | `ANTHROPIC_MODEL` | backend | Optional — pin a Claude model (default `claude-opus-4-7`) |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | backend | Redis KV cache |
 | `RESEND_API_KEY` / `RESEND_FROM` / `DIGEST_EMAIL` | backend | Daily digest email |
-| `SESSION_SECRET` | backend | **Required in production.** Signs session tokens; rotating it logs everyone out |
+| `CLERK_SECRET_KEY` / `CLERK_JWT_KEY` | backend | Verify Clerk session tokens (`JWT_KEY` keeps verification networkless) |
+| `CLERK_AUTHORIZED_PARTIES` | backend | Comma-separated frontend origins allowed by Clerk token `azp` |
+| `SESSION_SECRET` | backend | Legacy/local session signing; retain the old value during account migration |
 | `CRON_SECRET` | backend | `/api/ingest` requires `Authorization: Bearer <secret>`. Required in production |
 | `FRONTEND_URL` | backend | CORS allow-list (also scopes Vercel preview origins) |
 | `CORS_ALLOW_ORIGIN_REGEX` | backend | Optional CORS regex override |
 | `NEXT_PUBLIC_API_URL` | frontend | Backend base URL |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `CLERK_SECRET_KEY` | frontend | Enable Clerk provider, proxy protection, and account UI |
 
 See `backend/.env.example` for the full list.
 
@@ -94,21 +99,28 @@ See `backend/.env.example` for the full list.
   `backend/` also ships `railway.json` and `nixpacks.toml` for hosting the API
   on Railway instead.
 - **Frontend** deploys from `frontend/` as a standard Next.js project; set
-  `NEXT_PUBLIC_API_URL` to the deployed backend URL.
+  `NEXT_PUBLIC_API_URL` plus the Clerk frontend keys from `frontend/.env.example`.
 
-Set `SESSION_SECRET` and `CRON_SECRET` in the backend's project before going
-live. Both fail closed in production: without `SESSION_SECRET` the API cannot
-issue or verify sessions, and without `CRON_SECRET` the ingest endpoint (which
-also sends the digest email) returns 503 instead of running unauthenticated.
+Set `CLERK_SECRET_KEY`, `CLERK_JWT_KEY`, `CLERK_AUTHORIZED_PARTIES`, and
+`CRON_SECRET` in the backend project before going live. Keep the existing
+`SESSION_SECRET` during rollout so old local/session data can be migrated after
+the user signs in. Production stops issuing or accepting guest sessions once
+Clerk is configured, while the migration endpoint can still validate the old
+signed token.
 
-## Sessions
+## Accounts And Migration
 
-Per-user data — profile, workbench, bookmarks — is keyed by an opaque session
-id the backend mints and signs with `SESSION_SECRET`. The browser stores the
-`<user_id>.<signature>` token and replays it in `X-SignalForge-Token`; the
-backend only honours ids whose signature verifies, so keys are neither
-guessable nor forgeable. Onboarding mints the session before the first profile
-save.
+In account mode, the frontend gets a short-lived Clerk session token and sends
+it to FastAPI as `Authorization: Bearer <token>`. The backend verifies the token
+with Clerk's official Python SDK, hashes the Clerk subject into an internal
+storage key, and scopes profiles, workbench state, bookmarks, generated posts,
+AI output, and digest caches to that account.
+
+On the first account sign-in, the frontend also presents any existing signed
+SignalForge session to `/api/auth/migrate`. The backend merges profile,
+workbench, and bookmark data into the Clerk account, then removes the old
+scoped records. The operation is idempotent. Keyless local development still
+uses the signed session automatically.
 
 `scripts/mint_session.py` mints a token from the command line and can copy an
 older key's data onto it:

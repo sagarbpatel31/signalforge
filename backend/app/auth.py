@@ -1,14 +1,8 @@
-"""
-Session identity.
+"""Verified account identity with a signed-session compatibility path.
 
-Before this module, the user key arrived as a plain ``X-SignalForge-User``
-header the client chose for itself, so anyone could read or overwrite anyone
-else's profile and workbench by guessing a handle. Now the backend mints an
-opaque random user id, signs it with ``SESSION_SECRET``, and only accepts ids
-carrying a valid signature. The id is unguessable and the signature is
-unforgeable without the secret, so a caller can only reach its own data.
-
-Token format: ``<user_id>.<hex signature>`` where ``user_id`` is ``u_<32 hex>``.
+Clerk bearer tokens are the production identity. The older SignalForge HMAC
+session remains available for keyless local development and one-time account
+migration, but production stops accepting it once Clerk is configured.
 """
 import hashlib
 import hmac
@@ -18,7 +12,8 @@ import secrets
 from pathlib import Path
 from typing import Optional
 
-from fastapi import Header, HTTPException
+from fastapi import HTTPException, Request
+from starlette.concurrency import run_in_threadpool
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +32,19 @@ def _is_production() -> bool:
         "production",
         "prod",
     }
+
+
+def clerk_configured() -> bool:
+    return bool(os.environ.get("CLERK_SECRET_KEY", "").strip())
+
+
+def legacy_sessions_allowed() -> bool:
+    override = os.environ.get("ALLOW_LEGACY_SESSIONS", "").strip().lower()
+    if override in {"1", "true", "yes"}:
+        return True
+    if override in {"0", "false", "no"}:
+        return False
+    return not (_is_production() and clerk_configured())
 
 
 def _secret() -> Optional[str]:
@@ -111,20 +119,87 @@ def resolve_user(token: Optional[str]) -> Optional[str]:
     return verify_token(token.strip())
 
 
+def _authorized_parties() -> list[str]:
+    configured = os.environ.get("CLERK_AUTHORIZED_PARTIES", "")
+    parties = [item.strip() for item in configured.split(",") if item.strip()]
+    if parties:
+        return parties
+
+    fallback = ["http://localhost:3000"]
+    frontend_url = os.environ.get("FRONTEND_URL", "").strip()
+    if frontend_url:
+        fallback.append(frontend_url)
+    return fallback
+
+
+def _account_key(subject: str) -> str:
+    digest = hashlib.sha256(subject.encode()).hexdigest()[:32]
+    return f"c_{digest}"
+
+
+def _verify_clerk_request(request: Request) -> Optional[str]:
+    if not clerk_configured():
+        return None
+
+    try:
+        from clerk_backend_api import AuthenticateRequestOptions, authenticate_request
+
+        jwt_key = os.environ.get("CLERK_JWT_KEY", "").replace("\\n", "\n").strip()
+        state = authenticate_request(
+            request,
+            AuthenticateRequestOptions(
+                secret_key=os.environ["CLERK_SECRET_KEY"],
+                jwt_key=jwt_key or None,
+                authorized_parties=_authorized_parties(),
+                accepts_token=["session_token"],
+            ),
+        )
+        payload = state.payload or {}
+        subject = payload.get("sub") if state.is_signed_in else None
+        if not isinstance(subject, str) or not subject.startswith("user_"):
+            return None
+        return _account_key(subject)
+    except Exception as exc:
+        logger.warning("Clerk token verification failed: %s", exc)
+        return None
+
+
+async def _clerk_user(request: Request) -> Optional[str]:
+    return await run_in_threadpool(_verify_clerk_request, request)
+
+
+async def current_clerk_user(request: Request) -> str:
+    """Require a Clerk account. Used for migration and account-only actions."""
+    user_id = await _clerk_user(request)
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Invalid or missing account token")
+    return user_id
+
+
 async def current_user(
-    x_signalforge_token: Optional[str] = Header(default=None),
+    request: Request,
 ) -> str:
-    """Dependency for endpoints that own per-user data. Anonymous callers and
-    bad signatures both get 401 — there is no shared bucket to fall into."""
-    user_id = resolve_user(x_signalforge_token)
+    """Resolve a verified Clerk account or an allowed legacy local session."""
+    authorization = request.headers.get("Authorization", "")
+    if authorization.startswith("Bearer "):
+        user_id = await _clerk_user(request)
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Invalid account token")
+        return user_id
+
+    legacy_token = request.headers.get(TOKEN_HEADER)
+    user_id = resolve_user(legacy_token) if legacy_sessions_allowed() else None
     if user_id is None:
         raise HTTPException(status_code=401, detail="Invalid or missing session")
     return user_id
 
 
 async def optional_user(
-    x_signalforge_token: Optional[str] = Header(default=None),
+    request: Request,
 ) -> Optional[str]:
-    """Dependency for endpoints that personalize when possible but still serve
-    anonymous callers (the job feed, for example)."""
-    return resolve_user(x_signalforge_token)
+    authorization = request.headers.get("Authorization", "")
+    if authorization.startswith("Bearer "):
+        return await _clerk_user(request)
+    if not legacy_sessions_allowed():
+        return None
+    return resolve_user(request.headers.get(TOKEN_HEADER))

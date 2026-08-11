@@ -14,7 +14,7 @@ import { DashboardFrame } from "@/components/sections/DashboardFrame";
 import { Footer } from "@/components/sections/Footer";
 import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchWeekly } from "@/lib/api";
 import type { WeeklyResponse } from "@/lib/api";
-import { readCacheFile, readProfileFile } from "@/lib/server-cache";
+import { readCacheFile } from "@/lib/server-cache";
 import { getServerSessionToken } from "@/lib/server-identity";
 import { summarizeFeedStatus } from "@/lib/intelligence";
 import { redirect } from "next/navigation";
@@ -59,13 +59,13 @@ export default async function DashboardPage() {
 
   const [profile, posts, tasks, brief, weekly] = await Promise.all([
     fetchProfile(sessionToken),
-    fetchPosts(),
+    fetchPosts(sessionToken),
     fetchTasks(),
     fetchBrief(),
     fetchWeekly(),
   ]);
 
-  const resolvedProfile: UserProfile | null = profile ?? readProfileFile<UserProfile>(sessionToken);
+  const resolvedProfile: UserProfile | null = profile;
   if (!resolvedProfile) redirect("/onboarding");
   const feedStatus = summarizeFeedStatus(readCacheFile("meta"));
 

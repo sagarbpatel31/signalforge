@@ -17,6 +17,7 @@ _CACHE_DIR = _DATA_DIR / "cache"
 _PROFILES_DIR = _DATA_DIR / "profiles"
 _WORKBENCH_DIR = _DATA_DIR / "workbench"
 _BOOKMARKS_DIR = _DATA_DIR / "bookmarks"
+_DIGESTS_DIR = _DATA_DIR / "digests"
 
 
 def _redis():
@@ -55,6 +56,9 @@ def kv_get(key: str):
         if key.startswith("bookmarks:"):
             p = _BOOKMARKS_DIR / f"{key[10:]}.json"
             return json.loads(p.read_text()) if p.exists() else None
+        if key.startswith("digest:"):
+            p = _DIGESTS_DIR / f"{key[7:]}.json"
+            return json.loads(p.read_text()) if p.exists() else None
         if key == "profile":
             p = _DATA_DIR / "profile.json"
             return json.loads(p.read_text()) if p.exists() else None
@@ -92,6 +96,9 @@ def kv_set(key: str, value, ttl: int = 86_400) -> None:  # 24h default; cron ove
         elif key.startswith("bookmarks:"):
             _BOOKMARKS_DIR.mkdir(parents=True, exist_ok=True)
             (_BOOKMARKS_DIR / f"{key[10:]}.json").write_text(json.dumps(value))
+        elif key.startswith("digest:"):
+            _DIGESTS_DIR.mkdir(parents=True, exist_ok=True)
+            (_DIGESTS_DIR / f"{key[7:]}.json").write_text(json.dumps(value))
         elif key == "profile":
             _DATA_DIR.mkdir(parents=True, exist_ok=True)
             (_DATA_DIR / "profile.json").write_text(json.dumps(value))
@@ -103,3 +110,27 @@ def kv_set(key: str, value, ttl: int = 86_400) -> None:  # 24h default; cron ove
             (_DATA_DIR / "bookmarks.json").write_text(json.dumps(value))
     except Exception as exc:
         logger.warning("File fallback SET %s failed: %s", key, exc)
+
+
+def kv_delete(key: str) -> None:
+    r = _redis()
+    if r is not None:
+        try:
+            r.delete(key)
+            return
+        except Exception as exc:
+            logger.warning("Redis DELETE %s failed: %s", key, exc)
+
+    paths = {
+        "profile:": _PROFILES_DIR,
+        "workbench:": _WORKBENCH_DIR,
+        "bookmarks:": _BOOKMARKS_DIR,
+        "digest:": _DIGESTS_DIR,
+    }
+    try:
+        for prefix, directory in paths.items():
+            if key.startswith(prefix):
+                (directory / f"{key[len(prefix):]}.json").unlink(missing_ok=True)
+                return
+    except Exception as exc:
+        logger.warning("File fallback DELETE %s failed: %s", key, exc)

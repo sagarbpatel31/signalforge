@@ -11,6 +11,7 @@ backend/data/.session_secret
 backend/data/profiles/
 backend/data/workbench/
 backend/data/bookmarks/
+backend/data/digests/
 *.egg-info/
 dist/
 build/

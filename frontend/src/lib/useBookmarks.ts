@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { fetchBookmarks, saveBookmarks } from "./api";
-import { getBrowserSessionToken, userIdFromToken } from "./identity";
+import { getIdentityKey, IDENTITY_CHANGE_EVENT } from "./identity";
 
 export interface BookmarkItem {
   id: string;       // unique key (url or title)
@@ -28,9 +28,10 @@ let snapshot: Bookmarks | null = null;
 let hydratePromise: Promise<void> | null = null;
 let lastSavedJson = "";
 let activeUserId = "anon";
+let identityListenerAttached = false;
 
 function currentUserId(): string {
-  return userIdFromToken(getBrowserSessionToken()) || "anon";
+  return getIdentityKey();
 }
 
 // localStorage is now an offline cache in front of the server, not the source
@@ -114,6 +115,15 @@ async function hydrateRemote() {
 }
 
 export function subscribe(cb: () => void) {
+  if (typeof window !== "undefined" && !identityListenerAttached) {
+    window.addEventListener(IDENTITY_CHANGE_EVENT, () => {
+      snapshot = null;
+      hydratePromise = null;
+      lastSavedJson = "";
+      listeners.forEach((listener) => listener());
+    });
+    identityListenerAttached = true;
+  }
   listeners.add(cb);
   return () => {
     listeners.delete(cb);

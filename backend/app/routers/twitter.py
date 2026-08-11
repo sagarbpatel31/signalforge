@@ -1,5 +1,9 @@
 from datetime import date
-from fastapi import APIRouter
+from typing import Optional
+
+from fastapi import APIRouter, Depends
+
+from ..auth import current_user, optional_user
 from ..schemas import Post
 from ..mock_data import POSTS
 
@@ -126,21 +130,21 @@ def _truncate(text: str, limit: int = 280) -> str:
     return cut.rstrip(".,\n") + "…"
 
 
-def _profile_domains() -> list[str]:
+def _profile_domains(user_key: Optional[str] = None) -> list[str]:
     try:
         from ..routers.profile import _load
-        p = _load()
+        p = _load(user_key)
         return p.model_dump().get("domains", []) if p else []
     except Exception:
         return []
 
 
-def generate_posts_from_cache() -> list[Post]:
+def generate_posts_from_cache(user_key: Optional[str] = None) -> list[Post]:
     """Build 5 X/Twitter drafts from cached news. No API key needed."""
     from ..ingestion.sources import read_cache
 
     news    = read_cache("news") or []
-    domains = _profile_domains() or ["Edge AI", "Robotics"]
+    domains = _profile_domains(user_key) or ["Edge AI", "Robotics"]
 
     d1  = domains[0]
     d2  = domains[1] if len(domains) > 1 else domains[0]
@@ -228,29 +232,12 @@ def generate_posts_from_cache() -> list[Post]:
 
 
 @router.get("/posts", response_model=list[Post])
-async def get_posts() -> list[Post]:
-    """Return today's drafts from cache → generate from news → mock fallback."""
-    from ..ingestion.sources import read_cache, write_cache
-
-    cached = read_cache("posts")
-    if cached and isinstance(cached, list) and len(cached) >= 3:
-        return [Post(**p) for p in cached]
-
-    posts = generate_posts_from_cache()
-    if posts:
-        write_cache("posts", [p.model_dump() for p in posts])
-        return posts
-
-    return POSTS
+async def get_posts(user_id: Optional[str] = Depends(optional_user)) -> list[Post]:
+    """Generate cheap drafts per account; never reuse another user's cache."""
+    return generate_posts_from_cache(user_id) or POSTS
 
 
 @router.post("/posts/refresh", response_model=list[Post])
-async def refresh_posts() -> list[Post]:
-    """Regenerate drafts from latest news and persist."""
-    from ..ingestion.sources import write_cache
-
-    posts = generate_posts_from_cache()
-    if not posts:
-        return POSTS
-    write_cache("posts", [p.model_dump() for p in posts])
-    return posts
+async def refresh_posts(user_id: str = Depends(current_user)) -> list[Post]:
+    """Regenerate drafts from the latest news for the verified account."""
+    return generate_posts_from_cache(user_id) or POSTS

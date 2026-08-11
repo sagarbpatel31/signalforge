@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AccountControl } from "@/components/auth/AccountControl";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { SearchModal } from "@/components/ui/SearchModal";
 import { useState, useEffect } from "react";
@@ -8,15 +9,6 @@ import { useState, useEffect } from "react";
 interface NavProps {
   date: string;
   userName?: string;
-}
-
-function initials(name: string) {
-  return name
-    .trim()
-    .split(/\s+/)
-    .map((w) => w[0].toUpperCase())
-    .slice(0, 2)
-    .join("");
 }
 
 export function Nav({ date, userName }: NavProps) {
@@ -146,33 +138,7 @@ export function Nav({ date, userName }: NavProps) {
 
           <ThemeToggle />
 
-          <Link
-            href="/profile"
-            title="Profile settings"
-            style={{ textDecoration: "none" }}
-          >
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, var(--blue-soft), var(--purple-soft))",
-                border: "1px solid oklch(0.72 0.16 245 / 0.3)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: "var(--font-mono)",
-                fontSize: 11,
-                fontWeight: 600,
-                color: "var(--blue)",
-                cursor: "pointer",
-                transition: "opacity 0.15s",
-              }}
-              className="nav-avatar"
-            >
-              {userName ? initials(userName) : "SF"}
-            </div>
-          </Link>
+          <AccountControl userName={userName} />
         </div>
       </nav>
 
