@@ -137,4 +137,3 @@ async def get_meta() -> FeedMetaResponse:
         source_mode="fallback",
         source_detail="Feed cache is cold. Endpoints may fall back to built-in mock data until refresh completes.",
     )
-
