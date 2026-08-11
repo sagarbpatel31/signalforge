@@ -20,6 +20,18 @@ _BOOKMARKS_DIR = _DATA_DIR / "bookmarks"
 _DIGESTS_DIR = _DATA_DIR / "digests"
 
 
+def storage_mode() -> str:
+    url = os.environ.get("UPSTASH_REDIS_REST_URL", "").strip()
+    token = os.environ.get("UPSTASH_REDIS_REST_TOKEN", "").strip()
+    configured = (
+        url.startswith("https://")
+        and "your-db" not in url
+        and bool(token)
+        and not token.startswith("your_")
+    )
+    return "redis" if configured else "file"
+
+
 def _redis():
     url = os.environ.get("UPSTASH_REDIS_REST_URL", "")
     token = os.environ.get("UPSTASH_REDIS_REST_TOKEN", "")

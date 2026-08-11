@@ -15,6 +15,7 @@ backend/   FastAPI (Python 3.11)                            →  Vercel function
            ├─ storage:   Upstash Redis KV (file fallback for local dev)
            ├─ auth:      Clerk accounts (signed guest sessions in keyless local dev)
            ├─ AI:        Anthropic Claude (brief / posts / tasks / weekly / digest)
+           ├─ telemetry: request IDs + structured logs + optional Sentry
            └─ email:     Resend (daily digest)
 api/index.py  thin shim that mounts backend/main.py for Vercel
 ```
@@ -87,8 +88,10 @@ pull requests (see `.github/workflows/ci.yml`).
 | `CRON_SECRET` | backend | `/api/ingest` requires `Authorization: Bearer <secret>`. Required in production |
 | `FRONTEND_URL` | backend | CORS allow-list (also scopes Vercel preview origins) |
 | `CORS_ALLOW_ORIGIN_REGEX` | backend | Optional CORS regex override |
+| `SENTRY_DSN` / `SENTRY_TRACES_SAMPLE_RATE` | both | Optional scrubbed error reporting and trace sampling |
 | `NEXT_PUBLIC_API_URL` | frontend | Backend base URL |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `CLERK_SECRET_KEY` | frontend | Enable Clerk provider, proxy protection, and account UI |
+| `NEXT_PUBLIC_SENTRY_DSN` | frontend | Optional browser error reporting; unset disables Sentry |
 
 See `backend/.env.example` for the full list.
 
@@ -121,6 +124,20 @@ SignalForge session to `/api/auth/migrate`. The backend merges profile,
 workbench, and bookmark data into the Clerk account, then removes the old
 scoped records. The operation is idempotent. Keyless local development still
 uses the signed session automatically.
+
+## Observability
+
+The frontend mounts Vercel Web Analytics and Speed Insights. Account,
+onboarding, and profile routes are excluded, query strings are removed, and
+Speed Insights samples 25% of visits. Sentry is disabled until a DSN is set;
+when enabled, both frontend and backend scrub user identity, headers, cookies,
+request bodies, and URL query strings before events are sent.
+
+Every backend response includes `X-Request-ID`. The API emits one JSON log per
+request containing only the request ID, method, path, status, and duration. The
+`/health` response reports service version, storage mode, and feed freshness
+without exposing credentials. Add `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, and
+`SENTRY_PROJECT` only when production source-map uploads are desired.
 
 `scripts/mint_session.py` mints a token from the command line and can copy an
 older key's data onto it:

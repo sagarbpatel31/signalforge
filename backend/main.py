@@ -1,21 +1,27 @@
 import asyncio
 import hmac
 import logging
+import os
 import re
+import time
 from contextlib import asynccontextmanager
+from pathlib import Path
 from urllib.parse import urlparse
 
-from pathlib import Path
 from dotenv import load_dotenv
+
 load_dotenv(Path(__file__).parent / ".env")
 
-import os
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from app.observability import REQUEST_LOGGER, init_sentry, request_id, request_log
 from app.routers import auth, bookmarks, brief, opportunities, startups, career, research, twitter, tasks, weekly, profile, generate, feeds, email, workbench
 from app.ingestion.scheduler import create_scheduler, run_ingestion
 
 logging.basicConfig(level=logging.INFO)
+init_sentry()
 
 
 @asynccontextmanager
@@ -30,7 +36,59 @@ async def lifespan(app: FastAPI):
         yield
 
 
-app = FastAPI(title="SignalForge API", version="0.2.0", lifespan=lifespan)
+app = FastAPI(title="SignalForge API", version="0.3.0", lifespan=lifespan)
+
+
+@app.exception_handler(Exception)
+async def unexpected_error(request: Request, _exc: Exception) -> JSONResponse:
+    correlation_id = getattr(request.state, "request_id", request_id(None))
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "Internal server error",
+            "request_id": correlation_id,
+        },
+        headers={"X-Request-ID": correlation_id},
+    )
+
+
+@app.middleware("http")
+async def observe_request(request: Request, call_next):
+    correlation_id = request_id(request.headers.get("X-Request-ID"))
+    request.state.request_id = correlation_id
+    started = time.perf_counter()
+    status = 500
+
+    try:
+        response = await call_next(request)
+        status = response.status_code
+    except Exception:
+        duration_ms = (time.perf_counter() - started) * 1000
+        REQUEST_LOGGER.error(
+            request_log(
+                request_id_value=correlation_id,
+                method=request.method,
+                path=request.url.path,
+                status=status,
+                duration_ms=duration_ms,
+            )
+        )
+        raise
+
+    duration_ms = (time.perf_counter() - started) * 1000
+    response.headers["X-Request-ID"] = correlation_id
+    log = REQUEST_LOGGER.warning if status >= 500 else REQUEST_LOGGER.info
+    log(
+        request_log(
+            request_id_value=correlation_id,
+            method=request.method,
+            path=request.url.path,
+            status=status,
+            duration_ms=duration_ms,
+        )
+    )
+    return response
+
 
 _extra = os.environ.get("FRONTEND_URL", "")
 _allowed_origins = ["http://localhost:3000"] + ([_extra] if _extra else [])
@@ -56,6 +114,7 @@ app.add_middleware(
     allow_origin_regex=_build_origin_regex(),
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
+    expose_headers=["X-Request-ID"],
 )
 
 for router in [
@@ -80,14 +139,20 @@ for router in [
 
 @app.get("/health")
 async def health() -> dict:
-    from app.kv import kv_get, kv_set
-    kv_set("health_check", {"ok": True}, ttl=60)
-    result = kv_get("health_check")
-    redis_url = os.environ.get("UPSTASH_REDIS_REST_URL", "")[:40]
+    from app.ingestion.sources import read_cache
+    from app.kv import storage_mode
+
+    meta = read_cache("meta") or {}
     return {
         "status": "ok",
-        "redis_write_read": result is not None,
-        "redis_url_prefix": redis_url or "NOT SET",
+        "service": "signalforge-api",
+        "version": app.version,
+        "storage": storage_mode(),
+        "feeds": {
+            "last_refresh": meta.get("last_refresh"),
+            "source_mode": meta.get("source_mode", "fallback"),
+            "counts": meta.get("counts", {}),
+        },
     }
 
 
