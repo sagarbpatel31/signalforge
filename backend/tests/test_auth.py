@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 
 import main
 from app import auth
+from app.routers.auth import _merge_workbench
 
 
 def _client(monkeypatch) -> TestClient:
@@ -69,14 +70,56 @@ def test_sessions_cannot_read_each_others_data(monkeypatch):
     )
 
     alpha, beta = _issue(client), _issue(client)
-    payload_a = {"dismissed": ["opportunity:a"], "custom_tasks": []}
-    payload_b = {"dismissed": ["opportunity:b"], "custom_tasks": []}
+    empty_daily = {
+        "date": "",
+        "updated_at": "",
+        "reviewed_signal_ids": [],
+        "completed_task_ids": [],
+        "post_done": False,
+    }
+    payload_a = {
+        "dismissed": ["opportunity:a"],
+        "custom_tasks": [],
+        "daily_progress": empty_daily,
+    }
+    payload_b = {
+        "dismissed": ["opportunity:b"],
+        "custom_tasks": [],
+        "daily_progress": empty_daily,
+    }
 
     client.post("/api/workbench", json=payload_a, headers={"X-SignalForge-Token": alpha})
     client.post("/api/workbench", json=payload_b, headers={"X-SignalForge-Token": beta})
 
     assert client.get("/api/workbench", headers={"X-SignalForge-Token": alpha}).json() == payload_a
     assert client.get("/api/workbench", headers={"X-SignalForge-Token": beta}).json() == payload_b
+
+
+def test_workbench_merge_keeps_a_newer_explicit_daily_reset():
+    stale = {
+        "dismissed": [],
+        "custom_tasks": [],
+        "daily_progress": {
+            "date": "2026-08-11",
+            "updated_at": "2026-08-11T18:00:00.000Z",
+            "reviewed_signal_ids": ["signal-a"],
+            "completed_task_ids": ["task-a"],
+            "post_done": True,
+        },
+    }
+    reset = {
+        "dismissed": [],
+        "custom_tasks": [],
+        "daily_progress": {
+            "date": "2026-08-11",
+            "updated_at": "2026-08-11T18:01:00.000Z",
+            "reviewed_signal_ids": [],
+            "completed_task_ids": [],
+            "post_done": False,
+        },
+    }
+
+    assert _merge_workbench(stale, reset)["daily_progress"] == reset["daily_progress"]
 
 
 def test_production_without_secret_refuses_to_issue(monkeypatch):
@@ -161,6 +204,13 @@ def test_legacy_data_migrates_once_and_source_is_removed(monkeypatch):
         f"workbench:{legacy_id}": {
             "dismissed": ["startup:legacy"],
             "custom_tasks": [],
+            "daily_progress": {
+                "date": "2026-08-11",
+                "updated_at": "2026-08-11T18:00:00.000Z",
+                "reviewed_signal_ids": ["signal-legacy"],
+                "completed_task_ids": ["task-legacy"],
+                "post_done": True,
+            },
         },
         f"bookmarks:{legacy_id}": {
             "papers": [{
@@ -193,6 +243,7 @@ def test_legacy_data_migrates_once_and_source_is_removed(monkeypatch):
     assert response.json()["profile_migrated"] is True
     assert store[f"profile:{account_id}"]["name"] == "Legacy User"
     assert store[f"workbench:{account_id}"]["dismissed"] == ["startup:legacy"]
+    assert store[f"workbench:{account_id}"]["daily_progress"]["post_done"] is True
     assert len(store[f"bookmarks:{account_id}"]["papers"]) == 1
     assert f"profile:{legacy_id}" not in store
 

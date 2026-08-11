@@ -15,20 +15,30 @@ function priorityColor(p: string): TagColor {
   return "muted";
 }
 
-export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
+export function BuildThisWeek({
+  tasks: initialTasks,
+  dateKey,
+}: {
+  tasks: Task[];
+  dateKey: string;
+}) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
-  const [done, setDone] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [regen, setRegen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { state, removeTask } = useWorkbench();
+  const { state, removeTask, toggleCompletedTask } = useWorkbench();
 
   const mergedTasks = [...state.customTasks, ...tasks];
   const customIds = new Set(state.customTasks.map((task) => task.id));
+  const completedTaskIds = new Set(
+    state.dailyProgress.date === dateKey
+      ? state.dailyProgress.completedTaskIds
+      : []
+  );
 
   function toggleDone(e: React.MouseEvent, id: string) {
     e.stopPropagation();
-    setDone((prev) => ({ ...prev, [id]: !prev[id] }));
+    toggleCompletedTask(dateKey, id);
   }
 
   function toggleExpand(id: string) {
@@ -46,7 +56,6 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
     try {
       const fresh = await generateTasks();
       setTasks(fresh);
-      setDone({});
       setExpanded(new Set());
     } catch {
       setError("AI task generation is unavailable. Existing tasks remain available.");
@@ -55,7 +64,7 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
     }
   }
 
-  const doneCount = Object.values(done).filter(Boolean).length;
+  const doneCount = mergedTasks.filter((task) => completedTaskIds.has(String(task.id))).length;
   const pct = mergedTasks.length ? Math.round((doneCount / mergedTasks.length) * 100) : 0;
 
   return (
@@ -125,31 +134,35 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
                   alignItems: "center",
                   padding: "10px 0",
                   cursor: hasDesc ? "pointer" : "default",
-                  opacity: done[taskId] ? 0.45 : 1,
+                  opacity: completedTaskIds.has(taskId) ? 0.45 : 1,
                   transition: "opacity 0.2s",
                 }}
               >
                 {/* Checkbox */}
-                <div
+                <button
+                  type="button"
+                  aria-label={`${completedTaskIds.has(taskId) ? "Mark incomplete" : "Mark complete"}: ${t.task}`}
+                  aria-pressed={completedTaskIds.has(taskId)}
                   onClick={(e) => toggleDone(e, taskId)}
                   style={{
                     width: 16,
                     height: 16,
                     borderRadius: 6,
-                    border: `1.5px solid ${done[taskId] ? "var(--green)" : "var(--hairline-strong)"}`,
-                    background: done[taskId] ? "var(--green-soft)" : "transparent",
+                    border: `1.5px solid ${completedTaskIds.has(taskId) ? "var(--green)" : "var(--hairline-strong)"}`,
+                    background: completedTaskIds.has(taskId) ? "var(--green-soft)" : "transparent",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     flexShrink: 0,
                     transition: "all 0.15s",
                     cursor: "pointer",
+                    padding: 0,
                   }}
                 >
-                  {done[taskId] && (
+                  {completedTaskIds.has(taskId) && (
                     <span style={{ color: "var(--green)", fontSize: 9, lineHeight: 1 }}>✓</span>
                   )}
-                </div>
+                </button>
 
                 <SfTag color={priorityColor(t.priority)}>{t.priority}</SfTag>
 
@@ -158,8 +171,8 @@ export function BuildThisWeek({ tasks: initialTasks }: { tasks: Task[] }) {
                   style={{
                     fontSize: 12,
                     fontWeight: 500,
-                    textDecoration: done[taskId] ? "line-through" : "none",
-                    color: done[taskId] ? "var(--text-4)" : "var(--text)",
+                    textDecoration: completedTaskIds.has(taskId) ? "line-through" : "none",
+                    color: completedTaskIds.has(taskId) ? "var(--text-4)" : "var(--text)",
                     lineHeight: 1.35,
                   }}
                 >

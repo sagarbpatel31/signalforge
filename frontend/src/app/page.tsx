@@ -11,12 +11,14 @@ import { BuildThisWeek } from "@/components/sections/BuildThisWeek";
 import { PeopleFollowUp } from "@/components/sections/PeopleFollowUp";
 import { WeeklyStrategicReview } from "@/components/sections/WeeklyStrategicReview";
 import { DashboardFrame } from "@/components/sections/DashboardFrame";
+import { DailyCommandCenter } from "@/components/sections/DailyCommandCenter";
 import { Footer } from "@/components/sections/Footer";
 import { fetchPosts, fetchTasks, fetchProfile, fetchBrief, fetchWeekly } from "@/lib/api";
 import type { WeeklyResponse } from "@/lib/api";
 import { readCacheFile } from "@/lib/server-cache";
 import { getServerSessionToken } from "@/lib/server-identity";
 import { summarizeFeedStatus } from "@/lib/intelligence";
+import { pacificDateKey } from "@/lib/daily";
 import { redirect } from "next/navigation";
 import type { UserProfile } from "@/lib/types";
 
@@ -55,6 +57,7 @@ export default async function DashboardPage() {
   const hour = getPSTHour();
   const greeting = getGreeting(hour);
   const navDate = formatNavDate();
+  const dateKey = pacificDateKey();
   const sessionToken = await getServerSessionToken();
 
   const [profile, posts, tasks, brief, weekly] = await Promise.all([
@@ -106,6 +109,17 @@ export default async function DashboardPage() {
               <Hero userName={resolvedProfile.name} brief={brief} greeting={greeting} />
             </div>
           )}
+          daily={(
+            <div className="fade-up fade-up-2" style={{ marginBottom: GAP }}>
+              <DailyCommandCenter
+                dateKey={dateKey}
+                dateLabel={navDate}
+                signals={brief.signals}
+                tasks={tasks}
+                posts={posts}
+              />
+            </div>
+          )}
           statBar={(
             <div className="fade-up fade-up-1">
               <StatBar />
@@ -146,8 +160,8 @@ export default async function DashboardPage() {
                 marginBottom: GAP,
               }}
             >
-              <PostOnX posts={posts} />
-              <BuildThisWeek tasks={tasks} />
+              <PostOnX posts={posts} dateKey={dateKey} />
+              <BuildThisWeek tasks={tasks} dateKey={dateKey} />
               <PeopleFollowUp />
             </div>
           )}

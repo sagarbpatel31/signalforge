@@ -125,6 +125,15 @@ workbench, and bookmark data into the Clerk account, then removes the old
 scoped records. The operation is idempotent. Keyless local development still
 uses the signed session automatically.
 
+## Daily Workflow
+
+The dashboard opens with a focused `3 · 3 · 1` loop: review the three leading
+signals, finish three prioritized actions, and publish one sourced X draft.
+Progress uses the Pacific calendar date, syncs with the full weekly task and X
+sections, persists per account, and can be reset without changing the rest of
+the workbench. `Daily Focus` hides the longer intelligence feed while preserving
+the command center and can be toggled off at any time.
+
 ## Observability
 
 The frontend mounts Vercel Web Analytics and Speed Insights. Account,

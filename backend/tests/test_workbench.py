@@ -20,7 +20,17 @@ def test_workbench_defaults_empty(monkeypatch):
     client, token = _client_and_token(monkeypatch)
     res = client.get("/api/workbench", headers={"X-SignalForge-Token": token})
     assert res.status_code == 200
-    assert res.json() == {"dismissed": [], "custom_tasks": []}
+    assert res.json() == {
+        "dismissed": [],
+        "custom_tasks": [],
+        "daily_progress": {
+            "date": "",
+            "updated_at": "",
+            "reviewed_signal_ids": [],
+            "completed_task_ids": [],
+            "post_done": False,
+        },
+    }
 
 
 def test_workbench_roundtrip(monkeypatch):
@@ -46,6 +56,13 @@ def test_workbench_roundtrip(monkeypatch):
                 "description": "Investigate this company",
             }
         ],
+        "daily_progress": {
+            "date": "2026-08-11",
+            "updated_at": "2026-08-11T18:00:00.000Z",
+            "reviewed_signal_ids": ["signal-a"],
+            "completed_task_ids": ["startup:bar"],
+            "post_done": True,
+        },
     }
 
     post = client.post("/api/workbench", json=payload, headers=headers)

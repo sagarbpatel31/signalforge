@@ -7,6 +7,7 @@ import { SfTag } from "@/components/ui/sf-tag";
 import { InlineNotice } from "@/components/ui/InlineNotice";
 import { refreshPosts } from "@/lib/api";
 import type { Post } from "@/lib/types";
+import { useWorkbench } from "@/lib/useWorkbench";
 
 function trimToLimit(text: string, limit = 280): string {
   const compact = text.replace(/\n{3,}/g, "\n\n").replace(/[ \t]+/g, " ").trim();
@@ -39,13 +40,21 @@ function meterColor(count: number): string {
   return "var(--blue)";
 }
 
-export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
+export function PostOnX({
+  posts: initialPosts,
+  dateKey,
+}: {
+  posts: Post[];
+  dateKey: string;
+}) {
   const [posts, setPosts] = useState(initialPosts);
   const [selected, setSelected] = useState(0);
   const [drafts, setDrafts] = useState(initialPosts.map((post) => post.text));
   const [loading, setLoading] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied">("idle");
   const [error, setError] = useState<string | null>(null);
+  const { state, setPostDone } = useWorkbench();
+  const postedToday = state.dailyProgress.date === dateKey && state.dailyProgress.postDone;
 
   const post = posts[selected];
   const draft = drafts[selected] ?? post.text;
@@ -287,6 +296,13 @@ export function PostOnX({ posts: initialPosts }: { posts: Post[] }) {
             style={{ borderRadius: 8 }}
           >
             {copyState === "copied" ? "Copied" : "Copy draft"}
+          </button>
+          <button
+            onClick={() => setPostDone(dateKey, !postedToday)}
+            className="btn"
+            style={{ borderRadius: 8 }}
+          >
+            {postedToday ? "Posted today ✓" : "Mark posted"}
           </button>
           <a
             href={tweetHref}

@@ -59,7 +59,43 @@ def _merge_workbench(source: dict, target: dict) -> dict:
         tasks[str(item.get("id"))] = item
     for item in target.get("custom_tasks", []):
         tasks[str(item.get("id"))] = item
-    return {"dismissed": dismissed, "custom_tasks": list(tasks.values())}
+
+    source_daily = source.get("daily_progress") or {}
+    target_daily = target.get("daily_progress") or {}
+    source_date = str(source_daily.get("date", ""))
+    target_date = str(target_daily.get("date", ""))
+    if source_date > target_date:
+        daily_progress = source_daily
+    elif target_date > source_date:
+        daily_progress = target_daily
+    else:
+        source_updated = str(source_daily.get("updated_at", ""))
+        target_updated = str(target_daily.get("updated_at", ""))
+        if source_updated > target_updated:
+            daily_progress = source_daily
+        elif target_updated > source_updated:
+            daily_progress = target_daily
+        else:
+            daily_progress = {
+                "date": source_date,
+                "updated_at": source_updated,
+                "reviewed_signal_ids": list(dict.fromkeys([
+                    *target_daily.get("reviewed_signal_ids", []),
+                    *source_daily.get("reviewed_signal_ids", []),
+                ])),
+                "completed_task_ids": list(dict.fromkeys([
+                    *target_daily.get("completed_task_ids", []),
+                    *source_daily.get("completed_task_ids", []),
+                ])),
+                "post_done": bool(
+                    target_daily.get("post_done") or source_daily.get("post_done")
+                ),
+            }
+    return {
+        "dismissed": dismissed,
+        "custom_tasks": list(tasks.values()),
+        "daily_progress": daily_progress,
+    }
 
 
 def _merge_bookmarks(source: dict, target: dict) -> dict:

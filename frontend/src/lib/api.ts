@@ -6,6 +6,7 @@ import type {
 import type { FeedMeta } from "./intelligence";
 import type { WorkbenchState } from "./useWorkbench";
 import type { Bookmarks } from "./useBookmarks";
+import { normalizeDailyProgress } from "./daily";
 import { getUserHeaders } from "./identity";
 import { formatVerifiedDate } from "./curated";
 
@@ -162,14 +163,31 @@ export async function saveProfile(profile: UserProfile, token?: string): Promise
 }
 
 export async function fetchWorkbench(token?: string): Promise<WorkbenchState> {
-  const res = await apiFetchLive<{ dismissed?: string[]; custom_tasks?: Task[] }>(
+  const res = await apiFetchLive<{
+    dismissed?: string[];
+    custom_tasks?: Task[];
+    daily_progress?: {
+      date?: string;
+      updated_at?: string;
+      reviewed_signal_ids?: string[];
+      completed_task_ids?: string[];
+      post_done?: boolean;
+    };
+  }>(
     "/api/workbench",
-    { dismissed: [], custom_tasks: [] },
+    { dismissed: [], custom_tasks: [], daily_progress: {} },
     token
   );
   return {
     dismissed: Array.isArray(res.dismissed) ? res.dismissed : [],
     customTasks: Array.isArray(res.custom_tasks) ? res.custom_tasks : [],
+    dailyProgress: normalizeDailyProgress({
+      date: res.daily_progress?.date,
+      updatedAt: res.daily_progress?.updated_at,
+      reviewedSignalIds: res.daily_progress?.reviewed_signal_ids,
+      completedTaskIds: res.daily_progress?.completed_task_ids,
+      postDone: res.daily_progress?.post_done,
+    }),
   };
 }
 
@@ -183,13 +201,37 @@ export async function saveWorkbench(state: WorkbenchState): Promise<WorkbenchSta
     body: JSON.stringify({
       dismissed: state.dismissed,
       custom_tasks: state.customTasks,
+      daily_progress: {
+        date: state.dailyProgress.date,
+        updated_at: state.dailyProgress.updatedAt,
+        reviewed_signal_ids: state.dailyProgress.reviewedSignalIds,
+        completed_task_ids: state.dailyProgress.completedTaskIds,
+        post_done: state.dailyProgress.postDone,
+      },
     }),
   });
   if (!res.ok) throw new Error("Failed to save workbench");
-  const data = await res.json() as { dismissed?: string[]; custom_tasks?: Task[] };
+  const data = await res.json() as {
+    dismissed?: string[];
+    custom_tasks?: Task[];
+    daily_progress?: {
+      date?: string;
+      updated_at?: string;
+      reviewed_signal_ids?: string[];
+      completed_task_ids?: string[];
+      post_done?: boolean;
+    };
+  };
   return {
     dismissed: Array.isArray(data.dismissed) ? data.dismissed : [],
     customTasks: Array.isArray(data.custom_tasks) ? data.custom_tasks : [],
+    dailyProgress: normalizeDailyProgress({
+      date: data.daily_progress?.date,
+      updatedAt: data.daily_progress?.updated_at,
+      reviewedSignalIds: data.daily_progress?.reviewed_signal_ids,
+      completedTaskIds: data.daily_progress?.completed_task_ids,
+      postDone: data.daily_progress?.post_done,
+    }),
   };
 }
 

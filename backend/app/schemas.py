@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Literal, Optional
 
 
@@ -122,9 +122,18 @@ class WeeklyResponse(BaseModel):
     next_week_focus: str
 
 
+class DailyProgress(BaseModel):
+    date: str = Field(default="", pattern=r"^(?:|\d{4}-\d{2}-\d{2})$")
+    updated_at: str = Field(default="", max_length=40)
+    reviewed_signal_ids: list[str] = Field(default_factory=list, max_length=100)
+    completed_task_ids: list[str] = Field(default_factory=list, max_length=100)
+    post_done: bool = False
+
+
 class WorkbenchState(BaseModel):
-    dismissed: list[str] = []
-    custom_tasks: list[WorkbenchTask] = []
+    dismissed: list[str] = Field(default_factory=list)
+    custom_tasks: list[WorkbenchTask] = Field(default_factory=list)
+    daily_progress: DailyProgress = Field(default_factory=DailyProgress)
 
 
 class BookmarkItem(BaseModel):

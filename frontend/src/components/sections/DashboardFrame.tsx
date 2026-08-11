@@ -7,6 +7,7 @@ interface DashboardFrameProps {
   feedDetail: string;
   tone: "live" | "stale";
   hero: React.ReactNode;
+  daily: React.ReactNode;
   statBar: React.ReactNode;
   brief: React.ReactNode;
   opportunities: React.ReactNode;
@@ -23,6 +24,7 @@ export function DashboardFrame({
   feedDetail,
   tone,
   hero,
+  daily,
   statBar,
   brief,
   opportunities,
@@ -83,17 +85,22 @@ export function DashboardFrame({
           className={`btn ${focusMode ? "btn-blue" : ""}`}
           style={{ borderRadius: 8, flexShrink: 0 }}
         >
-          {focusMode ? "Focus Mode On" : "Focus Mode"}
+          {focusMode ? "Daily Focus On" : "Daily Focus"}
         </button>
       </div>
 
       <Fragment key="hero">{hero}</Fragment>
-      {!focusMode && <Fragment key="stats">{statBar}</Fragment>}
-      <Fragment key="brief">{brief}</Fragment>
-      <Fragment key="opportunities">{opportunities}</Fragment>
-      {!focusMode && <Fragment key="radar">{radarRow}</Fragment>}
-      <Fragment key="actions">{actionRow}</Fragment>
-      {!focusMode && <Fragment key="weekly">{weekly}</Fragment>}
+      <Fragment key="daily">{daily}</Fragment>
+      {!focusMode && (
+        <>
+          <Fragment key="stats">{statBar}</Fragment>
+          <Fragment key="brief">{brief}</Fragment>
+          <Fragment key="opportunities">{opportunities}</Fragment>
+          <Fragment key="radar">{radarRow}</Fragment>
+          <Fragment key="actions">{actionRow}</Fragment>
+          <Fragment key="weekly">{weekly}</Fragment>
+        </>
+      )}
       <Fragment key="footer">{footer}</Fragment>
     </>
   );
