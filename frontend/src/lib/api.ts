@@ -64,7 +64,7 @@ export interface BriefResponse {
   market_pulse: string;
   signals: Signal[];
   timestamp: string;
-  source_mode: "live" | "fallback";
+  source_mode: "live" | "degraded" | "fallback";
   source_detail: string;
 }
 
@@ -274,12 +274,16 @@ export const fetchFeedMeta = () =>
     counts: {},
     source_mode: "fallback",
     source_detail: "Feed meta unavailable. Treating UI as fallback-safe.",
+    sources: {},
   });
 
 /** Trigger a feed refresh — schedules background fetches that repopulate the Redis caches.
  * Lightweight and email-free; the cron-protected /api/ingest owns the daily digest. */
 export async function triggerIngest(): Promise<{ status: string }> {
-  const res = await fetch(`${API_BASE}/api/feeds/refresh`, { method: "POST" });
+  const res = await fetch(`${API_BASE}/api/feeds/refresh`, {
+    method: "POST",
+    headers: await getUserHeaders(),
+  });
   if (!res.ok) throw new Error(`refresh failed: ${res.status}`);
   return res.json();
 }
@@ -346,40 +350,44 @@ export async function generateBriefStream(
   if (!body) throw new Error("No response body");
   const reader = body.getReader();
   const decoder = new TextDecoder();
+  let buffer = "";
 
-  return new Promise((resolve, reject) => {
-    async function pump() {
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const text = decoder.decode(value, { stream: true });
-          const lines = text.split("\n");
-          for (const line of lines) {
-            if (!line.startsWith("data: ")) continue;
-            try {
-              const json = JSON.parse(line.slice(6));
-              if (json.chunk) {
-                onChunk(json.chunk as string);
-              } else if (json.done && json.result) {
-                resolve(json.result as BriefResponse);
-                return;
-              } else if (json.error) {
-                reject(new Error(json.error as string));
-                return;
-              }
-            } catch {
-              // skip malformed lines
-            }
-          }
+  while (true) {
+    const { done, value } = await reader.read();
+    buffer += done
+      ? decoder.decode()
+      : decoder.decode(value, { stream: true });
+    buffer = buffer.replaceAll("\r\n", "\n");
+    if (done && buffer.trim()) buffer += "\n\n";
+
+    let boundary = buffer.indexOf("\n\n");
+    while (boundary >= 0) {
+      const event = buffer.slice(0, boundary);
+      buffer = buffer.slice(boundary + 2);
+      for (const line of event.split("\n")) {
+        if (!line.startsWith("data: ")) continue;
+        let payload: {
+          chunk?: string;
+          done?: boolean;
+          result?: BriefResponse;
+          error?: string;
+        };
+        try {
+          payload = JSON.parse(line.slice(6));
+        } catch {
+          continue;
         }
-        reject(new Error("Stream ended without result"));
-      } catch (err) {
-        reject(err);
+        if (payload.chunk) onChunk(payload.chunk);
+        if (payload.error) throw new Error(payload.error);
+        if (payload.done && payload.result) return payload.result;
       }
+      boundary = buffer.indexOf("\n\n");
     }
-    pump();
-  });
+
+    if (done) break;
+  }
+
+  throw new Error("Stream ended without result");
 }
 
 export async function fetchGeneratedDigest(): Promise<DigestResponse | null> {

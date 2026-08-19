@@ -261,6 +261,7 @@ def test_personalized_generation_requires_identity(monkeypatch):
         "/api/generate/weekly",
         "/api/generate/digest",
         "/api/posts/refresh",
+        "/api/feeds/refresh",
     ):
         assert client.post(path).status_code == 401
     assert client.get("/api/generate/digest").status_code == 401

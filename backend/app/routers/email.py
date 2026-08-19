@@ -1,15 +1,35 @@
 import os
+import logging
 from datetime import datetime, timezone
+from html import escape
+from urllib.parse import urlparse
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Header, HTTPException
+
+from ..auth import verify_cron_authorization
 
 router = APIRouter(prefix="/api", tags=["email"])
 
-TO_EMAIL   = os.environ.get("DIGEST_EMAIL", "")
 # Set RESEND_FROM in Vercel env vars.
 # Free Resend accounts can only send from onboarding@resend.dev until you
 # verify a domain. Set RESEND_FROM=onboarding@resend.dev while testing.
 FROM_EMAIL = os.environ.get("RESEND_FROM", "SignalForge <noreply@signalforge.dev>")
+logger = logging.getLogger(__name__)
+
+
+def _safe_url(value: object) -> str:
+    candidate = str(value or "").strip()
+    parsed = urlparse(candidate)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        return "#"
+    return escape(candidate, quote=True)
+
+
+def _link(url: object, label: object) -> str:
+    return (
+        f'<a href="{_safe_url(url)}" style="color:#5b9bd5;text-decoration:none;">'
+        f"{escape(str(label or 'Untitled'))}</a>"
+    )
 
 
 def _resend_client():
@@ -38,8 +58,8 @@ def _build_digest_from_cache() -> dict:
         sections.append({
             "title": "News",
             "items": [
-                f'<a href="{n["url"]}" style="color:#5b9bd5;text-decoration:none;">'
-                f'{n["title"]}</a> <span style="color:#555f70;">— {n["source"]}</span>'
+                f'{_link(n.get("url"), n.get("title"))} '
+                f'<span style="color:#555f70;">— {escape(str(n.get("source", "News")))}</span>'
                 for n in news[:6]
             ],
         })
@@ -48,8 +68,8 @@ def _build_digest_from_cache() -> dict:
         sections.append({
             "title": "Research",
             "items": [
-                f'<a href="{p["url"]}" style="color:#5b9bd5;text-decoration:none;">'
-                f'{p["title"][:100]}</a> <span style="color:#555f70;">({p["venue"]})</span>'
+                f'{_link(p.get("url"), str(p.get("title", ""))[:100])} '
+                f'<span style="color:#555f70;">({escape(str(p.get("venue", "Research")))})</span>'
                 for p in papers[:5]
             ],
         })
@@ -58,9 +78,8 @@ def _build_digest_from_cache() -> dict:
         sections.append({
             "title": "Jobs",
             "items": [
-                f'<a href="{j.get("url","#")}" style="color:#5b9bd5;text-decoration:none;">'
-                f'{j["title"]}</a> @ {j["company"]}'
-                f'<span style="color:#555f70;"> · {j.get("location","")}</span>'
+                f'{_link(j.get("url"), j.get("title"))} @ {escape(str(j.get("company", "Unknown")))}'
+                f'<span style="color:#555f70;"> · {escape(str(j.get("location", "")))}</span>'
                 for j in jobs[:6]
             ],
         })
@@ -80,9 +99,9 @@ def _build_digest_from_cache() -> dict:
 
 
 def _render_html(data: dict) -> str:
-    headline    = data.get("headline", "Your daily intelligence brief")
+    headline    = escape(str(data.get("headline", "Your daily intelligence brief")))
     sections    = data.get("sections", [])
-    action_item = data.get("action_item", "")
+    action_item = escape(str(data.get("action_item", "")))
     date_str    = datetime.now(timezone.utc).strftime("%B %d, %Y")
 
     def _section(sec: dict) -> str:
@@ -96,7 +115,7 @@ def _render_html(data: dict) -> str:
         <div style="margin-bottom:26px;">
           <div style="font-family:monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
                       color:#5b9bd5;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #1e2230;">
-            {sec.get("title","")}
+            {escape(str(sec.get("title", "")))}
           </div>
           <ul style="list-style:none;padding:0;margin:0;">{items_html}</ul>
         </div>"""
@@ -158,10 +177,10 @@ def _render_html(data: dict) -> str:
 </html>"""
 
 
-@router.post("/send-digest")
-async def send_digest():
-    """Send daily digest email via Resend. Uses cached data — no Claude needed."""
-    if not TO_EMAIL:
+async def _send_digest() -> dict:
+    """Send the cached digest after caller authorization has been established."""
+    to_email = os.environ.get("DIGEST_EMAIL", "").strip()
+    if not to_email:
         raise HTTPException(status_code=503, detail="DIGEST_EMAIL not configured")
     resend    = _resend_client()
     data      = _build_digest_from_cache()
@@ -170,10 +189,18 @@ async def send_digest():
     try:
         resend.Emails.send({
             "from": FROM_EMAIL,
-            "to":   [TO_EMAIL],
+            "to":   [to_email],
             "subject": f"SignalForge Brief — {date_str}",
             "html": html,
         })
-        return {"ok": True, "sent_to": TO_EMAIL}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Email send failed: {e}")
+        return {"ok": True}
+    except Exception as exc:
+        logger.exception("Digest email delivery failed")
+        raise HTTPException(status_code=502, detail="Email delivery failed") from exc
+
+
+@router.post("/send-digest")
+async def send_digest(authorization: str | None = Header(default=None)):
+    """Cron-only digest delivery; cached data means no AI provider call."""
+    verify_cron_authorization(authorization)
+    return await _send_digest()

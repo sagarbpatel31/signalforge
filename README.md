@@ -69,10 +69,16 @@ cd backend && pip install -r requirements-dev.txt && pytest
 
 # frontend
 cd frontend && npm test
+
+# browser flows (starts isolated API/UI servers on 8100/3100)
+cd frontend && npx playwright install chromium && npm run test:e2e
+
+# curated fallback synchronization and age gate
+backend/.venv/bin/python scripts/sync_mock_data.py --check --max-age-days 30
 ```
 
-CI runs both suites plus frontend lint and build on every push to `main` and on
-pull requests (see `.github/workflows/ci.yml`).
+CI runs backend, frontend, build, and Chromium E2E suites on every push to
+`main` and on pull requests (see `.github/workflows/ci.yml`).
 
 ## Environment variables
 
@@ -86,6 +92,10 @@ pull requests (see `.github/workflows/ci.yml`).
 | `CLERK_AUTHORIZED_PARTIES` | backend | Comma-separated frontend origins allowed by Clerk token `azp` |
 | `SESSION_SECRET` | backend | Legacy/local session signing; retain the old value during account migration |
 | `CRON_SECRET` | backend | `/api/ingest` requires `Authorization: Bearer <secret>`. Required in production |
+| `AI_RATE_LIMIT_PER_HOUR` | backend | Per-account AI generation budget (default `20`) |
+| `FEED_REFRESH_RATE_LIMIT` | backend | Per-account manual refresh budget per 15 minutes (default `3`) |
+| `ENABLE_COLD_FEED_REFRESH` | backend | Optional local-only cold-cache fetch override; production defaults off and uses cron |
+| `SIGNALFORGE_DATA_DIR` | backend / frontend | Optional isolated file-storage root for tests or disposable environments |
 | `FRONTEND_URL` | backend | CORS allow-list (also scopes Vercel preview origins) |
 | `CORS_ALLOW_ORIGIN_REGEX` | backend | Optional CORS regex override |
 | `SENTRY_DSN` / `SENTRY_TRACES_SAMPLE_RATE` | both | Optional scrubbed error reporting and trace sampling |
@@ -103,6 +113,10 @@ See `backend/.env.example` for the full list.
   on Railway instead.
 - **Frontend** deploys from `frontend/` as a standard Next.js project; set
   `NEXT_PUBLIC_API_URL` plus the Clerk frontend keys from `frontend/.env.example`.
+
+Set repository variables `SIGNALFORGE_FRONTEND_URL` and
+`SIGNALFORGE_API_URL` to activate the six-hour scheduled production smoke
+workflow. It verifies the sign-in surface, API health contract, and feed status.
 
 Set `CLERK_SECRET_KEY`, `CLERK_JWT_KEY`, `CLERK_AUTHORIZED_PARTIES`, and
 `CRON_SECRET` in the backend project before going live. Keep the existing
@@ -147,6 +161,13 @@ request containing only the request ID, method, path, status, and duration. The
 `/health` response reports service version, storage mode, and feed freshness
 without exposing credentials. Add `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, and
 `SENTRY_PROJECT` only when production source-map uploads are desired.
+
+Feed metadata records health independently for news, papers, and jobs. Failed
+refreshes preserve last-known-good cache and expose only a sanitized failure
+code, last attempt, and last success. The weekly content workflow publishes a
+Markdown report and fails once any curated card is more than 14 days old;
+`backend/app/mock_data.py` remains the single source of truth for the generated
+frontend fallback.
 
 `scripts/mint_session.py` mints a token from the command line and can copy an
 older key's data onto it:

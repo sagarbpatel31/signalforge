@@ -7,76 +7,76 @@ import type {
 // Edit the backend source of truth, then rerun:
 //   backend/.venv/bin/python scripts/sync_mock_data.py
 
-export const curatedSnapshotDate = "2026-08-11";
+export const curatedSnapshotDate = "2026-08-18";
 
 export const signals: Signal[] = [
   {
-    "label": "Skild AI Series C",
-    "delta": "Jan 2026",
-    "color": "cyan",
-    "text": "Skild AI announced a $1.4B Series C led by SoftBank, pushing valuation above $14B and reinforcing the market for general-purpose robot foundation models."
-  },
-  {
-    "label": "Apptronik Apollo Scale",
-    "delta": "Feb 2026",
+    "label": "SHIELD",
+    "delta": "Aug 6",
     "color": "green",
-    "text": "Apptronik added a $520M Series A-X extension, bringing total Series A to more than $935M and nearly $1B total capital as it scales Apollo deployments."
+    "text": "Shield AI's latest newsroom update details the X-BAT thrust-vectoring system, following an August 5 autonomous-swarm exercise update."
   },
   {
-    "label": "Figure 03 Production",
-    "delta": "Apr 2026",
+    "label": "DANA",
+    "delta": "Jul 21",
+    "color": "cyan",
+    "text": "Applied Intuition launched Dana as an agentic platform for building, testing, deploying, and operating physical-AI systems."
+  },
+  {
+    "label": "AXELERA",
+    "delta": "Jul 15",
     "color": "amber",
-    "text": "Figure says BotQ has delivered over 350 Figure 03 robots and improved output from one robot per day to one per hour in under 120 days."
+    "text": "Axelera released Voyager Wingman to build, debug, and optimize edge-AI pipelines through its Voyager toolkit."
   },
   {
-    "label": "Figure 03 In Deployment",
-    "delta": "Jun 2026",
-    "color": "amber",
-    "text": "By June 30, 2026, BMW had begun deploying Figure 03 at Spartanburg, extending the story from pilot manufacturing claims into a concrete factory-floor logistics use case."
+    "label": "1X",
+    "delta": "Jul 9",
+    "color": "cyan",
+    "text": "1X published its 25-DoF, force-controlled NEO hand design and says hundreds have already come off its production line."
   },
   {
-    "label": "Edge AI Goes Mass Market",
-    "delta": "Jul 2026",
-    "color": "muted",
-    "text": "Axelera announced more than $250M in new funding and Hailo used CES 2026 to position edge AI and on-device GenAI as mainstream across robotics and commercial systems."
+    "label": "FLEETS",
+    "delta": "Jun 30",
+    "color": "green",
+    "text": "Figure demonstrated Figure 03 sequencing at BMW, while Apptronik announced active Apollo 2 fleets across Robot Park and customer sites."
   }
 ];
 
-export const marketPulse = "Verified August 11, 2026: Skild AI has raised $1.4B at a valuation above $14B, Apptronik has pushed Series A capital past $935M and is now emphasizing data-flywheel training for Apollo, Figure 03 has moved from BotQ manufacturing claims into active BMW Spartanburg deployment, and edge AI remains a commercial runtime story across robotics, security, and on-device GenAI.";
+export const marketPulse = "Verified August 18, 2026: physical-AI companies are shifting from isolated demos toward fleet learning, production tooling, and real deployments. Figure and Apptronik are operating at BMW and Robot Park, while Applied Intuition, Axelera, and Cursor are productizing agentic workflows around physical and software systems.";
 
 export const stats: Stat[] = [
   {
     "label": "Signals Tracked",
-    "value": "2,847",
-    "delta": "demo snapshot · Jul 2026",
-    "up": true,
+    "value": "5",
+    "delta": "curated · verified Aug 18",
+    "up": null,
     "series": []
   },
   {
     "label": "Opportunities",
-    "value": "38",
-    "delta": "curated roles + infra themes",
-    "up": true,
+    "value": "8",
+    "delta": "sourced opportunity map",
+    "up": null,
     "series": []
   },
   {
     "label": "Startups Flagged",
-    "value": "142",
-    "delta": "humanoid + edge AI focus",
-    "up": true,
+    "value": "12",
+    "delta": "focused company watchlist",
+    "up": null,
     "series": []
   },
   {
     "label": "Hiring Signals",
-    "value": "91",
-    "delta": "demo snapshot",
-    "up": true,
+    "value": "8",
+    "delta": "official careers pages",
+    "up": null,
     "series": []
   },
   {
     "label": "Research Papers",
-    "value": "23",
-    "delta": "review queue",
+    "value": "7",
+    "delta": "primary-source reading queue",
     "up": null,
     "series": []
   }
@@ -84,221 +84,216 @@ export const stats: Stat[] = [
 
 export const opportunities: Opportunity[] = [
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Skild AI Series C",
-        "url": "https://www.skild.ai/blogs/series-c",
-        "published_at": "2026-01-14"
+        "label": "Skild acquisition",
+        "url": "https://www.skild.ai/blogs",
+        "published_at": "2026-04-15"
       },
       {
-        "label": "π0.5 paper",
-        "url": "https://arxiv.org/abs/2504.16054",
-        "published_at": "2025-04-22"
+        "label": "Apptronik Robot Park",
+        "url": "https://apptronik.com/news-collection/welcome-to-robot-park-where-apptroniks-apollo-goes-to-work",
+        "published_at": "2026-06-30"
       }
     ],
     "rank": "01",
-    "title": "Generalist Robot Policy Engineer (VLA / Diffusion)",
+    "title": "Robot Policy and Fleet-Learning Engineer",
     "domain": "Physical AI",
     "signal": "HIGH",
     "fit": 97,
-    "why": "Skild, Physical Intelligence, and Figure have all raised or scaled aggressively into 2026. VLA policy work, diffusion policy, and Isaac Lab experience are directly legible signals.",
-    "sourced_fact": "Skild AI closed a $1.4B Series C on January 14, 2026, while Figure and Physical Intelligence kept publishing or scaling around VLA-style robot policy work.",
-    "editorial_take": "This is still the cleanest frontier for engineers who can connect policy learning, sim-to-real data, and deployment constraints instead of treating VLA work as a pure model problem."
+    "why": "Build the policy, data, and evaluation loops that let one model improve across robots and real customer deployments.",
+    "sourced_fact": "Skild acquired Zebra Technologies' robotics division in April 2026, and Apptronik says active Apollo 2 fleets now collect data across Robot Park and customer sites.",
+    "editorial_take": "The strongest hiring signal is moving from benchmark-only VLA work toward engineers who can close the loop between fleet data, policy training, and deployment safety."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Cognition funding coverage",
-        "url": "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation/",
-        "published_at": "2026-05-27"
+        "label": "Cursor 3",
+        "url": "https://cursor.com/blog/cursor-3",
+        "published_at": "2026-04-02"
+      },
+      {
+        "label": "Composer 2.5",
+        "url": "https://cursor.com/changelog/composer-2-5",
+        "published_at": "2026-05-18"
       }
     ],
     "rank": "02",
-    "title": "MCP Server / Agentic Infra Engineer",
+    "title": "Agent Runtime, MCP, and Evaluation Engineer",
     "domain": "Generative AI",
     "signal": "HIGH",
     "fit": 94,
-    "why": "By July 2026, agentic developer tooling and MCP-style integrations have become a durable infra layer. Teams need engineers who can build tool-use runtimes, evals, and workflow integrations.",
-    "sourced_fact": "Cognition raised a fresh $1B round on May 27, 2026, and AI-native developer tooling continues to concentrate around agent runtimes, evals, and tool integration layers.",
-    "editorial_take": "The durable opportunity is not prompt wrappers. It is infrastructure that makes agentic workflows observable, testable, and operational inside real engineering teams."
+    "why": "Own permissions, tool reliability, long-horizon evaluation, and observability for agents operating inside real engineering systems.",
+    "sourced_fact": "Cursor 3 added a unified agent workspace and a plugin marketplace built around MCPs, skills, and subagents; Composer 2.5 targets longer-running tasks.",
+    "editorial_take": "Thin chat wrappers are commoditized. Reliable execution, evaluation, and governance are the durable infrastructure layer."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Axelera AI funding",
-        "url": "https://axelera.ai/news/axelera-ai-secures-more-than-250-million-funding-on-global-commercial-growth",
-        "published_at": "2026-02-24"
+        "label": "Voyager Wingman",
+        "url": "https://axelera.ai/news/axelera-ai-publicly-releases-voyager-wingman-an-ai-assistant-that-speeds-application-development",
+        "published_at": "2026-07-15"
       },
       {
-        "label": "Hailo CES 2026",
-        "url": "https://hailo.ai/company-overview/newsroom/news/hailo-accelerates-edge-ai-adoption-across-consumer-and-commercial-markets-demonstrated-live-at-ces-2026/",
-        "published_at": "2026-01-06"
+        "label": "Hailo newsroom",
+        "url": "https://hailo.ai/company-overview/newsroom/news/",
+        "published_at": "2026-04-01"
       }
     ],
     "rank": "03",
-    "title": "Edge Inference Compiler / NPU Optimization",
+    "title": "Edge Inference Compiler and NPU Optimization",
     "domain": "Edge AI",
     "signal": "HIGH",
-    "fit": 91,
-    "why": "Axelera's February 2026 funding and Hailo's CES 2026 edge push keep compiler and low-power inference talent in demand. INT4/INT8 deployment fluency remains a high-signal skill.",
-    "sourced_fact": "Axelera announced more than $250M in new funding on February 24, 2026, and Hailo used CES 2026 to position on-device GenAI and edge inference as mainstream commercial priorities.",
-    "editorial_take": "Compiler, quantization, and runtime optimization still have better scarcity economics than generic application-layer ML work because they gate whether edge deployments ship at all."
+    "fit": 92,
+    "why": "Reduce model-to-device friction across compilation, scheduling, memory movement, profiling, and hardware-aware accuracy checks.",
+    "sourced_fact": "Axelera released Voyager Wingman in July 2026 after raising more than $250M in February; Hailo's 2026 releases continue to expand commercial edge-AI distribution.",
+    "editorial_take": "Hardware value is realized through software. Compiler and runtime engineers remain scarce because they determine whether models actually meet edge latency and power budgets."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "BMW deploys Figure 03",
-        "url": "https://timesofindia.indiatimes.com/technology/tech-news/bmw-deploys-figure-03-humanoid-robot-at-us-factory-to-transform-automotive-manufacturing/articleshow/132092781.cms",
+        "label": "Figure 03 at BMW",
+        "url": "https://www.figure.ai/news/f-03-at-bmw",
         "published_at": "2026-06-30"
       },
       {
-        "label": "Apptronik Series A-X",
-        "url": "https://apptronik.com/news-collection/apptronik-closes-over-935-million-series-a",
-        "published_at": "2026-02-11"
+        "label": "Apptronik Robot Park",
+        "url": "https://apptronik.com/news-collection/welcome-to-robot-park-where-apptroniks-apollo-goes-to-work",
+        "published_at": "2026-06-30"
       }
     ],
     "rank": "04",
-    "title": "ROS2 + Gazebo Harmonic + Nav2 Stack",
+    "title": "Robotics Deployment and Fleet Reliability Engineer",
     "domain": "Robotics",
     "signal": "HIGH",
-    "fit": 88,
-    "why": "Figure and Apptronik both spent 2026 scaling real deployments and production. ROS2, Gazebo Harmonic, and hardware-in-the-loop experience still map cleanly to deployment teams.",
-    "sourced_fact": "Figure had moved Figure 03 into BMW Spartanburg deployment by June 30, 2026, while Apptronik had already pushed total Series A capital above $935M as Apollo commercialization expanded.",
-    "editorial_take": "Middleware and deployment fluency matter even more now because the market is shifting from polished demos into real fleet behavior, uptime, and plant integration."
+    "fit": 90,
+    "why": "Turn policies and robot hardware into observable, recoverable systems that can operate across factories and customer sites.",
+    "sourced_fact": "Figure 03 performed a sequencing workflow at BMW Spartanburg on June 30, and Apptronik reported active Apollo 2 fleets at Robot Park and partner locations the same day.",
+    "editorial_take": "Uptime, telemetry, recovery behavior, and plant integration are becoming more valuable than another controlled demo."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
+      {
+        "label": "FieldAI and NVIDIA Omniverse",
+        "url": "https://www.fieldai.com/news/fieldai-and-nvidia-omniverse-building-the-next-generation-of-industrial-ai",
+        "published_at": "2026-03-16"
+      },
       {
         "label": "NVIDIA Isaac Lab",
         "url": "https://developer.nvidia.com/isaac/lab",
         "published_at": ""
-      },
-      {
-        "label": "Genesis documentation",
-        "url": "https://genesis-world.readthedocs.io/en/latest/",
-        "published_at": ""
       }
     ],
     "rank": "05",
-    "title": "Sim-to-Real: Isaac Lab + Genesis Engine",
+    "title": "Simulation, Digital Twins, and Sim-to-Real",
     "domain": "Physical AI",
     "signal": "HIGH",
-    "fit": 85,
-    "why": "Genesis, Isaac Lab, and VLA training loops remain central to sim-to-real work. The bottleneck is still data efficiency and transfer, not generic model availability.",
-    "sourced_fact": "NVIDIA maintains Isaac Lab as an open-source framework for robot learning, while Genesis publishes a generative physics platform aimed at robotics simulation workflows.",
-    "editorial_take": "Engineers who can connect simulation, policy training, and hardware validation remain more differentiated than practitioners who only tune models in an offline benchmark."
+    "fit": 87,
+    "why": "Connect high-fidelity simulation, evolving site twins, policy evaluation, and hardware validation into one repeatable workflow.",
+    "sourced_fact": "FieldAI described using NVIDIA Omniverse with field-deployed robots to create continuously evolving digital twins of industrial sites.",
+    "editorial_take": "Simulation is most defensible when it shortens a measured deployment loop, not when it exists as an isolated synthetic-data project."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Cognition funding coverage",
-        "url": "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation/",
-        "published_at": "2026-05-27"
+        "label": "Composer 2.5",
+        "url": "https://cursor.com/changelog/composer-2-5",
+        "published_at": "2026-05-18"
       },
       {
-        "label": "Model Context Protocol",
-        "url": "https://modelcontextprotocol.io/docs/getting-started/intro",
-        "published_at": ""
+        "label": "Cursor 3",
+        "url": "https://cursor.com/blog/cursor-3",
+        "published_at": "2026-04-02"
       }
     ],
     "rank": "06",
-    "title": "Agentic Coding Tool / SWE-Agent Developer",
+    "title": "Agentic Coding and Long-Horizon Tooling Engineer",
     "domain": "Generative AI",
     "signal": "MEDIUM",
-    "fit": 80,
-    "why": "Claude Code at 78.4%, Cursor at 67.2% SWE-bench — proving ground for agentic coding. Tooling, evals, and agent orchestration engineers in high demand. Target: Anthropic, Cognition, any coding-AI startup.",
-    "sourced_fact": "Cognition raised $1B in May 2026, while the Model Context Protocol documents a shared interface for connecting AI applications to tools and data sources.",
-    "editorial_take": "The defensible engineering work is moving toward evals, tool reliability, permissions, and orchestration rather than another thin coding-chat interface."
+    "fit": 83,
+    "why": "Build agent harnesses, sandboxes, code-search tools, and tests for tasks that span many actions and repositories.",
+    "sourced_fact": "Cursor says Composer 2.5 improves sustained work on long-running tasks, while Cursor 3 supports parallel agents and handoff between local and cloud work.",
+    "editorial_take": "The open problem is dependable completion under changing code and tools, not generating one more plausible patch."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Figure production update",
-        "url": "https://www.figure.ai/news/ramping-figure-03-production",
-        "published_at": "2026-04-29"
+        "label": "NEO hands",
+        "url": "https://www.1x.tech/discover/neos-hands",
+        "published_at": "2026-07-09"
       },
       {
-        "label": "Apptronik Robot Park",
-        "url": "https://www.businessinsider.com/apptroniks-humanoid-robots-are-practicing-for-their-first-real-jobs-2026-6",
-        "published_at": "2026-06-30"
+        "label": "Figure hardware careers",
+        "url": "https://www.figure.ai/careers",
+        "published_at": ""
       }
     ],
     "rank": "07",
-    "title": "Embedded Linux + Motor Control (Humanoid HW)",
+    "title": "Embedded Control and Dexterous Robot Hardware",
     "domain": "Embedded",
     "signal": "MEDIUM",
-    "fit": 76,
-    "why": "Every humanoid robot has firmware under the policy layer. FOC motor control, CAN bus, Zephyr/FreeRTOS for actuators. Target: Figure HW, Apptronik HW, Unitree, 1X Technologies → Embedded SW Eng.",
-    "sourced_fact": "Figure reported rapid Figure 03 production scaling, and Apptronik described Robot Park as infrastructure for training and deploying Apollo systems.",
-    "editorial_take": "That production push raises the value of engineers who can make actuator firmware, embedded control, field diagnostics, and safety behavior reliable at fleet scale."
+    "fit": 79,
+    "why": "Own force control, embedded sensing, actuator firmware, diagnostics, and manufacturing test for dexterous humanoid systems.",
+    "sourced_fact": "1X's July 2026 NEO hands use 25 force-controlled degrees of freedom, tactile sensing, and in-house firmware; the company reports hundreds produced.",
+    "editorial_take": "Dexterity makes embedded control and manufacturing quality part of the learning system, not a commodity layer below AI."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Hailo CES 2026",
-        "url": "https://hailo.ai/company-overview/newsroom/news/hailo-accelerates-edge-ai-adoption-across-consumer-and-commercial-markets-demonstrated-live-at-ces-2026/",
-        "published_at": "2026-01-06"
+        "label": "Wayve Series D",
+        "url": "https://wayve.ai/press/series-d/",
+        "published_at": "2026-02-25"
       },
       {
-        "label": "Axelera AI funding",
-        "url": "https://axelera.ai/news/axelera-ai-secures-more-than-250-million-funding-on-global-commercial-growth",
-        "published_at": "2026-02-24"
+        "label": "Hailo newsroom",
+        "url": "https://hailo.ai/company-overview/newsroom/news/",
+        "published_at": "2026-04-01"
       }
     ],
     "rank": "08",
-    "title": "On-Device Multimodal Perception (Camera + LiDAR)",
+    "title": "On-Device Multimodal Perception",
     "domain": "Edge AI",
     "signal": "MEDIUM",
-    "fit": 71,
-    "why": "AV + humanoid perception runs at the edge. Jetson Thor adoption by Amazon Robotics + Boston Dynamics. Target: Waymo, Luminar, Ouster, Wayve, Mobileye → Perception / ML Eng.",
-    "sourced_fact": "Hailo demonstrated on-device generative AI across commercial edge systems at CES 2026, and Axelera raised more than $250M to expand edge-inference products and software.",
-    "editorial_take": "The strongest opportunity is in the runtime path between sensor input and deployable multimodal inference: quantization, scheduling, memory movement, and hardware-aware evaluation."
+    "fit": 75,
+    "why": "Deploy perception and world models against real sensor, compute, latency, and safety constraints.",
+    "sourced_fact": "Wayve says its AI Driver runs on onboard compute and embedded sensors, while Hailo continues to expand edge GenAI and vision accelerator distribution.",
+    "editorial_take": "Engineers who can measure model quality together with thermal, memory, and latency budgets will remain more valuable than cloud-only perception specialists."
   }
 ];
 
 export const startups: Startup[] = [
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "BMW deploys Figure 03",
-        "url": "https://timesofindia.indiatimes.com/technology/tech-news/bmw-deploys-figure-03-humanoid-robot-at-us-factory-to-transform-automotive-manufacturing/articleshow/132092781.cms",
+        "label": "Figure 03 at BMW",
+        "url": "https://www.figure.ai/news/f-03-at-bmw",
         "published_at": "2026-06-30"
-      },
-      {
-        "label": "Figure production update",
-        "url": "https://www.figure.ai/news/ramping-figure-03-production",
-        "published_at": "2026-04-29"
       }
     ],
     "name": "Figure",
     "stage": "Series C",
     "domain": "Physical AI",
     "signal": "Hot",
-    "note": "As of June 30, 2026, Figure 03 had moved into BMW Spartanburg deployment after earlier BotQ production scaling claims.",
-    "website": "https://figure.ai",
-    "sourced_fact": "By June 30, 2026, BMW had begun deploying Figure 03 at Spartanburg, following Figure's earlier April 29, 2026 BotQ production update.",
-    "editorial_take": "Figure now matters as an operations signal, not just a flashy humanoid narrative: the conversation is moving toward customer-site deployment and factory logistics."
+    "note": "Figure 03 is performing a sequencing workflow at BMW Spartanburg with Helix 02 whole-body control.",
+    "website": "https://www.figure.ai",
+    "sourced_fact": "Figure published its Figure 03 BMW sequencing demonstration on June 30, 2026; Figure 02 had contributed to production of 30,000 cars in 2025.",
+    "editorial_take": "Figure now has a stronger deployment signal than a pure manufacturing-volume narrative because the latest work combines perception, manipulation, and locomotion on a factory floor."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Apptronik Series A-X",
-        "url": "https://apptronik.com/news-collection/apptronik-closes-over-935-million-series-a",
-        "published_at": "2026-02-11"
-      },
-      {
         "label": "Apptronik Robot Park",
-        "url": "https://www.businessinsider.com/apptroniks-humanoid-robots-are-practicing-for-their-first-real-jobs-2026-6",
+        "url": "https://apptronik.com/news-collection/welcome-to-robot-park-where-apptroniks-apollo-goes-to-work",
         "published_at": "2026-06-30"
       }
     ],
@@ -306,871 +301,247 @@ export const startups: Startup[] = [
     "stage": "Series A",
     "domain": "Physical AI",
     "signal": "Hot",
-    "note": "Apptronik announced a $520M Series A-X extension on February 11, 2026 and, by late June, was highlighting 'Robot Park' training infrastructure for Apollo data collection.",
+    "note": "Robot Park and Apollo 2 form a real-world data loop spanning Apptronik, Google DeepMind, and customer sites.",
     "website": "https://apptronik.com",
-    "sourced_fact": "Apptronik announced on February 11, 2026 that a $520M Series A-X extension pushed total Series A capital above $935M, and by June 30, 2026 it was showcasing Robot Park as training infrastructure for Apollo.",
-    "editorial_take": "The read is now broader than fundraising: Apptronik is signaling that the real moat in humanoids is becoming data generation, customer pilots, and deployment learning loops."
+    "sourced_fact": "Apptronik announced a nearly 90,000-square-foot Robot Park and active Apollo 2 fleets across its facility and key partner sites on June 30, 2026.",
+    "editorial_take": "The company is making fleet data collection the bridge between humanoid prototypes and a commercial Apollo 3 fleet."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Skild AI Series C",
+        "label": "Skild Series C",
         "url": "https://www.skild.ai/blogs/series-c",
         "published_at": "2026-01-14"
+      },
+      {
+        "label": "Skild blog",
+        "url": "https://www.skild.ai/blogs",
+        "published_at": "2026-04-15"
       }
     ],
     "name": "Skild AI",
     "stage": "Series C",
     "domain": "Physical AI",
     "signal": "Hot",
-    "note": "Skild AI announced a $1.4B Series C on January 14, 2026, taking its valuation above $14B and doubling down on omni-bodied robot intelligence.",
-    "website": "https://skild.ai",
-    "sourced_fact": "Skild AI announced a $1.4B Series C on January 14, 2026, at a valuation above $14B.",
-    "editorial_take": "Skild remains one of the clearest external signals that investors still believe a general-purpose robot intelligence platform can compound across embodiments."
+    "note": "Skild is pairing a heavily funded omni-bodied model thesis with warehouse deployment assets from Zebra's robotics division.",
+    "website": "https://www.skild.ai",
+    "sourced_fact": "Skild announced a $1.4B Series C at a valuation above $14B in January and the acquisition of Zebra Technologies' robotics division in April 2026.",
+    "editorial_take": "The acquisition turns a model-platform thesis into a clearer route to robots, customers, and deployment data."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Axelera AI funding",
-        "url": "https://axelera.ai/news/axelera-ai-secures-more-than-250-million-funding-on-global-commercial-growth",
-        "published_at": "2026-02-24"
+        "label": "Voyager Wingman",
+        "url": "https://axelera.ai/news/axelera-ai-publicly-releases-voyager-wingman-an-ai-assistant-that-speeds-application-development",
+        "published_at": "2026-07-15"
       }
     ],
     "name": "Axelera AI",
-    "stage": "Series C",
+    "stage": "Growth",
     "domain": "Edge AI",
     "signal": "Hot",
-    "note": "Axelera announced more than $250M in funding on February 24, 2026, alongside continued push around Europa and Voyager SDK for edge inference.",
+    "note": "Voyager Wingman connects natural-language agents directly to edge-AI pipeline creation, debugging, and optimization.",
     "website": "https://axelera.ai",
-    "sourced_fact": "Axelera announced more than $250M in funding on February 24, 2026 to support commercial growth in edge inference.",
-    "editorial_take": "That is a strong market signal that efficient inference hardware and toolchains still have room to differentiate beyond hyperscaler AI spending."
+    "sourced_fact": "Axelera publicly released Voyager Wingman on July 15, 2026 and says its edge platforms are deployed across more than 500 customers.",
+    "editorial_take": "The latest move makes developer experience, not only accelerator performance, a core part of Axelera's competitive position."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Hailo CES 2026",
-        "url": "https://hailo.ai/company-overview/newsroom/news/hailo-accelerates-edge-ai-adoption-across-consumer-and-commercial-markets-demonstrated-live-at-ces-2026/",
-        "published_at": "2026-01-06"
+        "label": "Hailo newsroom",
+        "url": "https://hailo.ai/company-overview/newsroom/news/",
+        "published_at": "2026-04-01"
       }
     ],
     "name": "Hailo",
     "stage": "Growth",
     "domain": "Edge AI",
-    "signal": "Hot",
-    "note": "Hailo used CES 2026 to position edge AI and on-device GenAI as mainstream across consumer devices, robotics, security, and retail.",
+    "signal": "Watch",
+    "note": "Hailo continues to widen edge-AI distribution through consumer, commercial, Raspberry Pi, and USB accelerator channels.",
     "website": "https://hailo.ai",
-    "sourced_fact": "Hailo used CES 2026 to frame edge AI and on-device GenAI as mainstream across consumer and commercial markets.",
-    "editorial_take": "Hailo matters as a distribution signal: edge inference is no longer being pitched as niche robotics infrastructure."
+    "sourced_fact": "Hailo's 2026 newsroom includes an April 1 ASUS UGen300 USB accelerator update and January launches spanning Raspberry Pi and commercial edge systems.",
+    "editorial_take": "Hailo remains a distribution signal for edge inference becoming a mainstream product component rather than specialist robotics hardware."
   },
   {
-    "last_verified": "2026-08-11",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "π0.5 paper",
-        "url": "https://arxiv.org/abs/2504.16054",
-        "published_at": "2025-04-22"
+        "label": "π*0.6 technical report",
+        "url": "https://www.physicalintelligence.company/download/pistar06.pdf",
+        "published_at": ""
       }
     ],
     "name": "Physical Intelligence",
     "stage": "Series B",
     "domain": "Physical AI",
     "signal": "Watch",
-    "note": "Physical Intelligence's π0.5 paper remains one of the clearest public references for open-world VLA generalization in manipulation.",
-    "website": "https://physicalintelligence.company",
-    "sourced_fact": "Physical Intelligence's π0.5 paper remains a concrete public reference point for open-world VLA generalization in manipulation.",
-    "editorial_take": "Even without a fresh financing headline here, the paper keeps the company relevant because it anchors technical expectations for embodied model capability."
+    "note": "The π*0.6 technical report extends the company's VLA line with reinforcement learning from experience and human feedback.",
+    "website": "https://www.physicalintelligence.company",
+    "sourced_fact": "Physical Intelligence published π*0.6, an adaptation of π0.6 that applies reinforcement learning with human reward feedback and interventions.",
+    "editorial_take": "The report keeps post-training and experience-driven improvement central to the robot-policy roadmap."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "1X Technologies",
-        "url": "https://1x.tech",
-        "published_at": ""
+        "label": "NEO hands",
+        "url": "https://www.1x.tech/discover/neos-hands",
+        "published_at": "2026-07-09"
       }
     ],
-    "name": "1X Technologies",
+    "name": "1X",
     "stage": "Series B",
     "domain": "Physical AI",
-    "signal": "Watch",
-    "note": "1X remains one of the most watched OpenAI-backed humanoid teams as home and service robotics moves from demo to deployment.",
-    "website": "https://1x.tech",
-    "sourced_fact": "1X remains one of the most watched OpenAI-backed humanoid teams as home and service robotics moves from demo to deployment.",
-    "editorial_take": "Interpretation: 1X Technologies remains a watch-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Covariant",
-        "url": "https://covariant.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "Covariant",
-    "stage": "Series C",
-    "domain": "Robotics",
     "signal": "Hot",
-    "note": "Foundation model for pick-and-place. $75M Series C, Amazon partnership.",
-    "website": "https://covariant.ai",
-    "sourced_fact": "Foundation model for pick-and-place. $75M Series C, Amazon partnership.",
-    "editorial_take": "Interpretation: Covariant remains a hot-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
+    "note": "NEO's latest hands combine dexterity, tactile sensing, force control, and a stated high-volume manufacturing path.",
+    "website": "https://www.1x.tech",
+    "sourced_fact": "1X unveiled 25-DoF NEO hands on July 9, 2026 and says hundreds have been built, with capacity to produce 10,000 hands during the year.",
+    "editorial_take": "1X is treating hands as both an actuator interface and a data-collection surface, which directly links hardware quality to model improvement."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Memfault",
-        "url": "https://memfault.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Memfault",
-    "stage": "Series B",
-    "domain": "Embedded",
-    "signal": "Watch",
-    "note": "Embedded observability + OTA platform. 250+ device companies on platform.",
-    "website": "https://memfault.com",
-    "sourced_fact": "Embedded observability + OTA platform. 250+ device companies on platform.",
-    "editorial_take": "Interpretation: Memfault remains a watch-priority signal inside the Embedded map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
+        "label": "FieldAI and NVIDIA",
+        "url": "https://www.fieldai.com/news/fieldai-and-nvidia-omniverse-building-the-next-generation-of-industrial-ai",
+        "published_at": "2026-03-16"
+      },
       {
-        "label": "Tenstorrent",
-        "url": "https://tenstorrent.com",
-        "published_at": ""
+        "label": "FieldAI and Boston Dynamics",
+        "url": "https://www.fieldai.com/news/boston-dynamics-and-fieldai-partner-to-bring-robots-into-uncharted-and-dynamic-environments",
+        "published_at": "2026-03-12"
       }
     ],
-    "name": "Tenstorrent",
-    "stage": "Series C",
-    "domain": "Edge AI",
-    "signal": "Watch",
-    "note": "RISC-V AI chip. Jim Keller CEO. $693M raised. Edge + cloud inference.",
-    "website": "https://tenstorrent.com",
-    "sourced_fact": "RISC-V AI chip. Jim Keller CEO. $693M raised. Edge + cloud inference.",
-    "editorial_take": "Interpretation: Tenstorrent remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Agility Robotics",
-        "url": "https://agilityrobotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Agility Robotics",
-    "stage": "Series B",
-    "domain": "Physical AI",
-    "signal": "Track",
-    "note": "Digit humanoid. 500 units ordered by Amazon. GXO warehouse pilots.",
-    "website": "https://agilityrobotics.com",
-    "sourced_fact": "Digit humanoid. 500 units ordered by Amazon. GXO warehouse pilots.",
-    "editorial_take": "Interpretation: Agility Robotics remains a track-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Etched",
-        "url": "https://etched.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Etched",
-    "stage": "Seed",
-    "domain": "Edge AI",
-    "signal": "Watch",
-    "note": "Transformer-only ASIC (Sohu). 144M TOPS. Beats H100 for inference.",
-    "website": "https://etched.com",
-    "sourced_fact": "Transformer-only ASIC (Sohu). 144M TOPS. Beats H100 for inference.",
-    "editorial_take": "Interpretation: Etched remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Collaborative Robotics",
-        "url": "https://collaborativerobotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Collaborative Robotics",
-    "stage": "Series A",
-    "domain": "Robotics",
-    "signal": "Hot",
-    "note": "Cobot platform for unstructured warehouse environments. Ex-Apple robotics team.",
-    "website": "https://collaborativerobotics.com",
-    "sourced_fact": "Cobot platform for unstructured warehouse environments. Ex-Apple robotics team.",
-    "editorial_take": "Interpretation: Collaborative Robotics remains a hot-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Gecko Robotics",
-        "url": "https://geckorobotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Gecko Robotics",
-    "stage": "Series B",
+    "name": "FieldAI",
+    "stage": "Growth",
     "domain": "Robotics",
     "signal": "Watch",
-    "note": "Inspection robots for industrial infrastructure. $100M+ raised.",
-    "website": "https://geckorobotics.com",
-    "sourced_fact": "Inspection robots for industrial infrastructure. $100M+ raised.",
-    "editorial_take": "Interpretation: Gecko Robotics remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
+    "note": "FieldAI is applying foundation models and evolving digital twins to unstructured industrial environments.",
+    "website": "https://www.fieldai.com",
+    "sourced_fact": "FieldAI announced March 2026 work with NVIDIA on industrial AI and a partnership with Boston Dynamics for dynamic construction environments.",
+    "editorial_take": "Its differentiation is the hard deployment regime: changing sites where uncertainty and physics matter more than scripted navigation."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Field AI",
-        "url": "https://field.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "Field AI",
-    "stage": "Seed",
-    "domain": "Robotics",
-    "signal": "Watch",
-    "note": "AI for autonomous field robotics — oil & gas, mining, defense.",
-    "website": "https://field.ai",
-    "sourced_fact": "AI for autonomous field robotics — oil & gas, mining, defense.",
-    "editorial_take": "Interpretation: Field AI remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Dexterity",
-        "url": "https://dexterity.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "Dexterity",
-    "stage": "Series B",
-    "domain": "Physical AI",
-    "signal": "Watch",
-    "note": "AI-powered robotic arms for warehouse picking. $140M raised.",
-    "website": "https://dexterity.ai",
-    "sourced_fact": "AI-powered robotic arms for warehouse picking. $140M raised.",
-    "editorial_take": "Interpretation: Dexterity remains a watch-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Dusty Robotics",
-        "url": "https://dustyrobotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Dusty Robotics",
-    "stage": "Series B",
-    "domain": "Robotics",
-    "signal": "Track",
-    "note": "Robotic layout printing for construction sites. $45M raised.",
-    "website": "https://dustyrobotics.com",
-    "sourced_fact": "Robotic layout printing for construction sites. $45M raised.",
-    "editorial_take": "Interpretation: Dusty Robotics remains a track-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Scythe Robotics",
-        "url": "https://scytherobotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Scythe Robotics",
-    "stage": "Series B",
-    "domain": "Robotics",
-    "signal": "Track",
-    "note": "Fully electric autonomous commercial mowers. $42M raised.",
-    "website": "https://scytherobotics.com",
-    "sourced_fact": "Fully electric autonomous commercial mowers. $42M raised.",
-    "editorial_take": "Interpretation: Scythe Robotics remains a track-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Built Robotics",
-        "url": "https://builtrobotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Built Robotics",
-    "stage": "Series C",
-    "domain": "Robotics",
-    "signal": "Track",
-    "note": "AI guidance for construction equipment. Excavators, bulldozers.",
-    "website": "https://builtrobotics.com",
-    "sourced_fact": "AI guidance for construction equipment. Excavators, bulldozers.",
-    "editorial_take": "Interpretation: Built Robotics remains a track-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Carbon Robotics",
-        "url": "https://carbonrobotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Carbon Robotics",
-    "stage": "Series C",
-    "domain": "Robotics",
-    "signal": "Watch",
-    "note": "Autonomous laser weeding robots for agriculture. $70M Series C.",
-    "website": "https://carbonrobotics.com",
-    "sourced_fact": "Autonomous laser weeding robots for agriculture. $70M Series C.",
-    "editorial_take": "Interpretation: Carbon Robotics remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Robust.AI",
-        "url": "https://robust.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "Robust.AI",
-    "stage": "Series A",
-    "domain": "Robotics",
-    "signal": "Watch",
-    "note": "Carter: warehouse cobot platform. Founded by Rodney Brooks (iRobot).",
-    "website": "https://robust.ai",
-    "sourced_fact": "Carter: warehouse cobot platform. Founded by Rodney Brooks (iRobot).",
-    "editorial_take": "Interpretation: Robust.AI remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Applied Intuition",
-        "url": "https://appliedintuition.com",
-        "published_at": ""
+        "label": "Dana launch",
+        "url": "https://www.appliedintuition.com/press-releases/applied-intuition-launches-dana",
+        "published_at": "2026-07-21"
       }
     ],
     "name": "Applied Intuition",
-    "stage": "Series E",
-    "domain": "Edge AI",
+    "stage": "Growth",
+    "domain": "Physical AI",
     "signal": "Hot",
-    "note": "Simulation + toolchain for AV/robotics validation. $1.5B valuation.",
-    "website": "https://appliedintuition.com",
-    "sourced_fact": "Simulation + toolchain for AV/robotics validation. $1.5B valuation.",
-    "editorial_take": "Interpretation: Applied Intuition remains a hot-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
+    "note": "Dana packages agents, data, tooling, evaluation, traceability, and governance for safety-critical physical-AI work.",
+    "website": "https://www.appliedintuition.com",
+    "sourced_fact": "Applied Intuition launched Dana on July 21, 2026 and says internal and select customer use reduced some vehicle-development phases from months to days.",
+    "editorial_take": "Applied is extending its autonomy infrastructure moat into an agentic control plane for physical-AI engineering workflows."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Skydio",
-        "url": "https://skydio.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Skydio",
-    "stage": "Series E",
-    "domain": "Robotics",
-    "signal": "Watch",
-    "note": "Autonomous drone platform — defense + enterprise. $230M raised.",
-    "website": "https://skydio.com",
-    "sourced_fact": "Autonomous drone platform — defense + enterprise. $230M raised.",
-    "editorial_take": "Interpretation: Skydio remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
+        "label": "Wayve Series D",
+        "url": "https://wayve.ai/press/series-d/",
+        "published_at": "2026-02-25"
+      },
       {
-        "label": "Wayve",
-        "url": "https://wayve.ai",
-        "published_at": ""
+        "label": "Wayve press room",
+        "url": "https://wayve.ai/press/",
+        "published_at": "2026-03-12"
       }
     ],
     "name": "Wayve",
-    "stage": "Series C",
-    "domain": "Edge AI",
-    "signal": "Watch",
-    "note": "Embodied AI for autonomous driving. $1.05B raised. NVIDIA-backed.",
-    "website": "https://wayve.ai",
-    "sourced_fact": "Embodied AI for autonomous driving. $1.05B raised. NVIDIA-backed.",
-    "editorial_take": "Interpretation: Wayve remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Gather AI",
-        "url": "https://gather.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "Gather AI",
-    "stage": "Seed",
-    "domain": "Robotics",
-    "signal": "Watch",
-    "note": "Drone-based inventory intelligence for warehouses.",
-    "website": "https://gather.ai",
-    "sourced_fact": "Drone-based inventory intelligence for warehouses.",
-    "editorial_take": "Interpretation: Gather AI remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Formant",
-        "url": "https://formant.io",
-        "published_at": ""
-      }
-    ],
-    "name": "Formant",
-    "stage": "Series B",
-    "domain": "Robotics",
-    "signal": "Track",
-    "note": "Robot operations platform — fleet management + telemetry.",
-    "website": "https://formant.io",
-    "sourced_fact": "Robot operations platform — fleet management + telemetry.",
-    "editorial_take": "Interpretation: Formant remains a track-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Polymath Robotics",
-        "url": "https://polymathrobotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Polymath Robotics",
-    "stage": "Seed",
-    "domain": "Robotics",
-    "signal": "Watch",
-    "note": "Autonomy stack for off-highway vehicles (mining, ag, construction).",
-    "website": "https://polymathrobotics.com",
-    "sourced_fact": "Autonomy stack for off-highway vehicles (mining, ag, construction).",
-    "editorial_take": "Interpretation: Polymath Robotics remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Neura Robotics",
-        "url": "https://neura-robotics.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Neura Robotics",
-    "stage": "Series B",
-    "domain": "Physical AI",
-    "signal": "Hot",
-    "note": "MAiRA cognitive humanoid. €120M Series B. Europe's leading humanoid startup. Hiring SW + policy.",
-    "website": "https://neura-robotics.com",
-    "sourced_fact": "MAiRA cognitive humanoid. €120M Series B. Europe's leading humanoid startup. Hiring SW + policy.",
-    "editorial_take": "Interpretation: Neura Robotics remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Fourier Intelligence",
-        "url": "https://fftai.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Fourier Intelligence",
-    "stage": "Series C",
-    "domain": "Physical AI",
-    "signal": "Hot",
-    "note": "GR-2 humanoid with 40-DOF hands. $100M+ raised. MIT + Stanford talent.",
-    "website": "https://fftai.com",
-    "sourced_fact": "GR-2 humanoid with 40-DOF hands. $100M+ raised. MIT + Stanford talent.",
-    "editorial_take": "Interpretation: Fourier Intelligence remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Unitree Robotics",
-        "url": "https://unitree.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Unitree Robotics",
-    "stage": "Series C",
-    "domain": "Physical AI",
-    "signal": "Watch",
-    "note": "G1 humanoid at $5,900 (2026) — commoditizing humanoid HW. 30k+ robots shipped.",
-    "website": "https://unitree.com",
-    "sourced_fact": "G1 humanoid at $5,900 (2026) — commoditizing humanoid HW. 30k+ robots shipped.",
-    "editorial_take": "Interpretation: Unitree Robotics remains a watch-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Viam Robotics",
-        "url": "https://viam.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Viam Robotics",
-    "stage": "Series B",
-    "domain": "Robotics",
-    "signal": "Watch",
-    "note": "RDK platform — robotics dev kit as a service. $57M raised. Ex-MongoDB founders.",
-    "website": "https://viam.com",
-    "sourced_fact": "RDK platform — robotics dev kit as a service. $57M raised. Ex-MongoDB founders.",
-    "editorial_take": "Interpretation: Viam Robotics remains a watch-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Machina Labs",
-        "url": "https://machinalabs.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "Machina Labs",
-    "stage": "Series B",
-    "domain": "Robotics",
-    "signal": "Hot",
-    "note": "Robotic sheet metal forming for aerospace/defense. $32M raised. Boeing + Northrop customers.",
-    "website": "https://machinalabs.ai",
-    "sourced_fact": "Robotic sheet metal forming for aerospace/defense. $32M raised. Boeing + Northrop customers.",
-    "editorial_take": "Interpretation: Machina Labs remains a hot-priority signal inside the Robotics map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Groq",
-        "url": "https://groq.com",
-        "published_at": ""
-      }
-    ],
-    "name": "Groq",
     "stage": "Series D",
     "domain": "Edge AI",
     "signal": "Hot",
-    "note": "Groq remains one of the clearest signals that inference-specialized hardware is now a first-class category alongside training-centric infrastructure.",
-    "website": "https://groq.com",
-    "sourced_fact": "Groq remains one of the clearest signals that inference-specialized hardware is now a first-class category alongside training-centric infrastructure.",
-    "editorial_take": "Interpretation: Groq remains a hot-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
+    "note": "Wayve is moving end-to-end embodied driving AI into robotaxi trials and automaker deployment channels.",
+    "website": "https://wayve.ai",
+    "sourced_fact": "Wayve raised a $1.2B Series D at an $8.6B post-money valuation in February 2026 and announced a Tokyo robotaxi collaboration in March.",
+    "editorial_take": "Its licensing and onboard-compute model is a capital-efficient test of whether one driving foundation model can generalize across markets and vehicles."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Cerebras Systems",
-        "url": "https://cerebras.net",
-        "published_at": ""
-      }
-    ],
-    "name": "Cerebras Systems",
-    "stage": "Pre-IPO",
-    "domain": "Edge AI",
-    "signal": "Watch",
-    "note": "WSE-3 wafer-scale chip — 4 trillion transistors. 900B param models on-chip. IPO expected 2026.",
-    "website": "https://cerebras.net",
-    "sourced_fact": "WSE-3 wafer-scale chip — 4 trillion transistors. 900B param models on-chip. IPO expected 2026.",
-    "editorial_take": "Interpretation: Cerebras Systems remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "d-Matrix",
-        "url": "https://d-matrix.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "d-Matrix",
-    "stage": "Series B",
-    "domain": "Edge AI",
-    "signal": "Watch",
-    "note": "In-memory compute for LLM inference. $110M raised. Targets data center + edge.",
-    "website": "https://d-matrix.ai",
-    "sourced_fact": "In-memory compute for LLM inference. $110M raised. Targets data center + edge.",
-    "editorial_take": "Interpretation: d-Matrix remains a watch-priority signal inside the Edge AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Shield AI",
-        "url": "https://shield.ai",
-        "published_at": ""
+        "label": "Shield AI newsroom",
+        "url": "https://shield.ai/newsroom/",
+        "published_at": "2026-08-06"
       }
     ],
     "name": "Shield AI",
-    "stage": "Series G",
+    "stage": "Growth",
     "domain": "Physical AI",
     "signal": "Hot",
-    "note": "Shield AI remains a leading autonomy signal in defense robotics through Hivemind and broader autonomous flight deployment work.",
+    "note": "Shield AI's August updates span autonomous swarms, maritime teaming, aircraft autonomy, and X-BAT vertical-flight systems.",
     "website": "https://shield.ai",
-    "sourced_fact": "Shield AI remains a leading autonomy signal in defense robotics through Hivemind and broader autonomous flight deployment work.",
-    "editorial_take": "Interpretation: Shield AI remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
+    "sourced_fact": "Shield AI's newsroom lists an August 6 X-BAT engineering update and an August 5 autonomous-swarm exercise with Taiwan's NCSIST.",
+    "editorial_take": "The pace and breadth of field programs make Shield AI a strong signal for production autonomy under contested, multi-asset constraints."
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Mind Robotics",
-        "url": "https://mindrobotics.ai",
-        "published_at": ""
-      }
-    ],
-    "name": "Mind Robotics",
-    "stage": "Series A",
-    "domain": "Physical AI",
-    "signal": "Hot",
-    "note": "$500M Series A (2026). Embodied AI platform — robot learning from human demonstration.",
-    "website": "https://mindrobotics.ai",
-    "sourced_fact": "$500M Series A (2026). Embodied AI platform — robot learning from human demonstration.",
-    "editorial_take": "Interpretation: Mind Robotics remains a hot-priority signal inside the Physical AI map. Treat it as a watchlist item until a fresher source changes the thesis."
-  },
-  {
-    "last_verified": "2026-08-11",
-    "sources": [
+        "label": "Cursor 3",
+        "url": "https://cursor.com/blog/cursor-3",
+        "published_at": "2026-04-02"
+      },
       {
-        "label": "Cognition funding coverage",
-        "url": "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation/",
-        "published_at": "2026-05-27"
-      }
-    ],
-    "name": "Cognition AI",
-    "stage": "Series D",
-    "domain": "Generative AI",
-    "signal": "Hot",
-    "note": "Cognition raised a fresh $1B round in late May 2026 and remains one of the strongest signals for agentic coding infrastructure demand.",
-    "website": "https://cognition.ai",
-    "sourced_fact": "TechCrunch reported on May 27, 2026 that Cognition raised a fresh $1B round.",
-    "editorial_take": "That keeps agentic coding infrastructure in the 'real budget, real urgency' category rather than speculative product theater."
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Cursor",
-        "url": "https://cursor.com",
-        "published_at": ""
+        "label": "Composer 2.5",
+        "url": "https://cursor.com/changelog/composer-2-5",
+        "published_at": "2026-05-18"
       }
     ],
     "name": "Cursor",
-    "stage": "Series B",
+    "stage": "Growth",
     "domain": "Generative AI",
     "signal": "Hot",
-    "note": "Cursor remains one of the fastest-moving AI-native IDEs, reinforcing demand for agentic tooling, evals, and MCP-adjacent workflow layers.",
+    "note": "Cursor is expanding from an AI IDE into a workspace for parallel local and cloud agents backed by its own coding models.",
     "website": "https://cursor.com",
-    "sourced_fact": "Cursor remains one of the fastest-moving AI-native IDEs, reinforcing demand for agentic tooling, evals, and MCP-adjacent workflow layers.",
-    "editorial_take": "Interpretation: Cursor remains a hot-priority signal inside the Generative AI map. Treat it as a watchlist item until a fresher source changes the thesis."
+    "sourced_fact": "Cursor launched Cursor 3 on April 2 and Composer 2.5 on May 18, 2026, emphasizing parallel agents and sustained long-horizon work.",
+    "editorial_take": "Cursor's moat is increasingly the integrated model, runtime, evaluation, and collaboration surface rather than code completion alone."
   }
 ];
 
 export const roles: Role[] = [
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Skild AI",
-        "url": "https://skild.ai/careers",
+        "label": "Figure careers",
+        "url": "https://www.figure.ai/careers",
         "published_at": ""
       }
     ],
-    "company": "Skild AI",
-    "role": "Robot Learning Engineer — Foundation Models",
-    "type": "Pittsburgh · Full-time",
-    "signal": "↑ Jan 2026 Series C",
+    "company": "Figure",
+    "role": "Helix AI Engineer, Robot Learning",
+    "type": "San Jose · Full-time",
+    "signal": "OPEN · verified Aug 18",
     "color": "cyan",
-    "url": "https://skild.ai/careers",
+    "url": "https://www.figure.ai/careers",
     "tags": [
       "robotics",
       "physical-ai"
     ]
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Apptronik",
-        "url": "https://apptronik.com/careers",
-        "published_at": ""
-      }
-    ],
-    "company": "Apptronik",
-    "role": "Robotics Software Engineer — Apollo",
-    "type": "Austin TX · Full-time",
-    "signal": "↑ Feb 2026 extension",
-    "color": "cyan",
-    "url": "https://apptronik.com/careers",
-    "tags": [
-      "robotics",
-      "physical-ai"
-    ]
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Physical Intelligence",
-        "url": "https://physicalintelligence.company/careers",
-        "published_at": ""
-      }
-    ],
-    "company": "Physical Intelligence",
-    "role": "Research Engineer — Robot Policies",
-    "type": "SF · Full-time",
-    "signal": "↑ Active · π0.5 launch",
-    "color": "cyan",
-    "url": "https://physicalintelligence.company/careers",
-    "tags": [
-      "robotics",
-      "physical-ai"
-    ]
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Groq",
-        "url": "https://groq.com/careers",
-        "published_at": ""
-      }
-    ],
-    "company": "Groq",
-    "role": "ML Systems Engineer — LPU Inference",
-    "type": "Mountain View / Remote",
-    "signal": "↑ inference infra demand",
-    "color": "green",
-    "url": "https://groq.com/careers",
-    "tags": [
-      "edge-ai"
-    ]
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Axelera AI",
-        "url": "https://axelera.ai/careers",
-        "published_at": ""
-      }
-    ],
-    "company": "Axelera AI",
-    "role": "Compiler Engineer — Edge AI Chip",
-    "type": "Amsterdam / Remote",
-    "signal": "↑ Feb 2026 funding",
-    "color": "cyan",
-    "url": "https://axelera.ai/careers",
-    "tags": [
-      "edge-ai"
-    ]
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Cognition AI",
-        "url": "https://cognition.ai/careers",
-        "published_at": ""
-      }
-    ],
-    "company": "Cognition AI",
-    "role": "Software Engineer — Agentic Systems",
-    "type": "NYC / Remote · Full-time",
-    "signal": "↑ May 2026 round",
-    "color": "green",
-    "url": "https://cognition.ai/careers",
-    "tags": [
-      "llm",
-      "agentic"
-    ]
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Covariant",
-        "url": "https://covariant.ai/careers",
-        "published_at": ""
-      }
-    ],
-    "company": "Covariant",
-    "role": "Robot Learning Engineer — RFM-1",
-    "type": "Berkeley CA · Full-time",
-    "signal": "↑ Amazon deal",
-    "color": "cyan",
-    "url": "https://covariant.ai/careers",
-    "tags": [
-      "robotics",
-      "physical-ai"
-    ]
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Hailo",
-        "url": "https://hailo.ai/company/careers",
-        "published_at": ""
-      }
-    ],
-    "company": "Hailo",
-    "role": "Compiler Engineer — NPU Toolchain",
-    "type": "Tel Aviv / Remote",
-    "signal": "↑ MLPerf TOPS leader",
-    "color": "cyan",
-    "url": "https://hailo.ai/company/careers",
-    "tags": [
-      "edge-ai",
-      "embedded"
-    ]
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Shield AI",
-        "url": "https://shield.ai/careers",
-        "published_at": ""
-      }
-    ],
-    "company": "Shield AI",
-    "role": "Autonomy Software Engineer",
-    "type": "San Diego · Full-time",
-    "signal": "↑ autonomy programs",
-    "color": "green",
-    "url": "https://shield.ai/careers",
-    "tags": [
-      "robotics",
-      "physical-ai"
-    ]
-  },
-  {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Cursor",
+        "label": "Cursor careers",
         "url": "https://cursor.com/careers",
         "published_at": ""
       }
     ],
     "company": "Cursor",
-    "role": "AI Engineer — IDE Agentic Features",
-    "type": "SF · Full-time",
-    "signal": "↑ AI-native IDE demand",
+    "role": "Software Engineer, Agent Evaluation and Quality",
+    "type": "San Francisco / New York · Full-time",
+    "signal": "OPEN · verified Aug 18",
     "color": "green",
     "url": "https://cursor.com/careers",
     "tags": [
@@ -1179,42 +550,122 @@ export const roles: Role[] = [
     ]
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Neura Robotics",
-        "url": "https://neura-robotics.com/careers",
+        "label": "1X careers",
+        "url": "https://www.1x.tech/careers",
         "published_at": ""
       }
     ],
-    "company": "Neura Robotics",
-    "role": "Software Engineer — Humanoid",
-    "type": "Metzingen, DE / Remote",
-    "signal": "↑ EU humanoid push",
+    "company": "1X",
+    "role": "Embedded Firmware Engineer, NEO",
+    "type": "San Carlos · Full-time",
+    "signal": "OPEN · verified Aug 18",
     "color": "amber",
-    "url": "https://neura-robotics.com/careers",
+    "url": "https://www.1x.tech/careers",
+    "tags": [
+      "robotics",
+      "embedded"
+    ]
+  },
+  {
+    "last_verified": "2026-08-18",
+    "sources": [
+      {
+        "label": "Applied Intuition careers",
+        "url": "https://www.appliedintuition.com/careers",
+        "published_at": ""
+      }
+    ],
+    "company": "Applied Intuition",
+    "role": "Software Engineer, Physical AI",
+    "type": "Ann Arbor · Full-time",
+    "signal": "OPEN · verified Aug 18",
+    "color": "cyan",
+    "url": "https://www.appliedintuition.com/careers",
     "tags": [
       "robotics",
       "physical-ai"
     ]
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
-        "label": "Figure AI",
-        "url": "https://figure.ai/careers",
+        "label": "Apptronik job listings",
+        "url": "https://apptronik.com/careers/job-listings",
         "published_at": ""
       }
     ],
-    "company": "Figure AI",
-    "role": "Staff ML Engineer — Locomotion",
-    "type": "Sunnyvale · Full-time",
-    "signal": "↑ 350+ robots built",
-    "color": "amber",
-    "url": "https://figure.ai/careers",
+    "company": "Apptronik",
+    "role": "Robotics and AI openings",
+    "type": "Austin · See current listings",
+    "signal": "CAREERS PAGE ACTIVE",
+    "color": "cyan",
+    "url": "https://apptronik.com/careers/job-listings",
     "tags": [
       "robotics",
+      "physical-ai"
+    ]
+  },
+  {
+    "last_verified": "2026-08-18",
+    "sources": [
+      {
+        "label": "Skild AI careers",
+        "url": "https://www.skild.ai/career",
+        "published_at": ""
+      }
+    ],
+    "company": "Skild AI",
+    "role": "Robotics research and engineering openings",
+    "type": "See current listings",
+    "signal": "CAREERS PAGE ACTIVE",
+    "color": "cyan",
+    "url": "https://www.skild.ai/career",
+    "tags": [
+      "robotics",
+      "physical-ai"
+    ]
+  },
+  {
+    "last_verified": "2026-08-18",
+    "sources": [
+      {
+        "label": "Shield AI careers",
+        "url": "https://shield.ai/careers/",
+        "published_at": ""
+      }
+    ],
+    "company": "Shield AI",
+    "role": "Autonomy and robotics openings",
+    "type": "Multiple locations",
+    "signal": "CAREERS PAGE ACTIVE",
+    "color": "green",
+    "url": "https://shield.ai/careers/",
+    "tags": [
+      "robotics",
+      "physical-ai"
+    ]
+  },
+  {
+    "last_verified": "2026-08-18",
+    "sources": [
+      {
+        "label": "Wayve careers",
+        "url": "https://wayve.ai/careers/",
+        "published_at": ""
+      }
+    ],
+    "company": "Wayve",
+    "role": "Embodied AI and autonomy openings",
+    "type": "London / Sunnyvale · See listings",
+    "signal": "CAREERS PAGE ACTIVE",
+    "color": "green",
+    "url": "https://wayve.ai/careers/",
+    "tags": [
+      "edge-ai",
       "physical-ai"
     ]
   }
@@ -1222,12 +673,12 @@ export const roles: Role[] = [
 
 export const papers: Paper[] = [
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
         "label": "Paper",
         "url": "https://arxiv.org/abs/2604.15395",
-        "published_at": "arXiv 2026"
+        "published_at": "2026-04"
       }
     ],
     "title": "Foundation Models in Robotics: A Comprehensive Review of Methods, Models, Datasets, Challenges and Future Research Directions",
@@ -1240,12 +691,31 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2604.15395"
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
+    "sources": [
+      {
+        "label": "Technical report",
+        "url": "https://www.physicalintelligence.company/download/pistar06.pdf",
+        "published_at": ""
+      }
+    ],
+    "title": "π*0.6: a VLA That Learns From Experience",
+    "venue": "Physical Intelligence technical report",
+    "tags": [
+      "Physical AI",
+      "VLA",
+      "RL"
+    ],
+    "read": false,
+    "url": "https://www.physicalintelligence.company/download/pistar06.pdf"
+  },
+  {
+    "last_verified": "2026-08-18",
     "sources": [
       {
         "label": "Paper",
         "url": "https://arxiv.org/abs/2504.16054",
-        "published_at": "arXiv 2025"
+        "published_at": "2025-04-22"
       }
     ],
     "title": "π0.5: a Vision-Language-Action Model with Open-World Generalization",
@@ -1259,12 +729,12 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2504.16054"
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
         "label": "Paper",
         "url": "https://arxiv.org/abs/2410.24164",
-        "published_at": "arXiv 2024"
+        "published_at": "2024-10"
       }
     ],
     "title": "π0: A Vision-Language-Action Flow Model for General Robot Control",
@@ -1278,12 +748,12 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2410.24164"
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
         "label": "Paper",
         "url": "https://arxiv.org/abs/2412.04325",
-        "published_at": "arXiv 2024"
+        "published_at": "2024-12"
       }
     ],
     "title": "Genesis: A Generative and Universal Physics Engine for Robotics",
@@ -1296,30 +766,12 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2412.04325"
   },
   {
-    "last_verified": "2026-07-01",
-    "sources": [
-      {
-        "label": "Paper",
-        "url": "https://arxiv.org/abs/2506.21628",
-        "published_at": "arXiv 2025"
-      }
-    ],
-    "title": "Ark: An Open-source Python-based Framework for Robot Learning",
-    "venue": "arXiv 2025",
-    "tags": [
-      "Robotics",
-      "Open Source"
-    ],
-    "read": false,
-    "url": "https://arxiv.org/abs/2506.21628"
-  },
-  {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
         "label": "Paper",
         "url": "https://arxiv.org/abs/2506.01182",
-        "published_at": "arXiv 2025"
+        "published_at": "2025-06"
       }
     ],
     "title": "Humanoid World Models: Open World Foundation Models for Humanoid Robotics",
@@ -1332,12 +784,12 @@ export const papers: Paper[] = [
     "url": "https://arxiv.org/abs/2506.01182"
   },
   {
-    "last_verified": "2026-07-01",
+    "last_verified": "2026-08-18",
     "sources": [
       {
         "label": "Paper",
         "url": "https://arxiv.org/abs/2603.03146",
-        "published_at": "arXiv 2026"
+        "published_at": "2026-03"
       }
     ],
     "title": "Channel-Adaptive Edge AI: Maximizing Inference Throughput by Adapting Computational Complexity to Channel States",
@@ -1354,56 +806,30 @@ export const papers: Paper[] = [
 export const posts: Post[] = [
   {
     "angle": "Take",
-    "text": "July 2026 check-in: edge AI is no longer a lab-only story.\n\nHailo's CES push, Axelera's funding, and the fact that deployment tooling still decides what actually ships all point the same direction.\n\n#EdgeAI #Robotics",
+    "text": "Physical AI's moat is moving from demo quality to learning-loop quality. Figure at BMW and Apptronik's Robot Park both point to the same constraint: fleet data, recovery, and uptime now matter as much as the policy.",
     "tags": [
-      "EdgeAI",
+      "PhysicalAI",
       "Robotics"
     ],
-    "source_ref": "Hailo Jan 2026 CES signal · Axelera Feb 2026 funding"
+    "source_ref": "Figure and Apptronik · Jun 30, 2026"
   },
   {
     "angle": "Thread",
-    "text": "🧵 As of July 1, 2026, humanoid robotics has crossed from prototype theater into real deployment mode.\n\nWhat every Robotics engineer needs to know right now:",
+    "text": "Five production signals worth watching: Figure at BMW, Apollo 2 fleets, 1X's 25-DoF hands, Applied's Dana platform, and Axelera's Wingman. The common layer is tooling that closes the gap between model and deployed machine.",
     "tags": [
-      "Robotics"
+      "Robotics",
+      "EdgeAI"
     ],
-    "source_ref": "Figure Jun 30 2026 BMW deployment · Apptronik Feb 2026 extension"
+    "source_ref": "Primary company updates · verified Aug 18, 2026"
   },
   {
     "angle": "Contrarian",
-    "text": "Hot take: foundation model robots get all the attention.\n\nBut the real moat is in the runtime layer. Nobody talks about that.\n\n#Robotics #EdgeAI",
+    "text": "The next robotics bottleneck may not be a larger VLA. It may be the unglamorous stack around it: embedded sensing, observability, fleet recovery, evaluation, and the data contracts that let failures improve the next policy.",
     "tags": [
       "Robotics",
-      "EdgeAI"
+      "Systems"
     ],
-    "source_ref": "ROS2 deployment reality · 2026 productization trend"
-  },
-  {
-    "angle": "Job Hunt",
-    "text": "The companies hiring aggressively right now are the ones turning prototypes into production fleets and data loops.\n\nIf you're a Robotics engineer, this is your moment. The wave is here.\n\n#Robotics #EdgeAI",
-    "tags": [
-      "Robotics",
-      "EdgeAI"
-    ],
-    "source_ref": "Figure · Apptronik · Skild AI hiring signals, Jul 1 2026"
-  },
-  {
-    "angle": "Research",
-    "text": "If you're rebuilding your robotics reading list for July 2026, start with the new foundation-models-in-robotics review and then go straight into π0.5.\n\nThat pair gives you both the map and the current frontier.\n\n#Robotics #EdgeAI",
-    "tags": [
-      "Robotics",
-      "EdgeAI"
-    ],
-    "source_ref": "arXiv 2604.15395 · π0.5 arXiv 2504.16054"
-  },
-  {
-    "angle": "Founder Signal",
-    "text": "Skild closed a $1.4B Series C. Apptronik pushed total Series A past $935M. Figure says it has already delivered 350+ Figure 03 robots.\n\nWhen capital, deployment, and data all move at once, the enabling infrastructure layer becomes the real strategic position.\n\n#Robotics #PhysicalAI",
-    "tags": [
-      "Robotics",
-      "PhysicalAI"
-    ],
-    "source_ref": "Skild Jan 2026 · Apptronik Feb 2026 · Figure Jun 30 2026"
+    "source_ref": "Figure · Apptronik · 1X deployment signals"
   }
 ];
 
@@ -1411,95 +837,87 @@ export const tasks: Task[] = [
   {
     "id": 1,
     "priority": "P0",
-    "task": "Apply to Skild AI, Apptronik, Figure, and Physical Intelligence — policy / robot-learning roles",
+    "task": "Tailor two applications to verified Figure, 1X, Applied, or Cursor openings",
     "domain": "Job Applications",
     "time": "1.5h",
-    "description": "1. Skild AI — Jan 14, 2026 Series C: $1.4B raised, valuation above $14B. Lead with diffusion policy + Isaac Lab + robot-data flywheel intuition. 2. Apptronik — Feb 11, 2026 extension took Series A past $935M. Highlight ROS2 + embedded control + deployment readiness for Apollo workflows. 3. Figure — Apr 29, 2026 production update: 350+ Figure 03 robots delivered, one robot per hour pace. Tailor toward fleet scale, runtime reliability, and embodied data systems. 4. Physical Intelligence — π0.5 remains a strong public signal for open-world VLA work. Tip: personalize each application with a dated 2026 milestone, not a generic company overview."
+    "description": "Use the official careers links in Career Radar. Reference one current product milestone and one directly relevant system you have shipped; do not send a generic robotics or AI resume."
   },
   {
     "id": 2,
     "priority": "P0",
-    "task": "NeetCode Blind 75 — Trees + Graphs (5 problems)",
-    "domain": "Coding Practice",
+    "task": "Add failure recovery and per-source health to one portfolio service",
+    "domain": "Production Engineering",
     "time": "2h",
-    "description": "Focus: Binary Tree Level Order Traversal, Word Ladder, Number of Islands, Course Schedule (cycle detect), Clone Graph. Platform: neetcode.io/roadmap → Graphs section. Tip: time yourself — aim for ≤20 min per medium. After: review the editorial for any you needed hints on. Goal: be fluent in BFS/DFS pattern recognition before FAANG-style interviews."
+    "description": "Implement last-known-good state, last attempt, last success, a sanitized error code, and one integration test. Publish the operational tradeoff in the README."
   },
   {
     "id": 3,
     "priority": "P1",
-    "task": "Run NVIDIA Isaac Lab locomotion policy on Jetson Orin",
-    "domain": "Physical AI",
+    "task": "Prototype an edge-AI pipeline and capture latency, memory, and accuracy",
+    "domain": "Edge AI",
     "time": "3h",
-    "description": "1. Clone Isaac Lab: github.com/isaac-sim/IsaacLab — follow Orbit migration guide. 2. Run AnymalC locomotion example on local GPU first to verify setup. 3. Export trained policy via ONNX: python scripts/export_policy.py. 4. Deploy on Jetson Orin using TensorRT — measure inference latency (target <8ms). 5. If Orin not available: use Isaac Gym preview in Colab. Bonus: log reward curves to W&B — screenshot for your portfolio."
+    "description": "Use ONNX Runtime, TensorRT, or available edge hardware. Compare at least two precisions and record p50/p95 latency plus memory, not only throughput."
   },
   {
     "id": 4,
     "priority": "P1",
-    "task": "Build ROS2 Nav2 autonomous navigation in Gazebo Harmonic",
+    "task": "Build a ROS2 deployment drill with telemetry and restart behavior",
     "domain": "Robotics",
     "time": "2h",
-    "description": "1. Install ROS2 Jazzy + Gazebo Harmonic (Ubuntu 24.04 recommended). 2. Clone Nav2 bringup: ros-planning/navigation2 — use turtlebot3 world. 3. Tune DWB controller params: max_vel_x, min_vel_theta in nav2_params.yaml. 4. Add a custom costmap layer (e.g. semantic obstacles). 5. Record a rosbag of a full autonomous run → post clip to X/LinkedIn. Goal: show recruiters you can go from sim → tuned navigation stack."
+    "description": "Run a Nav2 or manipulation flow, inject one node failure, and demonstrate detection, degraded behavior, and recovery in a short recording."
   },
   {
     "id": 5,
     "priority": "P1",
-    "task": "Study the 2026 robotics FM review + π0.5 — extract one concrete system design takeaway",
+    "task": "Read π*0.6 and extract one post-training experiment",
     "domain": "Physical AI",
-    "time": "2h",
-    "description": "1. Read the April 2026 robotics foundation-models review: arxiv.org/abs/2604.15395. 2. Read π0.5: arxiv.org/abs/2504.16054. 3. Write a 1-page note comparing where the review says the field is heading vs. what π0.5 actually demonstrates today. 4. Extract one implementation takeaway for your own stack: data mixture, action representation, or evaluation loop. Goal: turn reading into architecture judgment, not note-taking."
+    "time": "1.5h",
+    "description": "Focus on the RL recipe, feedback source, and evaluation. Write one experiment you could reproduce with a smaller policy or simulated task."
   },
   {
     "id": 6,
     "priority": "P1",
-    "task": "Benchmark INT4/INT8 quantization — llama.cpp on Jetson or M-series",
-    "domain": "Edge AI",
+    "task": "Create a long-horizon agent evaluation with a deterministic verifier",
+    "domain": "Generative AI",
     "time": "2h",
-    "description": "1. Pull latest llama.cpp: github.com/ggml-org/llama.cpp — build with CUDA/Metal. 2. Download Llama-3.1-8B-Instruct GGUF Q4_K_M from HuggingFace. 3. Run: ./llama-bench -m model.gguf -p 512 -n 128 -r 5. 4. Compare Q8_0 vs Q4_K_M vs Q4_0: tokens/sec, VRAM usage, perplexity. 5. Post results as a table on X with #TinyML #EdgeAI — this gets engagement."
+    "description": "Define one repository task, its allowed tools, a test-based verifier, timeout behavior, and a trace. Run it multiple times and report completion variance."
   },
   {
     "id": 7,
     "priority": "P2",
-    "task": "Read π0 (Physical Intelligence) + RT-2 papers — note architecture diffs",
-    "domain": "Physical AI",
-    "time": "1.5h",
-    "description": "π0: arxiv.org/abs/2410.24164 — flow matching for generalist robot policy. RT-2: arxiv.org/abs/2307.15818 — VLM-based robot learning from internet data. Focus on: action representation, training data pipeline, sim-to-real gap handling. Write 3-5 bullet takeaways in your notes — use them in interviews when asked 'what research are you following?'"
-  },
-  {
-    "id": 8,
-    "priority": "P2",
-    "task": "Build MCP server for personal toolchain — add to GitHub portfolio",
-    "domain": "Generative AI",
-    "time": "1.5h",
-    "description": "MCP (Model Context Protocol) is the standard agentic protocol — Claude Code natively uses it, Cursor + Codex adopting fast. Building an MCP server signals you understand agentic infra. 1. Pick a tool you use: GitHub, Notion, linear, or your own script. 2. Implement a basic MCP server in Python (anthropic MCP SDK). 3. Register it in Claude Code / Cursor and demo a real workflow. 4. Push to GitHub — write a README with demo GIF. This is a strong portfolio signal for any AI-native company: Anthropic, Cursor, Cognition, Modal."
+    "task": "Publish one sourced systems take from the August 18 watchlist",
+    "domain": "Build in Public",
+    "time": "45m",
+    "description": "Use a primary-source link, clearly separate the sourced fact from your interpretation, and avoid unsupported market-size or hiring claims."
   }
 ];
 
 export const weeklyWins = [
-  "Refreshed the fallback product narrative to July 1, 2026 so the site no longer reads like a June snapshot.",
-  "Updated the startup and opportunity stack with newer Figure deployment context and fresher Apptronik commercialization detail.",
-  "Kept the reading stack centered on the April 2026 FM review and π0.5 instead of drifting back to stale 2025-only references."
+  "Replaced inflated demo totals with exact counts from the maintained fallback collections.",
+  "Refocused the startup radar on 12 companies with first-party provenance and an August 18 verification date.",
+  "Added production reliability gates across authorization, source health, browser flows, and content freshness."
 ];
 
 export const weeklyGaps = [
-  "The startup long tail still contains several older watchlist notes that have not been re-verified against July 2026 sources.",
-  "Role and task counts are still curated demo numbers rather than live July 2026 aggregates.",
-  "Coding-tool and agentic-infra company data will need another refresh if July product or funding moves change the market map."
+  "Production smoke checks require repository variables for the deployed frontend and API URLs before the scheduled workflow can run.",
+  "Curated facts still require a human source review; the weekly workflow detects age and synchronization drift but does not invent updates.",
+  "Live job-board ingestion remains inherently noisy, so Career Radar keeps a small verified fallback when provider data is cold."
 ];
 
 export const convictionBets: ConvictionBet[] = [
   {
-    "label": "Edge AI compiler toolchain gap",
-    "conviction": 92
+    "label": "Fleet reliability for physical AI",
+    "conviction": 94
   },
   {
-    "label": "Isaac Lab sim-to-real pipeline",
-    "conviction": 81
+    "label": "Edge compiler and runtime tooling",
+    "conviction": 89
   },
   {
-    "label": "Zephyr RTOS for medical devices",
-    "conviction": 67
+    "label": "Deterministic evaluation for agents",
+    "conviction": 86
   }
 ];
 
-export const nextWeekFocus = "Re-verify the long-tail startup watchlist, tighten July 2026 company and role counts, and keep replacing soft relative language with explicit dates whenever curated fallback content is meant to look current.";
+export const nextWeekFocus = "Configure deployed smoke-test URLs, review the first scheduled freshness report, and use source-health telemetry to tune ingestion providers without hiding failures.";
 

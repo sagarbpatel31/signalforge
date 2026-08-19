@@ -163,16 +163,6 @@ def _job_to_role(job: dict) -> Role:
     )
 
 
-async def _bg_fetch_jobs():
-    try:
-        from ..ingestion.sources import fetch_jobs, write_cache
-        jobs = await fetch_jobs(limit=100)
-        if jobs:
-            write_cache("jobs", jobs)
-    except Exception:
-        pass
-
-
 def _get_filtered_roles(limit: Optional[int] = None, user_key: str | None = None) -> list[Role]:
     cached = read_cache("jobs")
     if not cached:
@@ -208,12 +198,14 @@ def _get_filtered_roles(limit: Optional[int] = None, user_key: str | None = None
 @router.get("/career", response_model=list[Role])
 async def get_career(background_tasks: BackgroundTasks, user_id: str | None = Depends(optional_user)) -> list[Role]:
     if not read_cache("jobs"):
-        background_tasks.add_task(_bg_fetch_jobs)
+        from ..ingestion.scheduler import refresh_source
+        background_tasks.add_task(refresh_source, "jobs")
     return _get_filtered_roles(limit=4, user_key=user_id)
 
 
 @router.get("/career/all", response_model=list[Role])
 async def get_career_all(background_tasks: BackgroundTasks, user_id: str | None = Depends(optional_user)) -> list[Role]:
     if not read_cache("jobs"):
-        background_tasks.add_task(_bg_fetch_jobs)
+        from ..ingestion.scheduler import refresh_source
+        background_tasks.add_task(refresh_source, "jobs")
     return _get_filtered_roles(limit=None, user_key=user_id)

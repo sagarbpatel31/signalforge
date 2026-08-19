@@ -7,7 +7,7 @@ export interface Signal {
   text: string;
 }
 
-export type SourceMode = "live" | "fallback";
+export type SourceMode = "live" | "degraded" | "fallback";
 
 export interface CuratedSource {
   label: string;

@@ -1,139 +1,72 @@
-import asyncio
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, Depends
+
+from ..auth import current_user
+from ..ingestion.scheduler import refresh_source, run_ingestion
 from ..ingestion.sources import read_cache
+from ..rate_limit import enforce_refresh_limit
 from ..schemas import FeedMetaResponse
 
 router = APIRouter(prefix="/api/feeds", tags=["feeds"])
 
 
-async def _bg_fetch_news():
-    """Background refresh: fetch + cache news (runs after response sent)."""
-    try:
-        from ..ingestion.sources import fetch_news, write_cache
-        from datetime import datetime, timezone
-        news = await fetch_news(limit=50)
-        if news:
-            write_cache("news", news)
-            meta = read_cache("meta") or {"last_refresh": None, "counts": {}}
-            meta["counts"]["news"] = len(news)
-            meta["last_refresh"] = datetime.now(timezone.utc).isoformat()
-            write_cache("meta", meta)
-    except Exception:
-        pass
-
-
-async def _bg_fetch_jobs():
-    try:
-        from ..ingestion.sources import fetch_jobs, write_cache
-        from datetime import datetime, timezone
-        jobs = await fetch_jobs(limit=100)
-        if jobs:
-            write_cache("jobs", jobs)
-            meta = read_cache("meta") or {"last_refresh": None, "counts": {}}
-            meta["counts"]["jobs"] = len(jobs)
-            meta["last_refresh"] = datetime.now(timezone.utc).isoformat()
-            write_cache("meta", meta)
-    except Exception:
-        pass
-
-
-async def _bg_fetch_papers():
-    try:
-        from ..ingestion.sources import fetch_papers, write_cache
-        from datetime import datetime, timezone
-        papers = await fetch_papers(limit=24)
-        if papers:
-            write_cache("papers", papers)
-            meta = read_cache("meta") or {"last_refresh": None, "counts": {}}
-            meta["counts"]["papers"] = len(papers)
-            meta["last_refresh"] = datetime.now(timezone.utc).isoformat()
-            write_cache("meta", meta)
-    except Exception:
-        pass
-
-
 @router.post("/refresh")
-async def refresh_feeds(background_tasks: BackgroundTasks):
-    """Client-triggered refresh: schedules background fetches for news/jobs/papers.
-    Returns immediately and sends no email — the cron-only /api/ingest owns the digest."""
-    background_tasks.add_task(_bg_fetch_news)
-    background_tasks.add_task(_bg_fetch_jobs)
-    background_tasks.add_task(_bg_fetch_papers)
+async def refresh_feeds(
+    background_tasks: BackgroundTasks,
+    user_id: str = Depends(current_user),
+):
+    """Schedule one complete refresh for an authenticated, rate-limited user."""
+    enforce_refresh_limit(user_id)
+    background_tasks.add_task(run_ingestion)
     return {"status": "refreshing"}
 
 
 @router.get("/news")
 async def get_news(background_tasks: BackgroundTasks):
     cached = read_cache("news")
-    if cached and isinstance(cached, list) and len(cached) > 0:
+    if isinstance(cached, list) and cached:
         return cached
-    # Cache cold → trigger background fetch and return empty for now
-    # (client can poll or reload; next hit will have data)
-    background_tasks.add_task(_bg_fetch_news)
-    # Attempt a fast synchronous news fetch (3 sources, short timeout)
-    try:
-        from ..ingestion.sources import RSS_SOURCES, _HEADERS, _is_relevant, _extract_tags
-        import feedparser, httpx
-        items = []
-        fast_sources = RSS_SOURCES[:4]  # first 4 are fastest
-        async with httpx.AsyncClient(timeout=5, follow_redirects=True) as client:
-            tasks = [client.get(url, headers=_HEADERS) for _, url in fast_sources]
-            responses = await asyncio.gather(*tasks, return_exceptions=True)
-        for resp in responses:
-            if isinstance(resp, Exception):
-                continue
-            feed = feedparser.parse(resp.text)
-            for entry in feed.entries[:10]:
-                title = entry.get("title", "")
-                body  = entry.get("summary", "")
-                if _is_relevant(title + " " + body):
-                    items.append({
-                        "title": title,
-                        "url": entry.get("link", ""),
-                        "source": entry.get("feed", {}).get("title", "News"),
-                        "published": entry.get("published", ""),
-                        "tags": _extract_tags(title + " " + body),
-                    })
-        if items:
-            from ..ingestion.sources import write_cache
-            write_cache("news", items)
-            return items
-    except Exception:
-        pass
+    background_tasks.add_task(refresh_source, "news")
     return []
 
 
 @router.get("/jobs")
 async def get_jobs(background_tasks: BackgroundTasks):
     cached = read_cache("jobs")
-    if cached and isinstance(cached, list) and len(cached) > 0:
+    if isinstance(cached, list) and cached:
         return cached
-    background_tasks.add_task(_bg_fetch_jobs)
+    background_tasks.add_task(refresh_source, "jobs")
     return []
 
 
 @router.get("/digest")
 async def get_digest():
-    return read_cache("digest") or {"headline": None, "sections": [], "action_item": None, "generated_at": None}
+    return read_cache("digest") or {
+        "headline": None,
+        "sections": [],
+        "action_item": None,
+        "generated_at": None,
+    }
 
 
 @router.get("/meta", response_model=FeedMetaResponse)
 async def get_meta() -> FeedMetaResponse:
-    meta = read_cache("meta") or {"last_refresh": None, "counts": {}}
-    counts = meta.get("counts", {}) if isinstance(meta, dict) else {}
-    total = sum(v for v in counts.values() if isinstance(v, int))
-
-    if total > 0:
-        return FeedMetaResponse(
-            last_refresh=meta.get("last_refresh"),
-            counts=counts,
-            source_mode="live",
-            source_detail=f"Cache contains {total} tracked feed items.",
-        )
+    meta = read_cache("meta")
+    meta = meta if isinstance(meta, dict) else {}
+    counts = meta.get("counts", {}) if isinstance(meta.get("counts"), dict) else {}
+    total = sum(value for value in counts.values() if isinstance(value, int))
+    mode = meta.get("source_mode")
+    if mode not in {"live", "degraded", "fallback"}:
+        mode = "live" if total > 0 else "fallback"
 
     return FeedMetaResponse(
-        last_refresh=meta.get("last_refresh") if isinstance(meta, dict) else None,
+        last_refresh=meta.get("last_refresh"),
         counts=counts,
-        source_mode="fallback",
-        source_detail="Feed cache is cold. Endpoints may fall back to built-in mock data until refresh completes.",
+        source_mode=mode,
+        source_detail=meta.get("source_detail")
+        or (
+            f"Cache contains {total} tracked feed items."
+            if total
+            else "Feed cache is cold; curated fallback data remains available."
+        ),
+        sources=meta.get("sources", {}),
     )

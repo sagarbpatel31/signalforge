@@ -34,6 +34,7 @@ def test_health_is_safe_and_correlated(monkeypatch):
             "last_refresh": None,
             "source_mode": "fallback",
             "counts": {},
+            "sources": {},
         },
     }
     assert "redis_url_prefix" not in response.text

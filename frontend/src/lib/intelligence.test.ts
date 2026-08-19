@@ -25,6 +25,26 @@ describe("summarizeFeedStatus", () => {
     expect(result.label).toBe("Live intelligence");
     expect(result.detail).toContain("10 tracked feed items");
   });
+
+  it("reports a failed source while preserving its cached count", () => {
+    const result = summarizeFeedStatus({
+      last_refresh: new Date().toISOString(),
+      counts: { news: 5, jobs: 3, papers: 2 },
+      source_mode: "degraded",
+      source_detail: "Serving last-known-good data; source issues: jobs.",
+      sources: {
+        news: { status: "healthy", item_count: 5 },
+        papers: { status: "healthy", item_count: 2 },
+        jobs: { status: "error", item_count: 3, error_code: "timeout" },
+      },
+    });
+
+    expect(result.label).toBe("Degraded intelligence");
+    expect(result.sources.find((source) => source.key === "jobs")).toMatchObject({
+      status: "error",
+      itemCount: 3,
+    });
+  });
 });
 
 describe("formatRelativeRefresh", () => {

@@ -1,5 +1,4 @@
 import asyncio
-import hmac
 import logging
 import os
 import re
@@ -12,11 +11,12 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent / ".env")
 
-from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi import FastAPI, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.observability import REQUEST_LOGGER, init_sentry, request_id, request_log
+from app.auth import verify_cron_authorization
 from app.routers import auth, bookmarks, brief, opportunities, startups, career, research, twitter, tasks, weekly, profile, generate, feeds, email, workbench
 from app.ingestion.scheduler import create_scheduler, run_ingestion
 
@@ -152,26 +152,12 @@ async def health() -> dict:
             "last_refresh": meta.get("last_refresh"),
             "source_mode": meta.get("source_mode", "fallback"),
             "counts": meta.get("counts", {}),
+            "sources": meta.get("sources", {}),
         },
     }
 
 
-def _verify_cron(authorization: str | None) -> None:
-    """Guard the cron ingest endpoint. Vercel cron sends the secret as a Bearer token.
-
-    /api/ingest also fires the daily digest email, so leaving it open in
-    production would let anyone trigger sends. Unset CRON_SECRET is tolerated
-    only for local dev; in production it fails closed."""
-    secret = os.environ.get("CRON_SECRET", "")
-    if not secret:
-        from app.auth import _is_production
-
-        if _is_production():
-            raise HTTPException(status_code=503, detail="CRON_SECRET not configured")
-        return
-    expected = f"Bearer {secret}"
-    if not authorization or not hmac.compare_digest(authorization, expected):
-        raise HTTPException(status_code=401, detail="Unauthorized")
+_verify_cron = verify_cron_authorization
 
 
 @app.get("/api/ingest")
@@ -181,8 +167,8 @@ async def trigger_ingest(authorization: str | None = Header(default=None)) -> di
     result = await run_ingestion()
     # Send daily digest email after ingestion (best-effort — never block ingest)
     try:
-        from app.routers.email import send_digest
-        await send_digest()
+        from app.routers.email import _send_digest
+        await _send_digest()
     except Exception:
-        pass
+        logging.getLogger(__name__).exception("Digest send after ingestion failed")
     return result

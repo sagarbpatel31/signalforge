@@ -7,6 +7,7 @@ import { FilterTabs, matchesFilter } from "@/components/ui/FilterTabs";
 import { InlineNotice } from "@/components/ui/InlineNotice";
 import { fetchFeedMeta, fetchNewsItems, triggerIngest } from "@/lib/api";
 import { summarizeFeedStatus } from "@/lib/intelligence";
+import type { FeedSourceIndicator } from "@/lib/intelligence";
 import type { NewsItem, TagColor } from "@/lib/types";
 import type { FilterTab } from "@/components/ui/FilterTabs";
 
@@ -53,6 +54,7 @@ export default function NewsPage() {
   const [ingesting, setIngesting] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<string>("");
   const [feedDetail, setFeedDetail] = useState("");
+  const [feedSources, setFeedSources] = useState<FeedSourceIndicator[]>([]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [error, setError] = useState<string | null>(null);
 
@@ -78,7 +80,9 @@ export default function NewsPage() {
     try {
       const [data, meta] = await Promise.all([fetchNewsItems(), fetchFeedMeta()]);
       setItems(data);
-      setFeedDetail(summarizeFeedStatus(meta).detail);
+      const status = summarizeFeedStatus(meta);
+      setFeedDetail(status.detail);
+      setFeedSources(status.sources);
       if (data.length > 0) setLastRefresh(new Date().toLocaleTimeString());
       return data;
     } catch {
@@ -181,6 +185,30 @@ export default function NewsPage() {
               >
                 {feedDetail}
               </p>
+            )}
+            {!loading && feedSources.length > 0 && (
+              <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginTop: 10 }}>
+                {feedSources.map((source) => (
+                  <span
+                    key={source.key}
+                    title={source.detail}
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 9,
+                      color: source.status === "healthy"
+                        ? "var(--green)"
+                        : source.status === "error"
+                          ? "var(--orange)"
+                          : "var(--text-3)",
+                      border: "1px solid var(--hairline)",
+                      borderRadius: 999,
+                      padding: "3px 7px",
+                    }}
+                  >
+                    {source.label} {source.itemCount} · {source.status}
+                  </span>
+                ))}
+              </div>
             )}
           </div>
 

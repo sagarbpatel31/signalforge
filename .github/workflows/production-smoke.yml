@@ -1,0 +1,26 @@
+name: Production smoke
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: production-smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    if: ${{ vars.SIGNALFORGE_FRONTEND_URL != '' && vars.SIGNALFORGE_API_URL != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify deployed frontend and API
+        env:
+          SIGNALFORGE_FRONTEND_URL: ${{ vars.SIGNALFORGE_FRONTEND_URL }}
+          SIGNALFORGE_API_URL: ${{ vars.SIGNALFORGE_API_URL }}
+        run: python scripts/production_smoke.py

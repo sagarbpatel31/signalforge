@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from datetime import datetime, timezone
 from typing import Optional, AsyncGenerator
@@ -8,9 +9,11 @@ from fastapi.responses import StreamingResponse
 
 from ..auth import current_user
 from ..kv import kv_get, kv_set
+from ..rate_limit import enforce_ai_limit
 from ..routers.profile import _load as _load_profile
 
 router = APIRouter(prefix="/api/generate", tags=["generate"])
+logger = logging.getLogger(__name__)
 
 # Override with ANTHROPIC_MODEL env var to pin a different Claude model.
 MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-opus-4-7")
@@ -200,15 +203,23 @@ async def _stream_brief_generator(user_key: str) -> AsyncGenerator[str, None]:
             "market_pulse": data["market_pulse"],
             "signals": data["signals"],
             "timestamp": f"{timestamp} · Claude",
+            "source_mode": "live",
+            "source_detail": "AI-generated from the current profile and cached feed context.",
         }
         yield f"data: {json.dumps({'done': True, 'result': result})}\n\n"
 
-    except Exception as e:
-        yield f"data: {json.dumps({'error': str(e)})}\n\n"
+    except Exception:
+        logger.exception("Streaming brief generation failed")
+        yield f"data: {json.dumps({'error': 'Brief generation failed'})}\n\n"
+
+
+def _rate_limited_user(user_id: str = Depends(current_user)) -> str:
+    enforce_ai_limit(user_id)
+    return user_id
 
 
 @router.post("/brief")
-async def generate_brief(user_id: str = Depends(current_user)):
+async def generate_brief(user_id: str = Depends(_rate_limited_user)):
     _validate_key()
     return StreamingResponse(
         _stream_brief_generator(user_id),
@@ -220,7 +231,7 @@ async def generate_brief(user_id: str = Depends(current_user)):
 # ── Posts ─────────────────────────────────────────────────────────────────
 
 @router.post("/posts")
-async def generate_posts(user_id: str = Depends(current_user)):
+async def generate_posts(user_id: str = Depends(_rate_limited_user)):
     profile = _load_profile(user_id)
     client = _get_client()
     news_context = _news_context(8)
@@ -247,7 +258,7 @@ async def generate_posts(user_id: str = Depends(current_user)):
 # ── Tasks ─────────────────────────────────────────────────────────────────
 
 @router.post("/tasks")
-async def generate_tasks(user_id: str = Depends(current_user)):
+async def generate_tasks(user_id: str = Depends(_rate_limited_user)):
     from ..ingestion.sources import read_cache
     profile = _load_profile(user_id)
     client = _get_client()
@@ -280,7 +291,7 @@ async def generate_tasks(user_id: str = Depends(current_user)):
 # ── Weekly review ─────────────────────────────────────────────────────────
 
 @router.post("/weekly")
-async def generate_weekly(user_id: str = Depends(current_user)):
+async def generate_weekly(user_id: str = Depends(_rate_limited_user)):
     from ..ingestion.sources import read_cache
     profile = _load_profile(user_id)
     client = _get_client()
@@ -320,7 +331,7 @@ async def get_generated_digest(user_id: str = Depends(current_user)):
 
 
 @router.post("/digest")
-async def generate_digest_endpoint(user_id: str = Depends(current_user)):
+async def generate_digest_endpoint(user_id: str = Depends(_rate_limited_user)):
     data = await _generate_digest_content(user_id)
     kv_set(f"digest:{user_id}", data, ttl=24 * 60 * 60)
     return data

@@ -6,6 +6,13 @@ interface DashboardFrameProps {
   feedLabel: string;
   feedDetail: string;
   tone: "live" | "stale";
+  feedSources: Array<{
+    key: string;
+    label: string;
+    status: "healthy" | "error" | "cold";
+    itemCount: number;
+    detail: string;
+  }>;
   hero: React.ReactNode;
   daily: React.ReactNode;
   statBar: React.ReactNode;
@@ -23,6 +30,7 @@ export function DashboardFrame({
   feedLabel,
   feedDetail,
   tone,
+  feedSources,
   hero,
   daily,
   statBar,
@@ -77,6 +85,32 @@ export function DashboardFrame({
           </div>
           <div style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.5 }}>
             {feedDetail}
+          </div>
+          <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginTop: 9 }}>
+            {feedSources.map((source) => {
+              const color = source.status === "healthy"
+                ? "var(--green)"
+                : source.status === "error"
+                  ? "var(--orange)"
+                  : "var(--text-3)";
+              return (
+                <span
+                  key={source.key}
+                  title={source.detail}
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 9,
+                    letterSpacing: "0.04em",
+                    color,
+                    border: "1px solid var(--hairline)",
+                    borderRadius: 999,
+                    padding: "3px 7px",
+                  }}
+                >
+                  {source.label} {source.itemCount} · {source.status}
+                </span>
+              );
+            })}
           </div>
         </div>
 

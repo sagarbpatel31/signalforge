@@ -40,16 +40,31 @@ def _normalized(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
 
 
-def validate_curated_content() -> list[str]:
-    errors: list[str] = []
-    datasets = (
+def _datasets():
+    return (
         ("opportunities", mock_data.OPPORTUNITIES),
         ("startups", mock_data.STARTUPS),
         ("roles", mock_data.ROLES),
         ("papers", mock_data.PAPERS),
     )
 
-    for dataset_name, items in datasets:
+
+def validate_curated_content(max_age_days: int | None = None) -> list[str]:
+    errors: list[str] = []
+
+    try:
+        snapshot_date = date.fromisoformat(mock_data.CURATED_SNAPSHOT_DATE)
+        if snapshot_date > date.today():
+            errors.append("CURATED_SNAPSHOT_DATE is in the future")
+        elif max_age_days is not None and (date.today() - snapshot_date).days > max_age_days:
+            errors.append(
+                f"CURATED_SNAPSHOT_DATE is {(date.today() - snapshot_date).days} days old "
+                f"(limit: {max_age_days})"
+            )
+    except (TypeError, ValueError):
+        errors.append("CURATED_SNAPSHOT_DATE must be an ISO date")
+
+    for dataset_name, items in _datasets():
         seen: set[str] = set()
         for item in items:
             label = _label(item)
@@ -63,6 +78,11 @@ def validate_curated_content() -> list[str]:
                 verified = date.fromisoformat(raw_date)
                 if verified > date.today():
                     errors.append(f"{dataset_name}/{label}: last_verified is in the future")
+                elif max_age_days is not None and (date.today() - verified).days > max_age_days:
+                    errors.append(
+                        f"{dataset_name}/{label}: last_verified is "
+                        f"{(date.today() - verified).days} days old (limit: {max_age_days})"
+                    )
             except (TypeError, ValueError):
                 errors.append(f"{dataset_name}/{label}: last_verified must be an ISO date")
 
@@ -84,7 +104,64 @@ def validate_curated_content() -> list[str]:
                 elif _normalized(fact) == _normalized(take):
                     errors.append(f"{dataset_name}/{label}: fact and editorial take must differ")
 
+    expected_stats = {
+        "Signals Tracked": len(mock_data.SIGNALS),
+        "Opportunities": len(mock_data.OPPORTUNITIES),
+        "Startups Flagged": len(mock_data.STARTUPS),
+        "Hiring Signals": len(mock_data.ROLES),
+        "Research Papers": len(mock_data.PAPERS),
+    }
+    actual_stats = {stat.label: stat.value for stat in mock_data.STATS}
+    for label, expected in expected_stats.items():
+        try:
+            actual = int(str(actual_stats.get(label, "")).replace(",", ""))
+        except ValueError:
+            actual = -1
+        if actual != expected:
+            errors.append(f"stats/{label}: expected {expected}, found {actual_stats.get(label)!r}")
+
+    for index, post in enumerate(mock_data.POSTS, start=1):
+        if len(post.text) > 280:
+            errors.append(f"posts/{index}: text is {len(post.text)} characters (limit: 280)")
+        if not post.source_ref.strip():
+            errors.append(f"posts/{index}: source_ref is required")
+
     return errors
+
+
+def build_staleness_report(max_age_days: int) -> str:
+    rows = []
+    stale_count = 0
+    for dataset_name, items in _datasets():
+        for item in items:
+            raw_date = getattr(item, "last_verified", "")
+            try:
+                age = (date.today() - date.fromisoformat(raw_date)).days
+                status = "STALE" if age > max_age_days else "current"
+                stale_count += int(status == "STALE")
+            except (TypeError, ValueError):
+                age = -1
+                status = "INVALID"
+                stale_count += 1
+            rows.append(
+                f"| {dataset_name} | {_label(item)} | {raw_date or '-'} | "
+                f"{age if age >= 0 else '-'} | {status} |"
+            )
+
+    state = "ACTION REQUIRED" if stale_count else "CURRENT"
+    return "\n".join([
+        "# SignalForge curated-content freshness",
+        "",
+        f"- Report date: `{date.today().isoformat()}`",
+        f"- Maximum age: `{max_age_days} days`",
+        f"- Status: **{state}**",
+        f"- Stale or invalid cards: `{stale_count}`",
+        "",
+        "| Dataset | Card | Last verified | Age (days) | Status |",
+        "| --- | --- | --- | ---: | --- |",
+        *rows,
+        "",
+    ])
 
 
 def build_content() -> str:
@@ -134,9 +211,29 @@ def main() -> int:
         action="store_true",
         help="Validate content and fail if the generated frontend fallback is out of sync.",
     )
+    parser.add_argument(
+        "--max-age-days",
+        type=int,
+        default=None,
+        help="Fail when any curated card was verified more than this many days ago.",
+    )
+    parser.add_argument(
+        "--report-file",
+        type=Path,
+        help="Write a Markdown freshness report (defaults to a 14-day threshold).",
+    )
     args = parser.parse_args()
 
-    errors = validate_curated_content()
+    if args.max_age_days is not None and args.max_age_days < 0:
+        parser.error("--max-age-days must be zero or greater")
+
+    report_age = args.max_age_days if args.max_age_days is not None else 14
+    if args.report_file:
+        args.report_file.parent.mkdir(parents=True, exist_ok=True)
+        args.report_file.write_text(build_staleness_report(report_age), encoding="utf-8")
+        print(f"Wrote {args.report_file}")
+
+    errors = validate_curated_content(args.max_age_days)
     if errors:
         print("Curated content validation failed:", file=sys.stderr)
         for error in errors:

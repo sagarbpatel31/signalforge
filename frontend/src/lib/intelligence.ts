@@ -9,6 +9,23 @@ export interface FeedMeta {
   };
   source_mode?: SourceMode;
   source_detail?: string;
+  sources?: Partial<Record<"news" | "jobs" | "papers", FeedSourceHealth>>;
+}
+
+export interface FeedSourceHealth {
+  status: "healthy" | "error" | "cold";
+  item_count: number;
+  last_attempt?: string | null;
+  last_success?: string | null;
+  error_code?: string | null;
+}
+
+export interface FeedSourceIndicator {
+  key: "news" | "jobs" | "papers";
+  label: string;
+  status: FeedSourceHealth["status"];
+  itemCount: number;
+  detail: string;
 }
 
 export interface RankedOpportunity extends Opportunity {
@@ -75,16 +92,44 @@ export function summarizeFeedStatus(meta?: FeedMeta | null): {
   label: string;
   detail: string;
   tone: "live" | "stale";
+  sources: FeedSourceIndicator[];
 } {
   const counts = meta?.counts ?? {};
   const total = (counts.news ?? 0) + (counts.jobs ?? 0) + (counts.papers ?? 0);
   const refreshLabel = formatRelativeRefresh(meta?.last_refresh);
+  const sourceLabels = { news: "News", papers: "Papers", jobs: "Jobs" } as const;
+  const sources = (Object.keys(sourceLabels) as Array<keyof typeof sourceLabels>)
+    .map((key) => {
+      const health = meta?.sources?.[key];
+      const itemCount = health?.item_count ?? counts[key] ?? 0;
+      const status = health?.status ?? (itemCount > 0 ? "healthy" : "cold");
+      const success = health?.last_success
+        ? `last success ${formatRelativeRefresh(health.last_success)}`
+        : "no successful refresh";
+      return {
+        key,
+        label: sourceLabels[key],
+        status,
+        itemCount,
+        detail: `${itemCount} cached · ${success}${health?.error_code ? ` · ${health.error_code.replaceAll("_", " ")}` : ""}`,
+      } satisfies FeedSourceIndicator;
+    });
 
   if (!total) {
     return {
       label: "Fallback-safe mode",
       detail: meta?.source_detail ?? "Feed cache is cold. The UI is still usable, but live ingestion has not populated local cache yet.",
       tone: "stale",
+      sources,
+    };
+  }
+
+  if (meta?.source_mode === "degraded" || sources.some((source) => source.status === "error")) {
+    return {
+      label: "Degraded intelligence",
+      detail: `${meta?.source_detail ?? "Serving last-known-good cache for one or more sources."} · latest success ${refreshLabel}`,
+      tone: "stale",
+      sources,
     };
   }
 
@@ -94,6 +139,7 @@ export function summarizeFeedStatus(meta?: FeedMeta | null): {
       ? `${meta.source_detail} · refreshed ${refreshLabel}`
       : `${total} cached signals · ${counts.news ?? 0} news · ${counts.jobs ?? 0} jobs · ${counts.papers ?? 0} papers · refreshed ${refreshLabel}`,
     tone: "live",
+    sources,
   };
 }
 

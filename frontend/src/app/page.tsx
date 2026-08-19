@@ -104,6 +104,7 @@ export default async function DashboardPage() {
           feedLabel={feedStatus.label}
           feedDetail={feedStatus.detail}
           tone={feedStatus.tone}
+          feedSources={feedStatus.sources}
           hero={(
             <div className="fade-up fade-up-1">
               <Hero userName={resolvedProfile.name} brief={brief} greeting={greeting} />

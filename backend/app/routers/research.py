@@ -43,23 +43,14 @@ def _cache_to_papers(items: list, limit: int | None = None) -> list[Paper]:
     ]
 
 
-async def _bg_fetch_papers():
-    try:
-        from ..ingestion.sources import fetch_papers, write_cache
-        papers = await fetch_papers(limit=24)
-        if papers:
-            write_cache("papers", papers)
-    except Exception:
-        pass
-
-
 @router.get("/research", response_model=list[Paper])
 async def get_research(background_tasks: BackgroundTasks) -> list[Paper]:
     cached = read_cache("papers")
     if cached and isinstance(cached, list) and len(cached) > 0:
         return _cache_to_papers(cached, limit=4)
     # Cold cache — trigger background fetch, return mock for now
-    background_tasks.add_task(_bg_fetch_papers)
+    from ..ingestion.scheduler import refresh_source
+    background_tasks.add_task(refresh_source, "papers")
     return PAPERS[:4]
 
 
@@ -68,5 +59,6 @@ async def get_research_all(background_tasks: BackgroundTasks) -> list[Paper]:
     cached = read_cache("papers")
     if cached and isinstance(cached, list) and len(cached) > 0:
         return _cache_to_papers(cached)
-    background_tasks.add_task(_bg_fetch_papers)
+    from ..ingestion.scheduler import refresh_source
+    background_tasks.add_task(refresh_source, "papers")
     return PAPERS

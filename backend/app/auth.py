@@ -22,9 +22,14 @@ TOKEN_HEADER = "X-SignalForge-Token"
 # Local dev without a configured secret would otherwise re-issue a fresh secret
 # on every reload, invalidating tokens and logging the user out constantly.
 # Persisting one under backend/data keeps a dev session alive across restarts.
-_DEV_SECRET_FILE = Path(__file__).parent.parent / "data" / ".session_secret"
-
 _cached_secret: Optional[str] = None
+
+
+def _dev_secret_file() -> Path:
+    data_dir = Path(
+        os.environ.get("SIGNALFORGE_DATA_DIR", Path(__file__).parent.parent / "data")
+    ).expanduser()
+    return data_dir / ".session_secret"
 
 
 def _is_production() -> bool:
@@ -65,16 +70,17 @@ def _secret() -> Optional[str]:
         return None
 
     try:
-        if _DEV_SECRET_FILE.exists():
-            _cached_secret = _DEV_SECRET_FILE.read_text().strip()
+        secret_file = _dev_secret_file()
+        if secret_file.exists():
+            _cached_secret = secret_file.read_text().strip()
         if not _cached_secret:
             _cached_secret = secrets.token_hex(32)
-            _DEV_SECRET_FILE.parent.mkdir(parents=True, exist_ok=True)
-            _DEV_SECRET_FILE.write_text(_cached_secret)
+            secret_file.parent.mkdir(parents=True, exist_ok=True)
+            secret_file.write_text(_cached_secret)
             logger.warning(
                 "SESSION_SECRET unset — generated a local dev secret at %s. "
                 "Set SESSION_SECRET before deploying.",
-                _DEV_SECRET_FILE,
+                secret_file,
             )
     except Exception as exc:  # unwritable fs (read-only container) — stay in memory
         logger.warning("Could not persist dev session secret: %s", exc)
@@ -203,3 +209,15 @@ async def optional_user(
     if not legacy_sessions_allowed():
         return None
     return resolve_user(request.headers.get(TOKEN_HEADER))
+
+
+def verify_cron_authorization(authorization: Optional[str]) -> None:
+    """Validate Vercel cron authorization and fail closed in production."""
+    secret = os.environ.get("CRON_SECRET", "")
+    if not secret:
+        if _is_production():
+            raise HTTPException(status_code=503, detail="CRON_SECRET not configured")
+        return
+    expected = f"Bearer {secret}"
+    if not authorization or not hmac.compare_digest(authorization, expected):
+        raise HTTPException(status_code=401, detail="Unauthorized")

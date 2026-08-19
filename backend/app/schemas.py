@@ -13,15 +13,24 @@ class BriefResponse(BaseModel):
     market_pulse: str
     signals: list[Signal]
     timestamp: str
-    source_mode: Literal["live", "fallback"]
+    source_mode: Literal["live", "degraded", "fallback"]
     source_detail: str
+
+
+class FeedSourceHealth(BaseModel):
+    status: Literal["healthy", "error", "cold"]
+    item_count: int = Field(default=0, ge=0)
+    last_attempt: Optional[str] = None
+    last_success: Optional[str] = None
+    error_code: Optional[str] = None
 
 
 class FeedMetaResponse(BaseModel):
     last_refresh: Optional[str] = None
-    counts: dict[str, int] = {}
-    source_mode: Literal["live", "fallback"]
+    counts: dict[str, int] = Field(default_factory=dict)
+    source_mode: Literal["live", "degraded", "fallback"]
     source_detail: str
+    sources: dict[str, FeedSourceHealth] = Field(default_factory=dict)
 
 
 class Stat(BaseModel):

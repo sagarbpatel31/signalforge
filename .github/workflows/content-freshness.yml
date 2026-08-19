@@ -1,0 +1,36 @@
+name: Curated content freshness
+
+on:
+  schedule:
+    - cron: "23 15 * * 1"
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Build freshness report
+        run: python ../scripts/sync_mock_data.py --check --max-age-days 14 --report-file ../curated-freshness.md
+      - name: Publish workflow summary
+        if: ${{ always() }}
+        working-directory: .
+        run: cat curated-freshness.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload freshness report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: curated-content-freshness
+          path: curated-freshness.md
+          retention-days: 30

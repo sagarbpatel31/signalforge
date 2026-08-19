@@ -36,3 +36,14 @@ def test_ingest_endpoint_returns_401_without_secret(monkeypatch):
     with TestClient(main.app) as client:
         resp = client.get("/api/ingest")
     assert resp.status_code == 401
+
+
+def test_digest_endpoint_returns_401_before_email_configuration(monkeypatch):
+    monkeypatch.setenv("CRON_SECRET", "s3cr3t")
+    monkeypatch.setenv("VERCEL", "1")
+    from fastapi.testclient import TestClient
+
+    with TestClient(main.app) as client:
+        response = client.post("/api/send-digest")
+
+    assert response.status_code == 401

@@ -10,9 +10,11 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-# backend/data — kv.py lives at backend/app/, so two parents up is backend/.
-# The frontend's server-side fallback (server-cache.ts) reads this same dir.
-_DATA_DIR = Path(__file__).parent.parent / "data"
+# backend/data by default. Tests and disposable local environments can isolate
+# state without mutating the checked-out runtime cache.
+_DATA_DIR = Path(
+    os.environ.get("SIGNALFORGE_DATA_DIR", Path(__file__).parent.parent / "data")
+).expanduser()
 _CACHE_DIR = _DATA_DIR / "cache"
 _PROFILES_DIR = _DATA_DIR / "profiles"
 _WORKBENCH_DIR = _DATA_DIR / "workbench"
@@ -33,6 +35,8 @@ def storage_mode() -> str:
 
 
 def _redis():
+    if storage_mode() != "redis":
+        return None
     url = os.environ.get("UPSTASH_REDIS_REST_URL", "")
     token = os.environ.get("UPSTASH_REDIS_REST_TOKEN", "")
     if not (url and token):
@@ -146,3 +150,22 @@ def kv_delete(key: str) -> None:
                 return
     except Exception as exc:
         logger.warning("File fallback DELETE %s failed: %s", key, exc)
+
+
+def kv_increment(key: str, ttl: int) -> int | None:
+    """Atomically increment a Redis counter.
+
+    File storage intentionally returns None: process-local callers can use a
+    lock-protected fallback, while production keeps one distributed counter.
+    """
+    r = _redis()
+    if r is None:
+        return None
+    try:
+        count = int(r.incr(key))
+        if count == 1:
+            r.expire(key, ttl)
+        return count
+    except Exception as exc:
+        logger.warning("Redis INCR %s failed: %s", key, exc)
+        return None
